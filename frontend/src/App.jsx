@@ -19,6 +19,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import AdminProperties from "./pages/AdminProperties";
 import AdminInquiries from "./pages/AdminInquiries";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
 import AIChatAssistant from "./components/AIChatAssistant";
@@ -38,6 +40,8 @@ function App() {
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
 
         {/* Fully Public Routes (Always accessible) */}

@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import sendEmail from "../utils/sendEmail.js";
 
 // Register
 export const register = async (req, res) => {
@@ -121,14 +122,42 @@ export const forgotPassword = async (req, res) => {
         user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
         await user.save();
-        res.json({
-            success: true,
-            message: "Reset token generated",
-            resetToken,
-        });
+
+        // Send reset link via email
+        const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
+
+        const message = `
+            <h1>Password Reset Request</h1>
+            <p>You requested a password reset. Please click on the link below to reset your password:</p>
+            <a href="${resetUrl}" clicktracking=off>${resetUrl}</a>
+            <p>This link will expire in 10 minutes.</p>
+            <p>If you did not request this, please ignore this email.</p>
+        `;
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: "Password Reset Request",
+                message,
+            });
+
+            res.json({
+                success: true,
+                message: "Password reset link sent to your email",
+            });
+        } catch (err) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            await user.save();
+
+            console.error("Email error:", err);
+            return res.status(500).json({
+                message: "Email could not be sent",
+            });
+        }
     } catch (err) {
-        console.log(err);
         res.status(500).json({
+
             message: err.message,
         });
     }

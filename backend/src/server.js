@@ -1,5 +1,15 @@
 import dotenv from "dotenv";
 dotenv.config({ override: true });
+
+// Handle uncaught exceptions and rejections to prevent server crash
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
 import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
@@ -18,14 +28,27 @@ const app = express();
 
 connectDB();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
 app.use(express.json());
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
@@ -59,10 +82,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "*",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
   },
 });
+
 
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
@@ -79,10 +103,6 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 });
-
-
-
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-
 });

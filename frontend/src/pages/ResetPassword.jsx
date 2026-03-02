@@ -1,45 +1,53 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { useAuth } from '../context/AuthContext';
+import API_URL from '../config';
 
-const Login = () => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    });
+const ResetPassword = () => {
+    const { token } = useParams();
+    const navigate = useNavigate();
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
-    const { login } = useAuth();
-    const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError('');
-    };
+    const [message, setMessage] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
         setIsLoading(true);
         setError('');
+        setMessage('');
 
-        const result = await login(formData.email, formData.password);
+        try {
+            const response = await fetch(`${API_URL}/api/auth/reset-password/${token}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password }),
+            });
 
-        if (result.success) {
-            // Redirect based on role
-            const user = JSON.parse(localStorage.getItem('user'));
-            if (user?.role === 'admin') {
-                navigate('/admin-dashboard');
-            } else if (user?.role === 'seller') {
-                navigate('/dashboard');
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage('Password reset successful! Redirecting to login...');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
             } else {
-                navigate('/');
+                setError(data.message || 'Something went wrong');
             }
-        } else {
-            setError(result.message);
+        } catch (err) {
+            setError('Server error. Please try again later.');
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     return (
@@ -64,12 +72,26 @@ const Login = () => {
                         textAlign: 'center',
                         marginBottom: '0.5rem',
                         color: 'var(--primary)'
-                    }}>Welcome Back</h2>
+                    }}>Reset Password</h2>
                     <p style={{
                         textAlign: 'center',
                         color: 'var(--text-muted)',
                         marginBottom: '2rem'
-                    }}>Please enter your details to sign in</p>
+                    }}>Enter your new password below</p>
+
+                    {message && (
+                        <div style={{
+                            padding: '1rem',
+                            backgroundColor: '#dcfce7',
+                            color: '#166534',
+                            borderRadius: '0.5rem',
+                            marginBottom: '1.5rem',
+                            fontSize: '0.875rem',
+                            textAlign: 'center'
+                        }}>
+                            {message}
+                        </div>
+                    )}
 
                     {error && (
                         <div style={{
@@ -87,13 +109,12 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email Address</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>New Password</label>
                             <input
-                                type="email"
-                                name="email"
-                                placeholder="name@company.com"
-                                value={formData.email}
-                                onChange={handleChange}
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 required
                                 style={{
                                     width: '100%',
@@ -105,26 +126,12 @@ const Login = () => {
                             />
                         </div>
                         <div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                <label style={{ fontWeight: 500 }}>Password</label>
-                                <Link
-                                    to="/forgot-password"
-                                    style={{
-                                        fontSize: '0.875rem',
-                                        color: 'var(--primary)',
-                                        fontWeight: 500,
-                                        textDecoration: 'none'
-                                    }}
-                                >
-                                    Forgot?
-                                </Link>
-                            </div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Confirm New Password</label>
                             <input
                                 type="password"
-                                name="password"
                                 placeholder="••••••••"
-                                value={formData.password}
-                                onChange={handleChange}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                                 style={{
                                     width: '100%',
@@ -136,43 +143,24 @@ const Login = () => {
                             />
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                            <input type="checkbox" id="remember" style={{ accentColor: 'var(--primary)' }} />
-                            <label htmlFor="remember" style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Remember me</label>
-                        </div>
-
                         <button
                             className="btn btn-primary"
                             type="submit"
                             disabled={isLoading}
                             style={{ padding: '0.875rem', fontSize: '1rem' }}
                         >
-                            {isLoading ? 'Signing In...' : 'Sign In'}
+                            {isLoading ? 'Resetting...' : 'Reset Password'}
                         </button>
                     </form>
 
                     <p style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-muted)' }}>
-                        Don't have an account?{' '}
-                        <Link to="/register" style={{ color: 'var(--primary)', fontWeight: 600 }}>Create an account</Link>
+                        Back to{' '}
+                        <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 600 }}>Login</Link>
                     </p>
-                    <style>{`
-@media(max - width: 640px) {
-                    .container {
-        padding - top: 2rem!important;
-    }
-                    .glass {
-        padding: 1.5rem!important;
-        border - radius: 1rem!important;
-    }
-                    h2 {
-        font - size: 1.5rem!important;
-    }
-}
-`}</style>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default ResetPassword;
