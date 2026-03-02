@@ -25,6 +25,7 @@
     "mongoose": "^9.2.1",
     "multer": "^2.0.2",
     "nodemailer": "^8.0.1",
+    "random": "^5.4.1",
     "resend": "^6.9.3",
     "socket.io": "^4.8.3",
     "streamifier": "^0.1.1",

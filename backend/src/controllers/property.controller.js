@@ -21,9 +21,9 @@ const uploadToCloudinary = (buffer) => {
 export const addProperty = async (req, res) => {
   try {
     let imageUrls = [];
-    if (req.files) {
+    if (req.files && req.files.length > 0) {
       for (let file of req.files) {
-        const result = await cloudinary.uploader.upload(file.path);
+        const result = await uploadToCloudinary(file.buffer);
         imageUrls.push(result.secure_url);
       }
     }
@@ -31,13 +31,13 @@ export const addProperty = async (req, res) => {
     const property = await Property.create({
       title: req.body.title,
       description: req.body.description,
-      price: req.body.price,
+      price: Number(req.body.price),
       city: req.body.city,
       area: req.body.area,
       pincode: req.body.pincode,
       propertyType: req.body.propertyType,
-      bhk: req.body.bhk,
-      areaSize: req.body.areaSize,
+      bhk: req.body.bhk ? String(req.body.bhk) : undefined,
+      areaSize: req.body.areaSize ? Number(req.body.areaSize) : undefined,
       furnishing: req.body.furnishing,
       status: req.body.status,
       images: imageUrls,
@@ -47,8 +47,8 @@ export const addProperty = async (req, res) => {
           ? req.body.amenities.split(",")
           : req.body.amenities
         : [],
-      securityDeposit: req.body.securityDeposit || 0,
-      maintenance: req.body.maintenance || 0,
+      securityDeposit: Number(req.body.securityDeposit) || 0,
+      maintenance: Number(req.body.maintenance) || 0,
     });
 
     res.json({
@@ -56,9 +56,11 @@ export const addProperty = async (req, res) => {
       property,
     });
   } catch (error) {
+    console.error("ADD_PROPERTY_ERROR:", error);
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Internal server error while adding property",
+      detailedError: process.env.NODE_ENV === 'development' ? error : undefined
     });
   }
 };
@@ -145,7 +147,7 @@ export const updateProperty = async (req, res) => {
     if (req.files && req.files.length > 0) {
       let newImages = [];
       for (let file of req.files) {
-        const result = await cloudinary.uploader.upload(file.path);
+        const result = await uploadToCloudinary(file.buffer);
         newImages.push(result.secure_url);
       }
       property.images = [...property.images, ...newImages];
