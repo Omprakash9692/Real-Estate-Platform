@@ -21,6 +21,7 @@ import AdminProperties from "./pages/AdminProperties";
 import AdminInquiries from "./pages/AdminInquiries";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import SellerProfile from "./pages/SellerProfile";
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
 import AIChatAssistant from "./components/AIChatAssistant";
@@ -48,6 +49,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/property/:id" element={<PropertyDetails />} />
+        <Route path="/seller/:id" element={<SellerProfile />} />
 
         {/* Protected Routes (Requires Login) */}
         <Route element={<ProtectedRoute allowedRoles={['buyer', 'seller', 'admin']} />}>

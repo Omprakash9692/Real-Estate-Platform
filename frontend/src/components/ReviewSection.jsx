@@ -128,18 +128,92 @@ const ReviewSection = ({ sellerId }) => {
 
 
 
-    if (loading) return <div>Loading...</div>;
-
-
+    if (loading) return <div className="no-reviews">Loading reviews...</div>;
 
     return (
-        <div>
+        <div className="reviews-section">
+            <div className="reviews-header">
+                <h3>Ratings & Reviews</h3>
+                <div className="reviews-stats">
+                    <div className="avg-rating">
+                        <HiStar color="#eab308" />
+                        <span>{stats.avgRating}</span>
+                    </div>
+                    <span className="total-reviews">({stats.totalReviews} reviews)</span>
+                </div>
+            </div>
 
-            {/* Your UI same as before */}
+            {user && user.role === "buyer" && (
+                <div className="add-review-form">
+                    <h4>Add a Review</h4>
+                    <div className="rating-select">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                                key={star}
+                                type="button"
+                                className={star <= rating ? "star-active" : ""}
+                                onClick={() => setRating(star)}
+                            >
+                                <HiStar size={24} />
+                            </button>
+                        ))}
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <textarea
+                            placeholder="Share your experience with this seller..."
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            required
+                        />
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            disabled={submitting}
+                        >
+                            {submitting ? "Submitting..." : "Submit Review"}
+                        </button>
+                    </form>
+                    {message && (
+                        <div className={`form-message ${message.type}`}>
+                            {message.text}
+                        </div>
+                    )}
+                </div>
+            )}
 
+            <div className="reviews-list">
+                {reviews.length > 0 ? (
+                    reviews.map((review) => (
+                        <div key={review._id} className="review-card">
+                            <div className="review-user">
+                                <img
+                                    src={review.buyer?.profilePic || `https://ui-avatars.com/api/?name=${review.buyer?.name || "User"}&background=random`}
+                                    alt={review.buyer?.name}
+                                />
+                                <div>
+                                    <div className="user-name">{review.buyer?.name}</div>
+                                    <div className="review-date">
+                                        {new Date(review.createdAt).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="review-rating">
+                                {[...Array(5)].map((_, i) => (
+                                    <HiStar
+                                        key={i}
+                                        color={i < review.rating ? "#eab308" : "#cbd5e1"}
+                                    />
+                                ))}
+                            </div>
+                            <p className="review-comment">{review.comment}</p>
+                        </div>
+                    ))
+                ) : (
+                    <div className="no-reviews">No reviews yet for this seller.</div>
+                )}
+            </div>
         </div>
     );
-
 };
 
 

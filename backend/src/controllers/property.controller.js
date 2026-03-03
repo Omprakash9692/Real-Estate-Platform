@@ -257,12 +257,14 @@ export const getAllProperties = async (req, res) => {
       maxPrice,
       amenities,
       sort,
+      seller,
     } = req.query;
 
     let query = {
       status: { $in: ["sale", "rent"] },
     };
 
+    if (seller) query.seller = seller;
     if (city) query.city = new RegExp(city, "i");
     if (area) query.area = new RegExp(area, "i");
     if (pincode) query.pincode = pincode;

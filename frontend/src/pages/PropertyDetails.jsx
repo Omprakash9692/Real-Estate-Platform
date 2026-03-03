@@ -425,7 +425,9 @@ const PropertyDetails = () => {
                                     <img src={`https://ui-avatars.com/api/?name=${property.seller?.name || 'Seller'}&background=0d6e59&color=fff`} alt="Agent" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </div>
                                 <div>
-                                    <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>{property.seller?.name || 'Seller'}</h4>
+                                    <Link to={`/seller/${property.seller?._id}`} style={{ textDecoration: 'none' }}>
+                                        <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: 'var(--text-main)' }} className="hover-primary">{property.seller?.name || 'Seller'}</h4>
+                                    </Link>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8125rem', color: '#eab308', fontWeight: 700 }}>
                                             <HiStar size={14} fill="#eab308" /> {sellerStats.avgRating}
@@ -651,6 +653,9 @@ const PropertyDetails = () => {
           transform: scale(1.1);
           box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
           border-color: #cbd5e1 !important;
+        }
+        .hover-primary:hover {
+          color: var(--primary) !important;
         }
       `}</style>
         </div>
