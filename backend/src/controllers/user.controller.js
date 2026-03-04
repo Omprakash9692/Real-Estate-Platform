@@ -1,5 +1,20 @@
 import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier";
+
+// helper function
+const uploadToCloudinary = (buffer) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: "profiles" },
+            (error, result) => {
+                if (result) resolve(result);
+                else reject(error);
+            }
+        );
+        streamifier.createReadStream(buffer).pipe(stream);
+    });
+};
 
 // GET PROFILE
 export const getProfile = async (req, res) => {
@@ -54,9 +69,7 @@ export const updateProfile = async (req, res) => {
 
         // Handle profile pic upload
         if (req.file) {
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: "profiles",
-            });
+            const result = await uploadToCloudinary(req.file.buffer);
             user.profilePic = result.secure_url;
         }
 

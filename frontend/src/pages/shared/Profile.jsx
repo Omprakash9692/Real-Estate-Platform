@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
 import { HiOutlineUser, HiOutlineMail, HiOutlinePhone, HiOutlineLocationMarker, HiCheck, HiX } from 'react-icons/hi';
-import { useAuth } from '../context/AuthContext';
-import Navbar from '../components/Navbar';
+import { useAuth } from '../../context/AuthContext';
+import Navbar from '../../components/common/Navbar';
 
 const Profile = () => {
-    const { user, setUser } = useAuth();
+    const { user, setUser, token } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -19,7 +19,14 @@ const Profile = () => {
     });
 
     const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === 'phone') {
+            // Only numbers, max 10
+            const numericValue = value.replace(/\D/g, '').slice(0, 10);
+            setFormData({ ...formData, [name]: numericValue });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleImageChange = (e) => {
@@ -36,7 +43,6 @@ const Profile = () => {
         setError(null);
 
         try {
-            const token = localStorage.getItem('token');
             const data = new FormData();
             data.append('name', formData.name);
             data.append('phone', formData.phone);
@@ -150,12 +156,14 @@ const Profile = () => {
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Phone Number</label>
                                 <input
-                                    type="text"
+                                    type="tel"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleInputChange}
+                                    maxLength="10"
+                                    pattern="\d*"
                                     style={{ width: '100%', padding: '0.875rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none' }}
-                                    placeholder="Enter your phone number"
+                                    placeholder="Enter your 10-digit phone number"
                                 />
                             </div>
                             <div>
@@ -219,28 +227,28 @@ const Profile = () => {
                 </div>
             </div>
             <style>{`
-                @media (max-width: 768px) {
-                    .profile-header {
-                        text-align: center !important;
-                        margin-bottom: 2rem !important;
-                    }
-                    .profile-header h1 {
-                        font-size: 2rem !important;
-                    }
-                    .profile-card {
-                        padding: 1.5rem !important;
-                    }
-                    .profile-info-header {
-                        flex-direction: column !important;
-                        text-align: center !important;
-                        gap: 1rem !important;
-                        margin-bottom: 2.5rem !important;
-                    }
-                    .form-actions {
-                        flex-direction: column !important;
-                    }
-                }
-            `}</style>
+@media(max - width: 768px) {
+                    .profile - header {
+        text - align: center!important;
+        margin - bottom: 2rem!important;
+    }
+                    .profile - header h1 {
+        font - size: 2rem!important;
+    }
+                    .profile - card {
+        padding: 1.5rem!important;
+    }
+                    .profile - info - header {
+        flex - direction: column!important;
+        text - align: center!important;
+        gap: 1rem!important;
+        margin - bottom: 2.5rem!important;
+    }
+                    .form - actions {
+        flex - direction: column!important;
+    }
+}
+`}</style>
         </div>
     );
 };

@@ -12,6 +12,10 @@ const reviewSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
+        property: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Property",
+        },
         rating: {
             type: Number,
             required: true,
@@ -29,8 +33,8 @@ const reviewSchema = new mongoose.Schema(
     }
 );
 
-// Prevent duplicate reviews from the same buyer for the same seller
-reviewSchema.index({ buyer: 1, seller: 1 }, { unique: true });
+// Prevent duplicate reviews from the same buyer for the same property
+reviewSchema.index({ buyer: 1, property: 1 }, { unique: true });
 
 const Review = mongoose.model("Review", reviewSchema);
 export default Review;

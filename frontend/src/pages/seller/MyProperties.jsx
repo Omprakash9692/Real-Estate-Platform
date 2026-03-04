@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
-import { HiOutlinePencilAlt, HiOutlineTrash, HiExternalLink, HiEye, HiOutlineLibrary } from "react-icons/hi";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
+import { HiOutlinePencilAlt, HiOutlineTrash, HiExternalLink, HiEye, HiOutlineLibrary, HiOutlineCheckCircle } from "react-icons/hi";
 import { Link } from 'react-router-dom';
-import PropertyCard from '../components/PropertyCard';
+import PropertyCard from '../../components/common/PropertyCard';
 
 const MyProperties = () => {
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { token } = useAuth();
 
     useEffect(() => {
         fetchMyProperties();
@@ -17,7 +19,7 @@ const MyProperties = () => {
     const fetchMyProperties = async () => {
         try {
             const res = await axios.get(`${API_URL}/api/property/my`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const props = Array.isArray(res.data) ? res.data : (res.data.properties || []);
             setProperties(props);
@@ -32,7 +34,7 @@ const MyProperties = () => {
         if (!window.confirm('Are you sure you want to delete this listing?')) return;
         try {
             await axios.delete(`${API_URL}/api/property/${id}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setProperties(properties.filter(p => p._id !== id));
         } catch (err) {
@@ -43,7 +45,7 @@ const MyProperties = () => {
     const updateStatus = async (id, newStatus) => {
         try {
             await axios.patch(`${API_URL}/api/property/${id}/status`, { status: newStatus }, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setProperties(properties.map(p => p._id === id ? { ...p, status: newStatus } : p));
         } catch (err) {
@@ -52,6 +54,12 @@ const MyProperties = () => {
     };
 
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
+
+    const getAvailableStatus = (p) => {
+        // If it was already a rental mode, return rent, else sale
+        if (p.status === 'rent' || p.status === 'rented') return 'rent';
+        return 'sale';
+    };
 
     return (
         <div className="fade-in">
@@ -95,9 +103,43 @@ const MyProperties = () => {
                                 property={p}
                                 renderActions={() => (
                                     <>
-                                        <div style={{ flex: 1, display: 'flex', gap: '0.5rem' }}>
+                                        <div style={{ flex: 1, display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                            <div style={{ flex: 1, position: 'relative' }}>
+                                                <select
+                                                    value={p.status === 'sale' || p.status === 'rent' ? 'available' : p.status}
+                                                    onChange={(e) => {
+                                                        const val = e.target.value;
+                                                        if (val === 'available') {
+                                                            updateStatus(p._id, getAvailableStatus(p));
+                                                        } else {
+                                                            updateStatus(p._id, val);
+                                                        }
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    onMouseDown={(e) => e.stopPropagation()}
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '0.6rem 2rem 0.6rem 0.8rem',
+                                                        fontSize: '0.8125rem',
+                                                        fontWeight: 600,
+                                                        borderRadius: '0.5rem',
+                                                        border: '1px solid #e2e8f0',
+                                                        background: 'white',
+                                                        color: p.status === 'sold' || p.status === 'rented' ? '#ef4444' : '#10b981',
+                                                        appearance: 'none',
+                                                        cursor: 'pointer',
+                                                        outline: 'none'
+                                                    }}
+                                                >
+                                                    <option value="available">Available</option>
+                                                    <option value="sold">Sold</option>
+                                                    <option value="rented">Rented</option>
+                                                </select>
+                                                <div style={{ position: 'absolute', right: '0.8rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#94a3b8' }}>
+                                                    <HiOutlineCheckCircle size={14} />
+                                                </div>
+                                            </div>
                                             <Link to={`/edit-property/${p._id}`} className="btn btn-outline" style={{
-                                                flex: 1,
                                                 padding: '0.6rem',
                                                 fontSize: '0.8125rem',
                                                 display: 'flex',
@@ -112,7 +154,6 @@ const MyProperties = () => {
                                                 onClick={(e) => { e.stopPropagation(); handleDelete(p._id); }}
                                                 className="btn"
                                                 style={{
-                                                    flex: 1,
                                                     padding: '0.6rem',
                                                     fontSize: '0.8125rem',
                                                     background: '#fff5f5',
@@ -124,40 +165,8 @@ const MyProperties = () => {
                                                     gap: '0.4rem'
                                                 }}
                                             >
-                                                <HiOutlineTrash /> Delete
+                                                <HiOutlineTrash />
                                             </button>
-                                        </div>
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: '1rem',
-                                            left: '1rem',
-                                            background: p.status === 'sold' || p.status === 'rented' ? '#64748b' : 'var(--primary)',
-                                            color: 'white',
-                                            padding: '0.25rem 0.75rem',
-                                            borderRadius: '2rem',
-                                            fontSize: '0.7rem',
-                                            fontWeight: 800,
-                                            textTransform: 'uppercase',
-                                            zIndex: 5
-                                        }}>
-                                            {p.status}
-                                        </div>
-                                        <div style={{
-                                            position: 'absolute',
-                                            bottom: '240px',
-                                            right: '1rem',
-                                            background: 'rgba(255,255,255,0.9)',
-                                            padding: '0.25rem 0.6rem',
-                                            borderRadius: '0.5rem',
-                                            fontSize: '0.75rem',
-                                            fontWeight: 700,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '0.3rem',
-                                            boxShadow: 'var(--shadow-sm)',
-                                            zIndex: 5
-                                        }}>
-                                            <HiEye size={14} /> {p.views || 0}
                                         </div>
                                     </>
                                 )}

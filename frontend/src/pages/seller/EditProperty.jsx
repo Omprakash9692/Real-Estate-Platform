@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
-import { useNavigate } from 'react-router-dom';
-import { HiUpload, HiCheckCircle, HiHome, HiCurrencyDollar, HiLocationMarker } from "react-icons/hi";
+import { useNavigate, useParams } from 'react-router-dom';
+import { HiUpload, HiCheckCircle, HiHome, HiCurrencyDollar, HiLocationMarker, HiX } from "react-icons/hi";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
 
-const AddProperty = () => {
+const EditProperty = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const { token } = useAuth();
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const [images, setImages] = useState([]);
-    const [imagePreviews, setImagePreviews] = useState([]);
+    const [existingImages, setExistingImages] = useState([]);
+    const [newImages, setNewImages] = useState([]);
+    const [newImagePreviews, setNewImagePreviews] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -29,6 +34,37 @@ const AddProperty = () => {
 
     const commonAmenities = ["Parking", "Pool", "Gym", "Security", "Wifi", "Power Backup", "Club House", "Garden"];
 
+    useEffect(() => {
+        const fetchProperty = async () => {
+            try {
+                const res = await axios.get(`${API_URL}/api/property/${id}`);
+                const p = res.data.property;
+                setFormData({
+                    title: p.title || '',
+                    description: p.description || '',
+                    price: p.price || '',
+                    city: p.city || '',
+                    area: p.area || '',
+                    pincode: p.pincode || '',
+                    propertyType: p.propertyType || 'flat',
+                    bhk: p.bhk || '',
+                    areaSize: p.areaSize || '',
+                    furnishing: p.furnishing || 'unfurnished',
+                    status: p.status || 'sale',
+                    amenities: p.amenities || [],
+                    securityDeposit: p.securityDeposit || '',
+                    maintenance: p.maintenance || ''
+                });
+                setExistingImages(p.images || []);
+                setLoading(false);
+            } catch (err) {
+                setError('Failed to load property details.');
+                setLoading(false);
+            }
+        };
+        fetchProperty();
+    }, [id]);
+
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -44,58 +80,67 @@ const AddProperty = () => {
         });
     };
 
-    const handleImageChange = (e) => {
+    const handleNewImageChange = (e) => {
         const files = Array.from(e.target.files);
-        if (images.length + files.length > 10) {
-            setError("You can only upload up to 10 images.");
+        if (existingImages.length + newImages.length + files.length > 10) {
+            setError("Total images cannot exceed 10.");
             return;
         }
-        setImages(prev => [...prev, ...files]);
+        setNewImages(prev => [...prev, ...files]);
 
         const previews = files.map(file => URL.createObjectURL(file));
-        setImagePreviews(prev => [...prev, ...previews]);
+        setNewImagePreviews(prev => [...prev, ...previews]);
     };
 
-    const removeImage = (index) => {
-        setImages(prev => prev.filter((_, i) => i !== index));
-        setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    const removeExistingImage = (url) => {
+        setExistingImages(existingImages.filter(img => img !== url));
+    };
+
+    const removeNewImage = (index) => {
+        setNewImages(newImages.filter((_, i) => i !== index));
+        setNewImagePreviews(newImagePreviews.filter((_, i) => i !== index));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
+        setSubmitting(true);
         setError(null);
 
         const data = new FormData();
         Object.keys(formData).forEach(key => {
             if (key === 'amenities') {
-                formData[key].forEach(a => data.append('amenities', a));
+                data.append('amenities', JSON.stringify(formData[key]));
+            } else if (key === 'securityDeposit' || key === 'maintenance') {
+                data.append(key, formData[key] || 0);
             } else {
                 data.append(key, formData[key]);
             }
         });
-        images.forEach(img => data.append('images', img));
+        data.append('existingImages', JSON.stringify(existingImages));
+        newImages.forEach(img => data.append('images', img));
 
         try {
-            await axios.post(`${API_URL}/api/property`, data, {
+            await axios.put(`${API_URL}/api/property/${id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${token}`
                 }
             });
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to add property.');
-            setLoading(false);
+            setError(err.response?.data?.message || 'Failed to update property.');
+            setSubmitting(false);
         }
     };
+
+    if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
 
     return (
         <div className="fade-in dashboard-content" style={{ padding: '1rem', width: '100%', margin: '0 auto' }}>
             <div style={{ maxWidth: '900px', width: '100%', margin: '0 auto' }}>
                 <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
-                    <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', marginBottom: '1rem', color: 'var(--text-main)' }}>List Your Property</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>Fill in the details below to reach thousands of potential buyers.</p>
+                    <h1 style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', marginBottom: '1rem', color: 'var(--text-main)' }}>Edit Property</h1>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>Update your property details and manage images.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="card-premium" style={{ padding: 'var(--card-padding, 2.5rem)' }}>
@@ -175,6 +220,7 @@ const AddProperty = () => {
                                         <select name="status" value={formData.status} onChange={handleInputChange} style={{ width: '100%', padding: '0.875rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', outline: 'none', background: '#fff' }}>
                                             <option value="sale">For Sale</option>
                                             <option value="rent">For Rent</option>
+                                            <option value="sold">Sold</option>
                                         </select>
                                     </div>
                                 </div>
@@ -247,92 +293,71 @@ const AddProperty = () => {
                         </div>
                     </div>
 
-                    {/* Section 4: Property Images */}
+                    {/* Section 4: Image Management */}
                     <div style={{ marginBottom: '1.5rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                             <div style={{ width: '4px', height: '24px', background: 'var(--primary)', borderRadius: '2px' }}></div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>Property Images</h3>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>Image Management</h3>
                         </div>
 
-                        <div style={{
-                            border: '2px dashed #cbd5e1',
-                            padding: '3rem',
-                            borderRadius: '1.25rem',
-                            textAlign: 'center',
-                            cursor: 'pointer',
-                            position: 'relative',
-                            background: '#f8fafc',
-                            transition: 'all 0.2s'
-                        }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--primary)'} onMouseOut={(e) => e.currentTarget.style.borderColor = '#cbd5e1'}>
-                            <input
-                                type="file"
-                                multiple
-                                onChange={handleImageChange}
-                                style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
-                                accept="image/*"
-                            />
-                            <HiUpload size={40} color="#64748b" style={{ marginBottom: '1rem' }} />
-                            <h4 style={{ marginBottom: '0.5rem', color: 'var(--text-main)' }}>Click to upload or drag and drop</h4>
-                            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Upload up to 10 high-quality images (PNG, JPG)</p>
-                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '1rem' }}>
+                            {/* Existing Images */}
+                            {existingImages.map((src, i) => (
+                                <div key={`existing-${i}`} style={{ position: 'relative', aspectRatio: '1', borderRadius: '0.75rem', overflow: 'hidden', border: '2px solid #f1f5f9' }}>
+                                    <img src={src} alt="Existing" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeExistingImage(src)}
+                                        style={{ position: 'absolute', top: '5px', right: '5px', background: '#dc2626', color: 'white', border: 'none', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10 }}
+                                    >
+                                        <HiX size={12} />
+                                    </button>
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'var(--primary)', color: 'white', fontSize: '0.6rem', textAlign: 'center', padding: '2px 0', fontWeight: 700, letterSpacing: '0.05em' }}>EXISTING</div>
+                                </div>
+                            ))}
 
-                        {/* Previews */}
-                        {imagePreviews.length > 0 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
-                                {imagePreviews.map((src, i) => (
-                                    <div key={i} style={{ position: 'relative', aspectRatio: '1', borderRadius: '0.75rem', overflow: 'hidden', border: '1px solid #f1f5f9', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-                                        <img src={src} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        <button
-                                            type="button"
-                                            onClick={() => removeImage(i)}
-                                            style={{
-                                                position: 'absolute',
-                                                top: '5px',
-                                                right: '5px',
-                                                background: '#dc2626',
-                                                color: 'white',
-                                                border: 'none',
-                                                borderRadius: '50%',
-                                                width: '22px',
-                                                height: '22px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                zIndex: 10,
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                            }}
-                                        >
-                                            <HiUpload size={12} style={{ transform: 'rotate(45deg)' }} /> {/* Using HiUpload rotated as an X fallback or HiX if available */}
-                                        </button>
-                                    </div>
-                                ))}
-                                {images.length < 10 && (
-                                    <div style={{
-                                        aspectRatio: '1',
-                                        border: '2px dashed #cbd5e1',
-                                        borderRadius: '0.75rem',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: 'pointer',
-                                        background: '#f8fafc',
-                                        position: 'relative'
-                                    }}>
-                                        <input
-                                            type="file"
-                                            multiple
-                                            onChange={handleImageChange}
-                                            style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
-                                            accept="image/*"
-                                        />
-                                        <HiUpload size={20} color="#64748b" />
-                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', marginTop: '4px' }}>Add More</span>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                            {/* New Image Previews */}
+                            {newImagePreviews.map((src, i) => (
+                                <div key={`new-${i}`} style={{ position: 'relative', aspectRatio: '1', borderRadius: '0.75rem', overflow: 'hidden', border: '2px dashed var(--primary)' }}>
+                                    <img src={src} alt="New Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeNewImage(i)}
+                                        style={{ position: 'absolute', top: '5px', right: '5px', background: '#dc2626', color: 'white', border: 'none', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10 }}
+                                    >
+                                        <HiX size={12} />
+                                    </button>
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: '#10b981', color: 'white', fontSize: '0.6rem', textAlign: 'center', padding: '2px 0', fontWeight: 700, letterSpacing: '0.05em' }}>NEW</div>
+                                </div>
+                            ))}
+
+                            {/* Upload Button overlay */}
+                            {(existingImages.length + newImages.length) < 10 && (
+                                <div style={{
+                                    aspectRatio: '1',
+                                    border: '2px dashed #cbd5e1',
+                                    borderRadius: '0.75rem',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    background: '#f8fafc',
+                                    transition: 'border-color 0.2s'
+                                }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--primary)'} onMouseOut={(e) => e.currentTarget.style.borderColor = '#cbd5e1'}>
+                                    <input
+                                        type="file"
+                                        multiple
+                                        onChange={handleNewImageChange}
+                                        style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                                        accept="image/*"
+                                    />
+                                    <HiUpload size={22} color="#64748b" />
+                                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginTop: '0.4rem' }}>Add Image</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.25rem', borderTop: '1px solid #f1f5f9', paddingTop: '2.5rem' }}>
@@ -341,9 +366,9 @@ const AddProperty = () => {
                             type="submit"
                             className="btn btn-primary"
                             style={{ padding: '0.875rem 3rem', fontWeight: 700, minWidth: '180px' }}
-                            disabled={loading}
+                            disabled={submitting}
                         >
-                            {loading ? 'Publishing...' : 'Publish Listing'}
+                            {submitting ? 'Updating...' : 'Save Changes'}
                         </button>
                     </div>
                 </form>
@@ -372,4 +397,4 @@ const AddProperty = () => {
     );
 };
 
-export default AddProperty;
+export default EditProperty;

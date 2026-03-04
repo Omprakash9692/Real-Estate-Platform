@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
 import { HiOutlineTrash, HiOutlineLockClosed, HiOutlineLockOpen, HiOutlineMail, HiOutlineIdentification } from "react-icons/hi";
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { token } = useAuth();
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const res = await axios.get(`${API_URL}/api/admin/users`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -28,7 +29,6 @@ const AdminUsers = () => {
 
     const handleBlock = async (id, currentStatus) => {
         try {
-            const token = localStorage.getItem('token');
             const res = await axios.patch(`${API_URL}/api/admin/users/${id}/block`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -43,7 +43,6 @@ const AdminUsers = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
         try {
-            const token = localStorage.getItem('token');
             await axios.delete(`${API_URL}/api/admin/users/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });

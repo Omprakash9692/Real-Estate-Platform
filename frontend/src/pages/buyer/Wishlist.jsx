@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
 import { HiOutlineArrowRight, HiHeart, HiTrash } from "react-icons/hi";
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import PropertyCard from '../components/PropertyCard';
+import Navbar from '../../components/common/Navbar';
+import PropertyCard from '../../components/common/PropertyCard';
+import { useAuth } from "../../context/AuthContext";
 
 const Wishlist = () => {
+    const { token } = useAuth();
     const [wishlistItems, setWishlistItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -18,7 +20,7 @@ const Wishlist = () => {
     const fetchWishlist = async () => {
         try {
             const res = await axios.get(`${API_URL}/api/wishlist`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setWishlistItems(res.data);
             setLoading(false);
@@ -29,13 +31,18 @@ const Wishlist = () => {
     };
 
     const removeFromWishlist = async (propertyId) => {
+        if (!propertyId) {
+            alert('Invalid property ID');
+            return;
+        }
         try {
             await axios.delete(`${API_URL}/api/wishlist/${propertyId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
-            setWishlistItems(wishlistItems.filter(item => item.property._id !== propertyId));
+            setWishlistItems(prev => prev.filter(item => item.property && item.property._id !== propertyId));
         } catch (err) {
-            alert('Failed to remove from wishlist.');
+            const errorMsg = err.response?.data?.message || 'Failed to remove from wishlist.';
+            alert(errorMsg);
         }
     };
 
@@ -62,7 +69,7 @@ const Wishlist = () => {
                     </div>
                 ) : (
                     <div className="grid grid-cols-3 wishlist-grid" style={{ gap: '2rem' }}>
-                        {wishlistItems.map((item) => (
+                        {wishlistItems.filter(item => item.property).map((item) => (
                             <PropertyCard
                                 key={item._id}
                                 property={item.property}
@@ -70,6 +77,7 @@ const Wishlist = () => {
                                     <button
                                         onClick={(e) => {
                                             e.preventDefault();
+                                            e.stopPropagation();
                                             removeFromWishlist(item.property._id);
                                         }}
                                         className="btn"

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
 import { HiOutlineTrash, HiOutlineExternalLink, HiOutlineLocationMarker, HiOutlineCurrencyRupee, HiOutlineTag } from "react-icons/hi";
 import { Link } from 'react-router-dom';
-import PropertyCard from '../components/PropertyCard';
+import PropertyCard from '../../components/common/PropertyCard';
 
 const AdminProperties = () => {
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { token } = useAuth();
 
     useEffect(() => {
         const fetchProperties = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const res = await axios.get(`${API_URL}/api/admin/properties`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -30,7 +31,6 @@ const AdminProperties = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this property? This action is permanent.')) return;
         try {
-            const token = localStorage.getItem('token');
             await axios.delete(`${API_URL}/api/admin/properties/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });

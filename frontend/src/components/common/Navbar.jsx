@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import Logo from "./Logo";
 
 const Navbar = () => {
@@ -94,7 +94,7 @@ const Navbar = () => {
                 <div className="profile-section" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                   <Link to="/profile" style={{ display: 'flex', alignItems: 'center' }}>
                     <img
-                      src={`https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`}
+                      src={user.profilePic || `https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`}
                       alt="Profile"
                       style={{ width: '40px', height: '40px', borderRadius: '50%', border: '2px solid var(--primary-light)', objectFit: 'cover' }}
                     />
@@ -140,9 +140,9 @@ const Navbar = () => {
             <div style={{ marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                 <img
-                  src={`https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`}
+                  src={user.profilePic || `https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`}
                   alt="Profile"
-                  style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                  style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
                 />
                 <div>
                   <div style={{ fontWeight: 600, fontSize: '0.9375rem' }}>{user.name}</div>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import API_URL from "../config";
-import Navbar from '../components/Navbar';
-import PropertyCard from '../components/PropertyCard';
-import ReviewSection from '../components/ReviewSection';
+import API_URL from "../../config";
+import Navbar from '../../components/common/Navbar';
+import PropertyCard from '../../components/common/PropertyCard';
+import ReviewSection from '../../components/ReviewSection';
 import { HiStar, HiBadgeCheck, HiMail, HiPhone, HiCalendar } from "react-icons/hi";
 
 const SellerProfile = () => {
@@ -45,7 +45,7 @@ const SellerProfile = () => {
     return (
         <div style={{ backgroundColor: '#fdfdfd', minHeight: '100vh', paddingBottom: '6rem' }}>
             <Navbar />
-            
+
             <div className="container fade-in" style={{ paddingTop: '3rem' }}>
                 {/* Header Profile Card */}
                 <div style={{
@@ -60,26 +60,26 @@ const SellerProfile = () => {
                     gap: '2.5rem',
                     alignItems: 'center'
                 }}>
-                    <div style={{ 
-                        width: '150px', 
-                        height: '150px', 
-                        borderRadius: '50%', 
+                    <div style={{
+                        width: '150px',
+                        height: '150px',
+                        borderRadius: '50%',
                         overflow: 'hidden',
                         border: '4px solid #f1f5f9'
                     }}>
-                        <img 
-                            src={seller.profilePic || `https://ui-avatars.com/api/?name=${seller.name}&background=0d6e59&color=fff&size=150`} 
-                            alt={seller.name} 
+                        <img
+                            src={seller.profilePic || `https://ui-avatars.com/api/?name=${seller.name}&background=0d6e59&color=fff&size=150`}
+                            alt={seller.name}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                     </div>
-                    
+
                     <div style={{ flex: 1, minWidth: '300px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                             <h1 style={{ fontSize: '2.25rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>{seller.name}</h1>
                             <HiBadgeCheck size={28} color="var(--primary)" />
                         </div>
-                        
+
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '1.5rem', color: '#64748b' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <HiStar color="#eab308" size={20} />
@@ -115,11 +115,11 @@ const SellerProfile = () => {
                                     <PropertyCard key={property._id} property={property} />
                                 ))
                             ) : (
-                                <div style={{ 
-                                    gridColumn: '1 / -1', 
-                                    padding: '3rem', 
-                                    background: '#f8fafc', 
-                                    borderRadius: '1.5rem', 
+                                <div style={{
+                                    gridColumn: '1 / -1',
+                                    padding: '3rem',
+                                    background: '#f8fafc',
+                                    borderRadius: '1.5rem',
                                     textAlign: 'center',
                                     border: '1px dashed #e2e8f0'
                                 }}>

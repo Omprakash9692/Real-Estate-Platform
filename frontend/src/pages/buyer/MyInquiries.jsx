@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
-import { HiOutlineChatAlt2, HiCalendar, HiCheckCircle, HiHome, HiExternalLink, HiUser, HiMail, HiPhone } from "react-icons/hi";
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Navbar from '../components/Navbar';
+import API_URL from "../../config";
+import { HiOutlineChatAlt2, HiChatAlt2, HiCalendar, HiCheckCircle, HiHome, HiExternalLink, HiUser, HiMail, HiPhone } from "react-icons/hi";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from "../../context/AuthContext";
+import Navbar from '../../components/common/Navbar';
 
 const MyInquiries = () => {
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const [inquiries, setInquiries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchInquiries = async () => {
@@ -18,7 +19,7 @@ const MyInquiries = () => {
             try {
                 const endpoint = user?.role === 'seller' ? 'seller' : 'my';
                 const res = await axios.get(`${API_URL}/api/inquiry/${endpoint}`, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 // Both endpoints now return { success: true, inquiries: [...] }
                 setInquiries(res.data.inquiries || []);
@@ -35,11 +36,27 @@ const MyInquiries = () => {
     const markAsRead = async (id) => {
         try {
             await axios.patch(`${API_URL}/api/inquiry/${id}/read`, {}, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setInquiries(inquiries.map(inq => inq._id === id ? { ...inq, isRead: true } : inq));
         } catch (err) {
             console.error('Failed to mark read');
+        }
+    };
+
+    const handleStartChat = async (inq) => {
+        try {
+            const res = await axios.post(`${API_URL}/api/chat/start`, {
+                propertyId: inq.property?._id,
+                buyerId: inq.buyer?._id
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            // Pass the chat object in state so ChatMessages can auto-focus it
+            navigate('/chat-messages', { state: { chat: res.data } });
+        } catch (err) {
+            console.error('Error starting chat:', err);
+            alert('Failed to start chat. Please try again.');
         }
     };
 
@@ -146,9 +163,13 @@ const MyInquiries = () => {
                                         </button>
                                     )}
                                     {isSeller && (
-                                        <a href={`mailto:${inq.buyer?.email}`} className="btn btn-primary" style={{ backgroundColor: '#2563eb' }}>
-                                            Reply via Email
-                                        </a>
+                                        <button
+                                            onClick={() => handleStartChat(inq)}
+                                            className="btn btn-primary"
+                                            style={{ backgroundColor: '#2563eb', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+                                        >
+                                            <HiChatAlt2 /> Message
+                                        </button>
                                     )}
                                 </div>
                             </div>

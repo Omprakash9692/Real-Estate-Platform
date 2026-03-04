@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
 import { HiSearch, HiFilter, HiAdjustments, HiViewGrid, HiViewList, HiOutlineChevronDown, HiX } from "react-icons/hi";
 import { useNavigate, useLocation } from 'react-router-dom';
-import PropertyCard from '../components/PropertyCard';
-import Navbar from '../components/Navbar';
+import PropertyCard from '../../components/common/PropertyCard';
+import Navbar from '../../components/common/Navbar';
 
 const Properties = () => {
     const navigate = useNavigate();
+    const { user, token } = useAuth();
     const location = useLocation();
     const [properties, setProperties] = useState([]);
+    const [wishlistedIds, setWishlistedIds] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [viewMode, setViewMode] = useState('grid');
@@ -54,7 +57,40 @@ const Properties = () => {
 
         setFilters(initialFilters);
         fetchProperties(initialFilters);
-    }, [location.search]);
+        if (user) {
+            fetchWishlist();
+        }
+    }, [location.search, user]);
+
+    const fetchWishlist = async () => {
+        try {
+            const res = await axios.get(`${API_URL}/api/wishlist`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setWishlistedIds(res.data.filter(item => item.property).map(item => String(item.property._id)));
+        } catch (err) {
+            console.error("Failed to fetch wishlist:", err);
+        }
+    };
+
+    const handleToggleWishlist = async (propertyId) => {
+        try {
+            const isWishlisted = wishlistedIds.includes(propertyId);
+            if (isWishlisted) {
+                await axios.delete(`${API_URL}/api/wishlist/${propertyId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setWishlistedIds(prev => prev.filter(id => id !== propertyId));
+            } else {
+                await axios.post(`${API_URL}/api/wishlist/${propertyId}`, {}, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setWishlistedIds(prev => [...prev, propertyId]);
+            }
+        } catch (err) {
+            console.error("Failed to toggle wishlist:", err);
+        }
+    };
 
     const fetchProperties = async (currentFilters) => {
         try {
@@ -405,8 +441,13 @@ const Properties = () => {
                                 gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(280px, 1fr))' : '1fr',
                                 gap: '1.5rem'
                             }}>
-                                {properties.map(p => (
-                                    <PropertyCard key={p._id} property={p} />
+                                {properties.filter(p => p).map(p => (
+                                    <PropertyCard
+                                        key={p._id}
+                                        property={p}
+                                        isWishlisted={wishlistedIds.includes(String(p._id))}
+                                        onToggleWishlist={handleToggleWishlist}
+                                    />
                                 ))}
                             </div>
                         )}

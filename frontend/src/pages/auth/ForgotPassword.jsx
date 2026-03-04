@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import API_URL from '../config';
+import axios from 'axios';
+import Navbar from '../../components/common/Navbar';
+import API_URL from "../../config";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ const ForgotPassword = () => {
         setMessage('');
 
         try {
-            const response = await fetch(`${API_URL}/api/auth/forgot-password`, {
+            const response = await fetch(`${API_URL} /api/auth / forgot - password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,27 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
 import {
   HiLocationMarker, HiSearch, HiHome, HiOfficeBuilding,
   HiOutlineMap, HiLightningBolt, HiShieldCheck,
   HiCurrencyDollar, HiVideoCamera, HiMail, HiPhone
 } from "react-icons/hi";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import PropertyCard from '../components/PropertyCard';
+import { useNavigate, Link } from 'react-router-dom';
+import Navbar from '../../components/common/Navbar';
+import PropertyCard from '../../components/common/PropertyCard';
+import { useAuth } from "../../context/AuthContext";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { user, token } = useAuth();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [propertyType, setPropertyType] = useState("Select Type");
+  const [propertyCounts, setPropertyCounts] = useState({
+    flat: 0,
+    villa: 0,
+    penthouse: 0,
+    commercial: 0
+  });
+  const [wishlistedIds, setWishlistedIds] = useState([]);
 
   useEffect(() => {
     fetchProperties();
-  }, []);
+    fetchCounts();
+    if (user) {
+      fetchWishlist();
+    }
+  }, [user]);
+
+  const fetchWishlist = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/wishlist`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setWishlistedIds(res.data.filter(item => item.property).map(item => String(item.property._id)));
+    } catch (err) {
+      console.error("Failed to fetch wishlist:", err);
+    }
+  };
+
+  const handleToggleWishlist = async (propertyId) => {
+    try {
+      const isWishlisted = wishlistedIds.includes(propertyId);
+      if (isWishlisted) {
+        await axios.delete(`${API_URL}/api/wishlist/${propertyId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setWishlistedIds(prev => prev.filter(id => id !== propertyId));
+      } else {
+        await axios.post(`${API_URL}/api/wishlist/${propertyId}`, {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setWishlistedIds(prev => [...prev, propertyId]);
+      }
+    } catch (err) {
+      console.error("Failed to toggle wishlist:", err);
+    }
+  };
+
+  const fetchCounts = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/property/counts`);
+      if (res.data.success) {
+        setPropertyCounts(res.data.counts);
+      }
+    } catch (err) {
+      console.error("Failed to fetch property counts:", err);
+    }
+  };
 
   const fetchProperties = async (search = "") => {
     try {
@@ -45,10 +99,10 @@ const LandingPage = () => {
   };
 
   const categories = [
-    { name: 'Modern Flats', count: '1,240', icon: <HiOfficeBuilding size={32} />, type: 'flat' },
-    { name: 'Luxury Villas', count: '482', icon: <HiHome size={32} />, type: 'villa' },
-    { name: 'Penthouse', count: '125', icon: <HiOfficeBuilding size={32} />, type: 'penthouse' },
-    { name: 'Commercial', count: '356', icon: <HiOfficeBuilding size={32} />, type: 'commercial' },
+    { name: 'Modern Flats', count: propertyCounts.flat || 0, icon: <HiOfficeBuilding size={32} />, type: 'flat' },
+    { name: 'Luxury Villas', count: propertyCounts.villa || 0, icon: <HiHome size={32} />, type: 'villa' },
+    { name: 'Penthouse', count: propertyCounts.penthouse || 0, icon: <HiOfficeBuilding size={32} />, type: 'penthouse' },
+    { name: 'Commercial', count: propertyCounts.commercial || 0, icon: <HiOfficeBuilding size={32} />, type: 'commercial' },
   ];
 
   const features = [
@@ -236,7 +290,7 @@ const LandingPage = () => {
                   {cat.icon}
                 </div>
                 <h3 style={{ marginBottom: '0.5rem', fontSize: '1.25rem' }}>{cat.name}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{cat.count} Properties</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{cat.count.toLocaleString()} Properties</p>
               </div>
             ))}
           </div>
@@ -303,6 +357,95 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section id="process" style={{ padding: '8rem 0', backgroundColor: 'var(--bg-main)' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+            <span className="badge" style={{ backgroundColor: 'rgba(13, 148, 136, 0.1)', color: 'var(--primary)', marginBottom: '1rem', display: 'inline-block' }}>
+              How It Works
+            </span>
+            <h2 style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>Our Seamless <span className="text-gradient">Process</span></h2>
+            <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', fontSize: '1.125rem' }}>
+              We've simplified the journey of finding your dream home into three clear, stress-free steps.
+            </p>
+          </div>
+
+          <div className="process-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '3rem',
+            position: 'relative'
+          }}>
+            {[
+              {
+                step: '01',
+                title: 'Smart Search',
+                desc: 'Leverage our AI-driven Smart Search algorithms to find the best property matches tailored to your specific preferences.',
+                icon: <HiLightningBolt size={32} />
+              },
+              {
+                step: '02',
+                title: 'Virtual Tours',
+                desc: 'Experience your future home from anywhere with our high-definition 3D virtual tours and immersive walkthroughs.',
+                icon: <HiVideoCamera size={32} />
+              },
+              {
+                step: '03',
+                title: 'Verified Trust',
+                desc: 'Every listing is strictly audited for ownership and condition, ensuring your peace of mind and a secure transaction.',
+                icon: <HiShieldCheck size={32} />
+              }
+            ].map((p, idx) => (
+              <div key={idx} className="process-card" style={{
+                padding: '3rem 2rem',
+                background: 'rgba(255, 255, 255, 0.4)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: '2rem',
+                border: '1px solid rgba(255, 255, 255, 0.5)',
+                position: 'relative',
+                transition: 'all 0.3s ease',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: '-1.5rem',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '64px',
+                  height: '64px',
+                  background: 'var(--primary)',
+                  color: 'white',
+                  borderRadius: '1.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.5rem',
+                  fontWeight: 800,
+                  boxShadow: '0 8px 20px rgba(13, 148, 136, 0.3)'
+                }}>
+                  {p.step}
+                </div>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  backgroundColor: 'var(--primary-light)',
+                  color: 'var(--primary)',
+                  borderRadius: '2rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '1rem auto 2rem',
+                }}>
+                  {p.icon}
+                </div>
+                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{p.title}</h3>
+                <p style={{ color: 'var(--text-muted)', lineHeight: '1.7' }}>{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Featured Collections */}
       <section style={{ padding: '6rem 0', backgroundColor: 'var(--bg-alt)' }}>
         <div className="container">
@@ -326,14 +469,23 @@ const LandingPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-3">
-              {properties.map((property) => (
-                <PropertyCard key={property._id} property={property} />
+              {properties.filter(p => p).map((property) => (
+                <PropertyCard
+                  key={property._id}
+                  property={property}
+                  isWishlisted={wishlistedIds.includes(String(property._id))}
+                  onToggleWishlist={handleToggleWishlist}
+                />
               ))}
             </div>
           )}
 
           <div style={{ textAlign: 'center', marginTop: '5rem' }}>
-            <button className="btn btn-primary" style={{ padding: '1rem 3rem', borderRadius: '1.5rem' }}>
+            <button
+              onClick={() => navigate('/properties')}
+              className="btn btn-primary"
+              style={{ padding: '1rem 3rem', borderRadius: '1.5rem' }}
+            >
               Discover More Properties
             </button>
           </div>
@@ -655,6 +807,15 @@ const LandingPage = () => {
                     background-color: var(--primary) !important;
                     color: white !important;
                     transform: scale(1.1);
+                }
+                .process-card:hover {
+                    transform: translateY(-10px);
+                    background: white !important;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+                    border-color: var(--primary-light) !important;
+                }
+                html {
+                    scroll-behavior: smooth;
                 }
             `}</style>
     </div>

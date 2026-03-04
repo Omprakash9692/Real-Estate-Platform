@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
 import {
     HiOutlineUserGroup,
     HiOutlineLibrary,
@@ -18,12 +19,12 @@ const AdminDashboard = () => {
         soldProperties: 0
     });
     const [loading, setLoading] = useState(true);
+    const { token } = useAuth();
 
     useEffect(() => {
         console.log('AdminDashboard mounted');
         const fetchDashboardData = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const res = await axios.get(`${API_URL}/api/admin/stats`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });

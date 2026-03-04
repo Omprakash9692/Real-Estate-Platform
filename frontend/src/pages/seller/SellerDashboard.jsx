@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
-import PropertyCard from '../components/PropertyCard';
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
+import PropertyCard from '../../components/common/PropertyCard';
 import {
     HiOutlineEye,
     HiOutlineUserGroup,
@@ -18,10 +19,9 @@ import {
     HiOutlineBell
 } from "react-icons/hi";
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 const SellerDashboard = () => {
-    const { logout } = useAuth();
+    const { logout, token } = useAuth();
     const [stats, setStats] = useState({
         totalProperties: 0,
         activeListings: 0,
@@ -37,7 +37,6 @@ const SellerDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const [statsRes, propsRes, inqRes] = await Promise.all([
                     axios.get(`${API_URL}/api/property/seller/dashboard`, {
                         headers: { Authorization: `Bearer ${token}` }
@@ -60,17 +59,32 @@ const SellerDashboard = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [token]);
 
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this listing?')) return;
         try {
             await axios.delete(`${API_URL}/api/property/${id}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setProperties(properties.filter(p => p._id !== id));
         } catch (err) {
             alert('Failed to delete property.');
+        }
+    };
+
+    const handleStatusUpdate = async (id, currentStatus) => {
+        const newStatus = (currentStatus === 'sold' || currentStatus === 'rented')
+            ? 'sale'
+            : (properties.find(p => p._id === id).status === 'rent' ? 'rented' : 'sold');
+
+        try {
+            await axios.patch(`${API_URL}/api/property/${id}/status`, { status: newStatus }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setProperties(properties.map(p => p._id === id ? { ...p, status: newStatus } : p));
+        } catch (err) {
+            alert('Failed to update status.');
         }
     };
 
@@ -211,6 +225,23 @@ const SellerDashboard = () => {
                                 property={p}
                                 renderActions={() => (
                                     <div style={{ flex: 1, display: 'flex', gap: '0.4rem' }}>
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleStatusUpdate(p._id, p.status); }}
+                                            className="btn btn-outline"
+                                            style={{
+                                                flex: 1,
+                                                padding: '0.5rem',
+                                                fontSize: '0.75rem',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '0.3rem',
+                                                color: p.status === 'sold' || p.status === 'rented' ? 'var(--primary)' : '#64748b'
+                                            }}
+                                            title={p.status === 'sold' || p.status === 'rented' ? "Mark as Available" : "Mark as Sold"}
+                                        >
+                                            <HiOutlineCheckCircle size={14} /> {p.status === 'sold' || p.status === 'rented' ? 'Available' : 'Sold'}
+                                        </button>
                                         <Link to={`/edit-property/${p._id}`} className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
                                             <HiOutlinePencilAlt size={14} /> Edit
                                         </Link>

@@ -43,9 +43,15 @@ export const addProperty = async (req, res) => {
       images: imageUrls,
       seller: req.user._id,
       amenities: req.body.amenities
-        ? typeof req.body.amenities === "string"
-          ? req.body.amenities.split(",")
-          : req.body.amenities
+        ? Array.isArray(req.body.amenities)
+          ? req.body.amenities
+          : (() => {
+            try {
+              return JSON.parse(req.body.amenities);
+            } catch (e) {
+              return req.body.amenities.split(",");
+            }
+          })()
         : [],
       securityDeposit: Number(req.body.securityDeposit) || 0,
       maintenance: Number(req.body.maintenance) || 0,
@@ -306,7 +312,7 @@ export const getAllProperties = async (req, res) => {
     if (sort === "latest") sortOption = { createdAt: -1 };
 
     const properties = await Property.find(query)
-      .populate("seller", "name phone")
+      .populate("seller", "name phone profilePic")
       .sort(sortOption);
 
     res.json({
@@ -328,7 +334,7 @@ export const getPropertyDetails = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id).populate(
       "seller",
-      "name email phone"
+      "name email phone profilePic"
     );
 
     if (!property) {
@@ -417,6 +423,32 @@ export const getSellerDashboard = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+// GET PROPERTY COUNTS BY TYPE
+export const getPropertyCounts = async (req, res) => {
+  try {
+    const counts = await Property.aggregate([
+      { $match: { status: { $in: ["sale", "rent"] } } },
+      { $group: { _id: "$propertyType", count: { $sum: 1 } } }
+    ]);
+
+    const formattedCounts = counts.reduce((acc, curr) => {
+      acc[curr._id] = curr.count;
+      return acc;
+    }, {});
+
+    res.json({
+      success: true,
+      counts: formattedCounts
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error while fetching property counts",
+      error: error.message
     });
   }
 };

@@ -1,4 +1,4 @@
-import API_URL from "../config";
+import API_URL from "../../config";
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';

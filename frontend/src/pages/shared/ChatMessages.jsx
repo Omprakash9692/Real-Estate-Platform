@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
 import { useNavigate, useLocation } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import { useAuth } from '../context/AuthContext';
-import { useChat } from '../context/ChatContext';
+import Navbar from '../../components/common/Navbar';
+import { useAuth } from "../../context/AuthContext";
+import { useChat } from '../../context/ChatContext';
 import { HiChevronLeft, HiOutlineChatAlt2, HiPaperAirplane, HiOutlineTrash } from 'react-icons/hi';
 import './ChatMessages.css';
 
 const ChatMessages = () => {
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const location = useLocation();
     const { socket, activeChat, setActiveChat, joinChat, sendMessage } = useChat();
     const [conversations, setConversations] = useState([]);
@@ -26,7 +26,7 @@ const ChatMessages = () => {
         const fetchConversations = async () => {
             try {
                 const res = await axios.get(`${API_URL}/api/chat/user`, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 const fetchedConversations = res.data;
                 setConversations(fetchedConversations);
@@ -56,7 +56,7 @@ const ChatMessages = () => {
             const fetchMessages = async () => {
                 try {
                     const res = await axios.get(`${API_URL}/api/chat/${activeChat._id}`, {
-                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                        headers: { Authorization: `Bearer ${token}` }
                     });
                     setMessages(res.data.messages || []);
                     joinChat(activeChat._id);
@@ -106,7 +106,7 @@ const ChatMessages = () => {
                 chatId: activeChat._id,
                 text: textToSend
             }, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
 
             // Emit to socket with database-provided fields
@@ -126,7 +126,7 @@ const ChatMessages = () => {
 
         try {
             await axios.delete(`${API_URL}/api/chat/${chatId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setConversations((prev) => prev.filter((c) => c._id !== chatId));
             if (activeChat?._id === chatId) setActiveChat(null);
@@ -140,7 +140,7 @@ const ChatMessages = () => {
 
         try {
             const res = await axios.delete(`${API_URL}/api/chat/${chatId}/message/${messageId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setMessages(res.data.chat.messages);
         } catch (err) {
@@ -177,7 +177,11 @@ const ChatMessages = () => {
                                     onClick={() => setActiveChat(chat)}
                                 >
                                     <div className="conversation-avatar">
-                                        {getChatPartner(chat)?.name?.charAt(0)}
+                                        {getChatPartner(chat)?.profilePic ? (
+                                            <img src={getChatPartner(chat).profilePic} alt="" />
+                                        ) : (
+                                            getChatPartner(chat)?.name?.charAt(0)
+                                        )}
                                     </div>
                                     <div className="conversation-info">
                                         <div className="conversation-name">{getChatPartner(chat)?.name}</div>
@@ -208,7 +212,11 @@ const ChatMessages = () => {
                                         <HiChevronLeft size={24} />
                                     </button>
                                     <div className="conversation-avatar">
-                                        {getChatPartner(activeChat)?.name?.charAt(0)}
+                                        {getChatPartner(activeChat)?.profilePic ? (
+                                            <img src={getChatPartner(activeChat).profilePic} alt="" />
+                                        ) : (
+                                            getChatPartner(activeChat)?.name?.charAt(0)
+                                        )}
                                     </div>
                                     <div className="chat-header-name">{getChatPartner(activeChat)?.name}</div>
                                 </div>

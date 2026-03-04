@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import Navbar from "../../components/common/Navbar";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
     const [formData, setFormData] = useState({

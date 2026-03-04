@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
+import { useAuth } from "../../context/AuthContext";
 import { HiOutlineUser, HiOutlineAnnotation, HiOutlineHome, HiOutlineCalendar } from "react-icons/hi";
 
 const AdminInquiries = () => {
     const [inquiries, setInquiries] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { token } = useAuth();
 
     useEffect(() => {
         const fetchInquiries = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const res = await axios.get(`${API_URL}/api/admin/inquiries`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });

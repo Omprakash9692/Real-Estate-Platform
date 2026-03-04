@@ -3,7 +3,7 @@ import Review from "../models/review.model.js";
 // ADD REVIEW
 export const addReview = async (req, res) => {
     try {
-        const { sellerId, rating, comment } = req.body;
+        const { sellerId, propertyId, rating, comment } = req.body;
         const buyerId = req.user._id;
 
         // prevent self review
@@ -14,12 +14,18 @@ export const addReview = async (req, res) => {
             });
         }
 
-        const review = new Review({
+        const reviewData = {
             buyer: buyerId,
             seller: sellerId,
             rating,
             comment,
-        });
+        };
+
+        if (propertyId) {
+            reviewData.property = propertyId;
+        }
+
+        const review = new Review(reviewData);
 
         await review.save();
 
@@ -49,8 +55,14 @@ export const addReview = async (req, res) => {
 export const getSellerReviews = async (req, res) => {
     try {
         const { sellerId } = req.params;
+        const { propertyId } = req.query;
 
-        const reviews = await Review.find({ seller: sellerId })
+        let query = { seller: sellerId };
+        if (propertyId) {
+            query.property = propertyId;
+        }
+
+        const reviews = await Review.find(query)
             .populate("buyer", "name profilePic")
             .sort({ createdAt: -1 });
 

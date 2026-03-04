@@ -8,7 +8,7 @@ import {
     HiOutlineLogout
 } from "react-icons/hi";
 import { useAuth } from '../context/AuthContext';
-import Logo from './Logo';
+import Logo from './common/Logo';
 
 const SellerSidebar = ({ isOpen, onClose }) => {
     const { logout } = useAuth();

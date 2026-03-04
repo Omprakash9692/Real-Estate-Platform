@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import API_URL from "../config";
+import API_URL from "../../config";
 import {
     HiLocationMarker, HiOutlineHome, HiArrowsExpand,
     HiPhone, HiChatAlt, HiHeart, HiOutlineLogout,
@@ -10,14 +10,13 @@ import {
     HiX, HiChevronLeft, HiCollection, HiOutlineHeart
 } from "react-icons/hi";
 import { HiStar, HiOutlineStar } from 'react-icons/hi';
-import Navbar from '../components/Navbar';
-import PropertyCard from '../components/PropertyCard';
-import { useAuth } from '../context/AuthContext';
-import ReviewSection from '../components/ReviewSection';
+import Navbar from '../../components/common/Navbar';
+import PropertyCard from '../../components/common/PropertyCard';
+import { useAuth } from '../../context/AuthContext';
 
 const PropertyDetails = () => {
     const { id } = useParams();
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const navigate = useNavigate();
     const [property, setProperty] = useState(null);
     const [similarProperties, setSimilarProperties] = useState([]);
@@ -26,7 +25,6 @@ const PropertyDetails = () => {
     const [inquiry, setInquiry] = useState({ name: '', email: '', phone: '', message: '' });
     const [inquiryStatus, setInquiryStatus] = useState({ loading: false, success: false, error: null });
     const [isInWishlist, setIsInWishlist] = useState(false);
-    const [sellerStats, setSellerStats] = useState({ avgRating: 0, totalReviews: 0 });
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -38,14 +36,10 @@ const PropertyDetails = () => {
 
                 if (user && user.role === 'buyer') {
                     const wishRes = await axios.get(`${API_URL}/api/wishlist`, {
-                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                        headers: { Authorization: `Bearer ${token}` }
                     });
                     const found = wishRes.data.some(item => item.property?._id === id);
                     setIsInWishlist(found);
-                }
-                if (res.data.property?.seller?._id) {
-                    const statsRes = await axios.get(`${API_URL}/api/reviews/${res.data.property.seller._id}`);
-                    setSellerStats(statsRes.data.stats);
                 }
                 setLoading(false);
             } catch (err) {
@@ -61,12 +55,12 @@ const PropertyDetails = () => {
         try {
             if (isInWishlist) {
                 await axios.delete(`${API_URL}/api/wishlist/${id}`, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setIsInWishlist(false);
             } else {
                 await axios.post(`${API_URL}/api/wishlist/${id}`, {}, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setIsInWishlist(true);
             }
@@ -88,7 +82,7 @@ const PropertyDetails = () => {
                 propertyId: id,
                 message: inquiry.message
             }, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             setInquiryStatus({ loading: false, success: true, error: null });
             setInquiry({ ...inquiry, message: '' });
@@ -106,7 +100,7 @@ const PropertyDetails = () => {
                 propertyId: id,
                 sellerId: property.seller._id
             }, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
 
             const chat = res.data;
@@ -116,7 +110,7 @@ const PropertyDetails = () => {
                 chatId: chat._id,
                 text: `(Context: Interested in property "${property.title}")`
             }, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
 
             navigate('/chat-messages', { state: { chat } });
@@ -379,10 +373,6 @@ const PropertyDetails = () => {
                                 ))}
                             </div>
                         </div>
-
-
-                        {/* Review Section */}
-                        <ReviewSection sellerId={property.seller?._id} />
                     </div>
 
                     {/* Right Column: Sidebar */}
@@ -422,19 +412,13 @@ const PropertyDetails = () => {
                         <div style={{ background: 'white', padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #f1f5f9', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                                 <div style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden', background: '#f1f5f9' }}>
-                                    <img src={`https://ui-avatars.com/api/?name=${property.seller?.name || 'Seller'}&background=0d6e59&color=fff`} alt="Agent" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <img src={property.seller?.profilePic || `https://ui-avatars.com/api/?name=${property.seller?.name || 'Seller'}&background=0d6e59&color=fff`} alt="Agent" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </div>
                                 <div>
                                     <Link to={`/seller/${property.seller?._id}`} style={{ textDecoration: 'none' }}>
                                         <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: 'var(--text-main)' }} className="hover-primary">{property.seller?.name || 'Seller'}</h4>
                                     </Link>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8125rem', color: '#eab308', fontWeight: 700 }}>
-                                            <HiStar size={14} fill="#eab308" /> {sellerStats.avgRating}
-                                        </div>
-                                        <span style={{ fontSize: '0.75rem', color: '#64748b' }}>({sellerStats.totalReviews} reviews)</span>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, marginTop: '0.25rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, marginTop: '0.5rem' }}>
                                         <HiBadgeCheck /> Verified Seller
                                     </div>
                                 </div>

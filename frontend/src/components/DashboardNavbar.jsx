@@ -1,6 +1,6 @@
 import React from 'react';
 import { HiMenuAlt2 } from "react-icons/hi";
-import Logo from './Logo';
+import Logo from './common/Logo';
 
 const DashboardNavbar = ({ onMenuClick }) => {
     return (

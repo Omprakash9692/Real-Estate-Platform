@@ -6,7 +6,7 @@ import API_URL from "../config";
 import "./ReviewSection.css";
 
 
-const ReviewSection = ({ sellerId }) => {
+const ReviewSection = ({ sellerId, propertyId }) => {
 
     const { user } = useAuth();
 
@@ -33,7 +33,11 @@ const ReviewSection = ({ sellerId }) => {
 
         try {
 
-            const res = await axios.get(`${API_URL}/api/reviews/${sellerId}`);
+            const url = propertyId
+                ? `${API_URL}/api/reviews/${sellerId}?propertyId=${propertyId}`
+                : `${API_URL}/api/reviews/${sellerId}`;
+
+            const res = await axios.get(url);
 
             setReviews(res.data.reviews);
 
@@ -59,7 +63,7 @@ const ReviewSection = ({ sellerId }) => {
 
         fetchReviews();
 
-    }, [sellerId]);
+    }, [sellerId, propertyId]);
 
 
 
@@ -81,6 +85,7 @@ const ReviewSection = ({ sellerId }) => {
 
                 {
                     sellerId,
+                    propertyId,
                     rating,
                     comment
                 },
@@ -133,7 +138,7 @@ const ReviewSection = ({ sellerId }) => {
     return (
         <div className="reviews-section">
             <div className="reviews-header">
-                <h3>Ratings & Reviews</h3>
+                <h3>{propertyId ? "Property Reviews" : "Seller Reviews"}</h3>
                 <div className="reviews-stats">
                     <div className="avg-rating">
                         <HiStar color="#eab308" />
@@ -209,7 +214,11 @@ const ReviewSection = ({ sellerId }) => {
                         </div>
                     ))
                 ) : (
-                    <div className="no-reviews">No reviews yet for this seller.</div>
+                    <div className="no-reviews">
+                        {propertyId
+                            ? "No reviews yet for this property."
+                            : "No reviews yet for this seller."}
+                    </div>
                 )}
             </div>
         </div>

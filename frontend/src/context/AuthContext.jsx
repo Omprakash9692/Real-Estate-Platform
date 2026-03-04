@@ -8,8 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
-
-    const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [token, setToken] = useState(localStorage.getItem('token') || sessionStorage.getItem('token') || null);
 
     const [loading, setLoading] = useState(true);
 
@@ -20,15 +19,10 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
 
         if (token) {
-
-            const storedUser = localStorage.getItem('user');
-
+            const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
             if (storedUser) {
-
                 setUser(JSON.parse(storedUser));
-
             }
-
         }
 
         setLoading(false);
@@ -70,44 +64,26 @@ export const AuthProvider = ({ children }) => {
 
 
 
-    const login = async (email, password) => {
-
+    const login = async (email, password, remember = false) => {
         try {
-
-            const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });   // ✅ fixed
-
+            const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
             const { token, user } = res.data;
 
-
-
             setToken(token);
-
             setUser(user);
 
-
-
-            localStorage.setItem('token', token);
-
-            localStorage.setItem('user', JSON.stringify(user));
-
-
+            const storage = remember ? localStorage : sessionStorage;
+            storage.setItem('token', token);
+            storage.setItem('user', JSON.stringify(user));
 
             return { success: true };
-
         }
-
         catch (err) {
-
             return {
-
                 success: false,
-
                 message: err.response?.data?.message || 'Login failed'
-
             };
-
         }
-
     };
 
 
@@ -147,17 +123,13 @@ export const AuthProvider = ({ children }) => {
 
 
     const logout = () => {
-
         setToken(null);
-
         setUser(null);
-
         localStorage.removeItem('token');
-
         localStorage.removeItem('user');
-
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
         navigate('/login');
-
     };
 
 
