@@ -6,6 +6,7 @@ import {
     logout,
     forgotPassword,
     resetPassword,
+
 } from "../controllers/auth.controller.js";
 
 router.post("/register", register);

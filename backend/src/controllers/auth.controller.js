@@ -157,7 +157,6 @@ export const forgotPassword = async (req, res) => {
         }
     } catch (err) {
         res.status(500).json({
-
             message: err.message,
         });
     }
@@ -198,6 +197,4 @@ export const resetPassword = async (req, res) => {
             message: err.message,
         });
     }
- };
-
-
+};
