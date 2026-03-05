@@ -1,15 +1,20 @@
 import nodemailer from "nodemailer";
 
 const sendEmail = async (options) => {
-    // Explicit SMTP configuration for better reliability on cloud platforms like Render
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
+        port: 465,
+        secure: true, // SSL
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
         },
+        // Connections settings to help with cloud environment issues
+        connectionTimeout: 10000, // 10 seconds
+        greetingTimeout: 10000,
+        socketTimeout: 10000,
+        debug: true,
+        logger: true
     });
 
     await transporter.sendMail({
