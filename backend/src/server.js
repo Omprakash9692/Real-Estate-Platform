@@ -23,6 +23,7 @@ import http from "http";
 import { Server } from "socket.io";
 import chatRoutes from "./routes/chat.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
+import contactRoutes from "./routes/contact.route.js";
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use("/api/property", propertyRoutes);
 app.use("/api/inquiry", inquiryRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.post("/chat", async (req, res) => {
   try {
@@ -75,6 +77,7 @@ app.post("/chat", async (req, res) => {
 
 app.use("/api/chat", chatRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/contact", contactRoutes);
 
 const PORT = process.env.PORT || 5000;
 

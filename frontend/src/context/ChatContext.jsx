@@ -19,10 +19,14 @@ export const ChatProvider = ({ children }) => {
 
 
     useEffect(() => {
-
         activeChatRef.current = activeChat;
-
     }, [activeChat]);
+
+    // Reset chat state when user logs out or changes
+    useEffect(() => {
+        setActiveChat(null);
+        setNotifications([]);
+    }, [user]);
 
 
 
@@ -66,7 +70,7 @@ export const ChatProvider = ({ children }) => {
 
 
 
-    const sendMessage = (chatId, text, messageId = null, createdAt = new Date()) => {
+    const sendMessage = (chatId, text, messageId = null, createdAt = new Date(), image = null) => {
 
         if (socket && user) {
 
@@ -77,6 +81,8 @@ export const ChatProvider = ({ children }) => {
                 sender: user._id,
 
                 text,
+
+                image,
 
                 createdAt,
 

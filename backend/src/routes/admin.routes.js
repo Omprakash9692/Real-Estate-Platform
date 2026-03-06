@@ -8,6 +8,8 @@ import {
     deleteProperty,
     getAllInquiries,
     getDashboardStats,
+    getPendingSellers,
+    approveSeller,
 } from "../controllers/admin.controller.js";
 import { protect, authorize } from "../middlewares/auth.middleware.js";
 
@@ -20,5 +22,7 @@ router.get("/properties", getAllProperties);
 router.delete("/properties/:id", deleteProperty);
 router.get("/inquiries", getAllInquiries);
 router.get("/stats", getDashboardStats);
+router.get("/pending-sellers", getPendingSellers);
+router.patch("/approve-seller/:id", approveSeller);
 
 export default router;

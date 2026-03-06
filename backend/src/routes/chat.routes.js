@@ -56,15 +56,21 @@ router.post("/start", async (req, res) => {
 // send message
 router.post("/send", async (req, res) => {
     try {
-        const { chatId, text } = req.body;
+        const { chatId, text, image } = req.body;
         const userId = req.user.id;
 
         const chat = await Chat.findById(chatId);
         if (!chat) return res.status(404).json({ message: "Chat not found" });
 
+        // Security Check: Ensure sender is part of this chat
+        if (chat.buyer.toString() !== userId && chat.seller.toString() !== userId) {
+            return res.status(403).json({ message: "Not authorized to send messages in this chat" });
+        }
+
         const newMessage = {
             sender: userId,
             text,
+            image,
             createdAt: new Date(),
         };
         chat.messages.push(newMessage);
@@ -108,6 +114,15 @@ router.get("/:chatId", async (req, res) => {
             "messages.sender",
             "name profilePic"
         );
+
+        if (!chat) return res.status(404).json({ message: "Chat not found" });
+
+        // Security Check: Ensure user is part of this chat
+        const userId = req.user._id.toString();
+        if (chat.buyer.toString() !== userId && chat.seller.toString() !== userId) {
+            return res.status(403).json({ message: "Not authorized to view these messages" });
+        }
+
         res.json(chat);
     } catch (err) {
         res

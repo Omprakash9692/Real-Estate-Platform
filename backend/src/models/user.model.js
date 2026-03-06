@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    isApproved: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

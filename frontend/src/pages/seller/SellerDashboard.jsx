@@ -213,49 +213,69 @@ const SellerDashboard = () => {
                         No properties found matching "{searchTerm}".
                     </div>
                 ) : (
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                        gap: '1.5rem',
-                        justifyItems: 'center'
-                    }}>
-                        {filteredProperties.map((p) => (
-                            <PropertyCard
-                                key={p._id}
-                                property={p}
-                                renderActions={() => (
-                                    <div style={{ flex: 1, display: 'flex', gap: '0.4rem' }}>
-                                        <button
-                                            onClick={(e) => { e.stopPropagation(); handleStatusUpdate(p._id, p.status); }}
-                                            className="btn btn-outline"
-                                            style={{
-                                                flex: 1,
-                                                padding: '0.5rem',
-                                                fontSize: '0.75rem',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '0.3rem',
-                                                color: p.status === 'sold' || p.status === 'rented' ? 'var(--primary)' : '#64748b'
-                                            }}
-                                            title={p.status === 'sold' || p.status === 'rented' ? "Mark as Available" : "Mark as Sold"}
-                                        >
-                                            <HiOutlineCheckCircle size={14} /> {p.status === 'sold' || p.status === 'rented' ? 'Available' : 'Sold'}
-                                        </button>
-                                        <Link to={`/edit-property/${p._id}`} className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
-                                            <HiOutlinePencilAlt size={14} /> Edit
-                                        </Link>
-                                        <button onClick={() => handleDelete(p._id)} className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem', color: '#ef4444', borderColor: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
-                                            <HiOutlineTrash size={14} /> Delete
-                                        </button>
-                                        <Link to={`/property/${p._id}`} className="btn btn-primary" style={{ padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <HiExternalLink size={14} />
-                                        </Link>
-                                    </div>
-                                )}
-                            />
-                        ))}
-                    </div>
+                    <>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                            gap: '1.5rem',
+                            justifyItems: 'center'
+                        }}>
+                            {filteredProperties.slice(0, 3).map((p) => (
+                                <PropertyCard
+                                    key={p._id}
+                                    property={p}
+                                    renderActions={() => (
+                                        <div style={{ flex: 1, display: 'flex', gap: '0.4rem' }}>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); handleStatusUpdate(p._id, p.status); }}
+                                                className="btn btn-outline"
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '0.5rem',
+                                                    fontSize: '0.75rem',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '0.3rem',
+                                                    color: p.status === 'sold' || p.status === 'rented' ? 'var(--primary)' : '#64748b'
+                                                }}
+                                                title={p.status === 'sold' || p.status === 'rented' ? "Mark as Available" : "Mark as Sold"}
+                                            >
+                                                <HiOutlineCheckCircle size={14} /> {p.status === 'sold' || p.status === 'rented' ? 'Available' : 'Sold'}
+                                            </button>
+                                            <Link to={`/edit-property/${p._id}`} className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
+                                                <HiOutlinePencilAlt size={14} /> Edit
+                                            </Link>
+                                            <button onClick={() => handleDelete(p._id)} className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem', color: '#ef4444', borderColor: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
+                                                <HiOutlineTrash size={14} /> Delete
+                                            </button>
+                                            <Link to={`/property/${p._id}`} className="btn btn-primary" style={{ padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <HiExternalLink size={14} />
+                                            </Link>
+                                        </div>
+                                    )}
+                                />
+                            ))}
+                        </div>
+
+                        {filteredProperties.length > 3 && (
+                            <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+                                <Link to="/my-properties" className="btn btn-outline" style={{
+                                    padding: '0.8rem 2.5rem',
+                                    fontWeight: 800,
+                                    fontSize: '0.9rem',
+                                    borderRadius: '0.75rem',
+                                    background: 'white',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem'
+                                }}>
+                                    Show More Listings <HiOutlinePencilAlt size={18} style={{ transform: 'rotate(90deg)' }} />
+                                </Link>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 

@@ -132,7 +132,22 @@ export const AuthProvider = ({ children }) => {
         navigate('/login');
     };
 
-
+    const refreshUser = async () => {
+        if (!token) return;
+        try {
+            const res = await axios.get(`${API_URL}/api/auth/me`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (res.data.success) {
+                const updatedUser = res.data.user;
+                setUser(updatedUser);
+                const storage = localStorage.getItem('token') ? localStorage : sessionStorage;
+                storage.setItem('user', JSON.stringify(updatedUser));
+            }
+        } catch (err) {
+            console.error('Failed to refresh user:', err);
+        }
+    };
 
 
     return (
@@ -153,7 +168,9 @@ export const AuthProvider = ({ children }) => {
 
                 register,
 
-                logout
+                logout,
+
+                refreshUser
 
             }}
 

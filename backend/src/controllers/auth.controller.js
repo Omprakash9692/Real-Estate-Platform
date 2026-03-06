@@ -26,6 +26,7 @@ export const register = async (req, res) => {
             email,
             password: hashedPassword,
             role,
+            isApproved: role === 'seller' ? false : true,
         });
 
         res.status(201).json({
@@ -191,6 +192,24 @@ export const resetPassword = async (req, res) => {
         res.json({
             success: true,
             message: "Password reset successful",
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: err.message,
+        });
+    }
+};
+
+// GET ME (profile)
+export const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json({
+            success: true,
+            user,
         });
     } catch (err) {
         res.status(500).json({

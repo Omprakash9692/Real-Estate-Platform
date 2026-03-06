@@ -11,7 +11,8 @@ import { useAuth } from '../context/AuthContext';
 import Logo from './common/Logo';
 
 const SellerSidebar = ({ isOpen, onClose }) => {
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
+
     const navItems = [
         { name: 'Dashboard', icon: HiOutlineViewGrid, path: '/dashboard' },
         { name: 'My Listings', icon: HiOutlineClipboardList, path: '/my-properties' },

@@ -2,6 +2,7 @@ import Property from "../models/property.model.js";
 import cloudinary from "../config/cloudinary.js";
 import streamifier from "streamifier";
 import Inquiry from "../models/inquiry.model.js";
+import jwt from "jsonwebtoken";
 
 // helper function
 const uploadToCloudinary = (buffer) => {

@@ -115,6 +115,10 @@ export const getDashboardStats = async (req, res) => {
     const soldProperties = await Property.countDocuments({
       status: "sold",
     });
+    const pendingSellers = await User.countDocuments({
+      role: "seller",
+      isApproved: false
+    });
 
     res.json({
       success: true,
@@ -123,11 +127,58 @@ export const getDashboardStats = async (req, res) => {
         totalProperties,
         activeListings,
         soldProperties,
+        pendingSellers
       },
     });
   } catch (error) {
     res.status(500).json({
       message: error.message,
+    });
+  }
+};
+
+// GET PENDING SELLERS
+export const getPendingSellers = async (req, res) => {
+  try {
+    const pendingSellers = await User.find({
+      role: "seller",
+      isApproved: false
+    }).select("-password");
+
+    res.json({
+      success: true,
+      count: pendingSellers.length,
+      pendingSellers
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// APPROVE SELLER
+export const approveSeller = async (req, res) => {
+  try {
+    const seller = await User.findById(req.params.id);
+    if (!seller || seller.role !== "seller") {
+      return res.status(404).json({
+        success: false,
+        message: "Seller not found",
+      });
+    }
+
+    seller.isApproved = true;
+    await seller.save();
+
+    res.json({
+      success: true,
+      message: "Seller approved successfully",
+      seller
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
     });
   }
 };

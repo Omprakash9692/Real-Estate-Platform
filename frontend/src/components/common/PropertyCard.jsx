@@ -115,30 +115,32 @@ const PropertyCard = ({ property, renderActions, isWishlisted, onToggleWishlist 
                 <HiShieldCheck size={14} /> Verified
               </span>
             </div>
-            <button
-              className="heart-btn"
-              onClick={handleWishlistClick}
-              style={{
-                background: 'rgba(255,255,255,0.9)',
-                border: 'none',
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                color: isWishlisted ? '#ef4444' : '#64748b',
-                transition: 'all 0.2s ease',
-                zIndex: 15
-              }}>
-              {isWishlisted ? (
-                <HiHeart size={20} />
-              ) : (
-                <HiOutlineHeart size={20} />
-              )}
-            </button>
+            {(!user || user.role === 'buyer') && (
+              <button
+                className="heart-btn"
+                onClick={handleWishlistClick}
+                style={{
+                  background: 'rgba(255,255,255,0.9)',
+                  border: 'none',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                  color: isWishlisted ? '#ef4444' : '#64748b',
+                  transition: 'all 0.2s ease',
+                  zIndex: 15
+                }}>
+                {isWishlisted ? (
+                  <HiHeart size={20} />
+                ) : (
+                  <HiOutlineHeart size={20} />
+                )}
+              </button>
+            )}
           </div>
 
           {/* Price Overlay */}

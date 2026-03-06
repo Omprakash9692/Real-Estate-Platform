@@ -229,7 +229,16 @@ const ChatMessages = () => {
                                         className={`msg-bubble ${(msg.sender?._id || msg.sender) === user._id ? 'sent' : 'received'}`}
                                     >
                                         <div className="msg-content">
-                                            {msg.text}
+                                            {msg.image && (
+                                                <div className="msg-image-container" style={{ marginBottom: '0.5rem', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                                                    <img
+                                                        src={msg.image}
+                                                        alt="Property Reference"
+                                                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', display: 'block' }}
+                                                    />
+                                                </div>
+                                            )}
+                                            <div style={{ wordBreak: 'break-word' }}>{msg.text}</div>
                                             {(msg.sender?._id || msg.sender) === user._id && (
                                                 <button
                                                     className="delete-msg-btn"

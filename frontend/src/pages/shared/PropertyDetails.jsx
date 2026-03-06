@@ -30,7 +30,9 @@ const PropertyDetails = () => {
         const fetchDetails = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get(`${API_URL}/api/property/${id}`);
+                const res = await axios.get(`${API_URL}/api/property/${id}`, {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {}
+                });
                 setProperty(res.data.property);
                 setSimilarProperties(res.data.similarProperties || []);
 
@@ -108,7 +110,8 @@ const PropertyDetails = () => {
             // Automatically send context message (like WhatsApp)
             await axios.post(`${API_URL}/api/chat/send`, {
                 chatId: chat._id,
-                text: `(Context: Interested in property "${property.title}")`
+                text: `(Context: Interested in property "${property.title}")`,
+                image: property.images[0]
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -313,18 +316,20 @@ const PropertyDetails = () => {
                                     </p>
                                 </div>
                                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <button
-                                        onClick={handleWishlistToggle}
-                                        className="wishlist-action-btn"
-                                        style={{
-                                            width: '48px', height: '48px', borderRadius: '50%', border: '1px solid #e2e8f0', background: 'white',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            cursor: 'pointer', transition: 'all 0.3s ease',
-                                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                            color: isInWishlist ? '#ef4444' : '#64748b'
-                                        }}>
-                                        {isInWishlist ? <HiHeart size={26} fill="#ef4444" /> : <HiOutlineHeart size={26} />}
-                                    </button>
+                                    {(!user || user.role === 'buyer') && (
+                                        <button
+                                            onClick={handleWishlistToggle}
+                                            className="wishlist-action-btn"
+                                            style={{
+                                                width: '48px', height: '48px', borderRadius: '50%', border: '1px solid #e2e8f0', background: 'white',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                cursor: 'pointer', transition: 'all 0.3s ease',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                                color: isInWishlist ? '#ef4444' : '#64748b'
+                                            }}>
+                                            {isInWishlist ? <HiHeart size={26} fill="#ef4444" /> : <HiOutlineHeart size={26} />}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

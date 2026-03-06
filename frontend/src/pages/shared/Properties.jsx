@@ -113,6 +113,16 @@ const Properties = () => {
         }
     };
 
+    // Debounce timer for search and price slider
+    const fetchTimer = React.useRef(null);
+
+    const debouncedFetch = (updatedFilters) => {
+        if (fetchTimer.current) clearTimeout(fetchTimer.current);
+        fetchTimer.current = setTimeout(() => {
+            fetchProperties(updatedFilters);
+        }, 500);
+    };
+
     const handleCheckboxChange = (category, value) => {
         const current = [...(filters[category] || [])];
         const index = current.indexOf(value);
@@ -121,15 +131,22 @@ const Properties = () => {
         } else {
             current.splice(index, 1);
         }
-        setFilters({ ...filters, [category]: current });
+        const updatedFilters = { ...filters, [category]: current };
+        setFilters(updatedFilters);
+        fetchProperties(updatedFilters); // Instant update for discrete toggle
     };
 
     const handlePriceChange = (e) => {
-        setFilters({ ...filters, maxPrice: parseInt(e.target.value) });
+        const value = parseInt(e.target.value);
+        const updatedFilters = { ...filters, maxPrice: value };
+        setFilters(updatedFilters);
+        debouncedFetch(updatedFilters); // Debounced to prevent spam while sliding
     };
 
     const handleBhkSelect = (value) => {
-        setFilters({ ...filters, bhk: filters.bhk === value ? '' : value });
+        const updatedFilters = { ...filters, bhk: filters.bhk === value ? '' : value };
+        setFilters(updatedFilters);
+        fetchProperties(updatedFilters); // Instant update for discrete toggle
     };
 
     const handleSortChange = (e) => {
@@ -140,10 +157,12 @@ const Properties = () => {
     };
 
     const applyFilters = () => {
+        if (fetchTimer.current) clearTimeout(fetchTimer.current);
         fetchProperties(filters);
     };
 
     const resetFilters = () => {
+        if (fetchTimer.current) clearTimeout(fetchTimer.current);
         const reset = { city: '', propertyType: [], bhk: '', maxPrice: 100000000, amenities: [], furnishing: [], sort: 'latest' };
         setFilters(reset);
         navigate('/properties');
@@ -180,7 +199,7 @@ const Properties = () => {
                         position: 'sticky',
                         top: '100px',
                         border: '1px solid #f1f5f9',
-                        zIndex: 1001
+                        zIndex: 90
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -214,7 +233,11 @@ const Properties = () => {
                                         type="text"
                                         placeholder="Search location..."
                                         value={filters.city}
-                                        onChange={(e) => setFilters({ ...filters, city: e.target.value })}
+                                        onChange={(e) => {
+                                            const updatedFilters = { ...filters, city: e.target.value };
+                                            setFilters(updatedFilters);
+                                            debouncedFetch(updatedFilters);
+                                        }}
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem 1rem 0.75rem 2.5rem',
@@ -460,7 +483,7 @@ const Properties = () => {
                     onClick={() => setShowMobileFilters(false)}
                     style={{
                         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                        background: 'rgba(0,0,0,0.5)', zIndex: 1000
+                        background: 'rgba(0,0,0,0.5)', zIndex: 80
                     }}
                 />
             )}
