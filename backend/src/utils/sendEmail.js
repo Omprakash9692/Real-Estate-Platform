@@ -6,22 +6,33 @@ const sendEmail = async (options) => {
         throw new Error("Missing Email Credentials");
     }
 
-    // Using 'service: gmail' is the most reliable way for Nodemailer + Gmail
+    // Explicit host and port 465 (SSL) is often more stable than 587 on Render
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
         auth: {
             user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
+            pass: process.env.EMAIL_PASS,
+        },
+        connectionTimeout: 15000, // 15 seconds
+        greetingTimeout: 15000,
+        socketTimeout: 15000,
     });
 
-    await transporter.sendMail({
-        from: `"${process.env.APP_NAME || 'Real Estate Platform'}" <${process.env.EMAIL_USER}>`,
-        to: options.email,
-        subject: options.subject,
-        text: options.message.replace(/<[^>]*>?/gm, ''), // Strip HTML for plain text version
-        html: options.message,
-    });
+    try {
+        await transporter.sendMail({
+            from: `"${process.env.APP_NAME || 'Real Estate Platform'}" <${process.env.EMAIL_USER}>`,
+            to: options.email,
+            subject: options.subject,
+            text: options.message.replace(/<[^>]*>?/gm, ''), // Plain text version
+            html: options.message,
+        });
+        console.log("Email sent successfully to:", options.email);
+    } catch (error) {
+        console.error("Nodemailer Send Error:", error.message);
+        throw error; // Rethrow to show in the main logs
+    }
 };
 
 export default sendEmail;
