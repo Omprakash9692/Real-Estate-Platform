@@ -6,26 +6,20 @@ const sendEmail = async (options) => {
         throw new Error("Missing Email Credentials");
     }
 
+    // Using 'service: gmail' is the most reliable way for Nodemailer + Gmail
     const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // Use STARTTLS (more compatible with Render/Production)
+        service: 'gmail',
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
-        },
-        tls: {
-            rejectUnauthorized: false // Helps with some hosting provider certificate issues
-        },
-        connectionTimeout: 15000,
-        socketTimeout: 15000
+        }
     });
 
     await transporter.sendMail({
-        from: `"${process.env.APP_NAME || 'RealEstateApp'}" <${process.env.EMAIL_USER}>`,
+        from: `"${process.env.APP_NAME || 'Real Estate Platform'}" <${process.env.EMAIL_USER}>`,
         to: options.email,
         subject: options.subject,
-        text: options.message,
+        text: options.message.replace(/<[^>]*>?/gm, ''), // Strip HTML for plain text version
         html: options.message,
     });
 };
