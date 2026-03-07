@@ -1,37 +1,43 @@
-import nodemailer from "nodemailer";
-
 const sendEmail = async (options) => {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        console.error("Missing Email Credentials in environment variables");
-        throw new Error("Missing Email Credentials");
-    }
-
-    // Explicit host and port 465 (SSL) is often more stable than 587 on Render
-    const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-        connectionTimeout: 15000, // 15 seconds
-        greetingTimeout: 15000,
-        socketTimeout: 15000,
-    });
-
     try {
-        await transporter.sendMail({
-            from: `"${process.env.APP_NAME || 'Real Estate Platform'}" <${process.env.EMAIL_USER}>`,
-            to: options.email,
+        const BREVO_API_KEY = process.env.BREVO_API_KEY?.trim();
+
+        if (!BREVO_API_KEY) {
+            console.error("Missing BREVO_API_KEY in environment variables");
+            throw new Error("Missing Email API Key");
+        }
+
+        const data = {
+            sender: {
+                name: process.env.APP_NAME || "Real Estate Platform",
+                email: process.env.EMAIL_USER
+            },
+            to: [{ email: options.email }],
             subject: options.subject,
-            text: options.message.replace(/<[^>]*>?/gm, ''), // Plain text version
-            html: options.message,
+            htmlContent: options.message,
+        };
+
+        const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+            method: "POST",
+            headers: {
+                "api-key": BREVO_API_KEY,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(data),
         });
-        console.log("Email sent successfully to:", options.email);
+
+        const result = await response.json();
+
+        if (response.ok) {
+            console.log("Email sent successfully via Brevo:", result.messageId);
+        } else {
+            console.error("Brevo API Error:", result);
+            throw new Error(result.message || "Could not send email via Brevo.");
+        }
     } catch (error) {
-        console.error("Nodemailer Send Error:", error.message);
-        throw error; // Rethrow to show in the main logs
+        console.error("Brevo Email Error:", error.message);
+        throw new Error("Could not send email via Brevo.");
     }
 };
 
