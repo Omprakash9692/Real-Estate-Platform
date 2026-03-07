@@ -1,20 +1,24 @@
 import nodemailer from "nodemailer";
 
 const sendEmail = async (options) => {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.error("Missing Email Credentials in environment variables");
+        throw new Error("Missing Email Credentials");
+    }
+
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, // SSL
+        port: 587,
+        secure: false, // Use STARTTLS (more compatible with Render/Production)
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
         },
-        // Connections settings to help with cloud environment issues
-        connectionTimeout: 10000, // 10 seconds
-        greetingTimeout: 10000,
-        socketTimeout: 10000,
-        debug: true,
-        logger: true
+        tls: {
+            rejectUnauthorized: false // Helps with some hosting provider certificate issues
+        },
+        connectionTimeout: 15000,
+        socketTimeout: 15000
     });
 
     await transporter.sendMail({

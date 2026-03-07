@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from "../../config";
 import { useAuth } from "../../context/AuthContext";
-import { HiOutlineMail, HiOutlinePhone, HiOutlineUser, HiOutlineClock, HiOutlineChevronRight } from 'react-icons/hi';
+import { HiOutlineMail, HiOutlinePhone, HiOutlineClock } from 'react-icons/hi';
 
 const AdminContacts = () => {
     const [contacts, setContacts] = useState([]);
@@ -103,20 +103,7 @@ const AdminContacts = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <button style={{
-                                        padding: '0.5rem 1rem',
-                                        borderRadius: '0.5rem',
-                                        border: '1px solid #e2e8f0',
-                                        background: 'white',
-                                        fontSize: '0.8rem',
-                                        fontWeight: 600,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.4rem',
-                                        cursor: 'pointer'
-                                    }}>
-                                        Reply <HiOutlineChevronRight />
-                                    </button>
+
                                 </div>
                                 <div style={{
                                     background: '#f8fafc',
