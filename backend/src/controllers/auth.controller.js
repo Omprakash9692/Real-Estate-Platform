@@ -115,36 +115,37 @@ export const forgotPassword = async (req, res) => {
             });
         }
 
-        // generate token
-        const resetToken = crypto.randomBytes(20).toString("hex");
+        // generate OTP (6 digit number)
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // save token in DB
-        user.resetPasswordToken = resetToken;
+        // save OTP in DB
+        user.resetPasswordToken = otp;
         user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
         await user.save();
 
-        // Send reset link via email
-        const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
-
         const message = `
-            <h1>Password Reset Request</h1>
-            <p>You requested a password reset. Please click on the link below to reset your password:</p>
-            <a href="${resetUrl}" clicktracking=off>${resetUrl}</a>
-            <p>This link will expire in 10 minutes.</p>
-            <p>If you did not request this, please ignore this email.</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; borderRadius: 10px;">
+                <h1 style="color: #0d9488; text-align: center;">Password Reset Request</h1>
+                <p>You requested a password reset. Please use the 6-digit OTP code below to reset your password:</p>
+                <div style="background: #f1f5f9; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
+                    <span style="font-size: 2.5rem; font-weight: 800; letter-spacing: 0.5rem; color: #1e293b;">${otp}</span>
+                </div>
+                <p>This code will expire in 10 minutes.</p>
+                <p>If you did not request this, please ignore this email.</p>
+            </div>
         `;
 
         try {
             await sendEmail({
                 email: user.email,
-                subject: "Password Reset Request",
+                subject: "Password Reset OTP",
                 message,
             });
 
             res.json({
                 success: true,
-                message: "Password reset link sent to your email",
+                message: "OTP sent to your email",
             });
         } catch (err) {
             user.resetPasswordToken = undefined;
@@ -163,13 +164,17 @@ export const forgotPassword = async (req, res) => {
     }
 };
 
-// Reset Password
+// Reset Password (OTP based)
 export const resetPassword = async (req, res) => {
     try {
-        const { token } = req.params;
-        const { password } = req.body;
+        const { otp, password } = req.body;
+
+        if (!otp || !password) {
+            return res.status(400).json({ message: "OTP and password are required" });
+        }
+
         const user = await User.findOne({
-            resetPasswordToken: token,
+            resetPasswordToken: otp,
             resetPasswordExpire: {
                 $gt: Date.now(),
             },
