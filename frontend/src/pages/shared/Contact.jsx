@@ -41,7 +41,7 @@ const Contact = () => {
 
     return (
         <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
-            <Navbar />
+            {user?.role !== 'seller' && <Navbar />}
 
             <div className="container" style={{ padding: '4rem 1.5rem', maxWidth: '1000px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>

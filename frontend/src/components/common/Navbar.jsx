@@ -20,9 +20,9 @@ const Navbar = () => {
         <>
           <Link to="/" className="nav-link" onClick={() => setIsOpen(false)}>Home</Link>
           <Link to="/properties" className="nav-link" onClick={() => setIsOpen(false)}>Property</Link>
-          <Link to="/contact" className="nav-link" onClick={() => setIsOpen(false)}>Contact Us</Link>
           <Link to="/wishlist" className="nav-link" onClick={() => setIsOpen(false)}>Wishlist</Link>
           <Link to="/chat-messages" className="nav-link" onClick={() => setIsOpen(false)}>Messages</Link>
+          <Link to="/contact" className="nav-link" onClick={() => setIsOpen(false)}>Contact Us</Link>
         </>
       )}
 
@@ -36,7 +36,6 @@ const Navbar = () => {
       {user && user.role === 'seller' && (
         <>
           <Link to="/dashboard" className="nav-link" onClick={() => setIsOpen(false)}>Dashboard</Link>
-          <Link to="/contact" className="nav-link" onClick={() => setIsOpen(false)}>Contact Us</Link>
         </>
       )}
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HiOutlineClock, HiOutlineSupport, HiOutlineLogout, HiOutlineRefresh } from "react-icons/hi";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const PendingApproval = () => {
@@ -94,7 +95,7 @@ const PendingApproval = () => {
 
             <div style={{ marginTop: '4rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>
                 <HiOutlineSupport size={18} />
-                Need help? <a href="mailto:support@realestate.com" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>Contact Support</a>
+                Need help? <Link to="/contact" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>Contact Support</Link>
             </div>
 
             <style>{`

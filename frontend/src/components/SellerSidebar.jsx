@@ -5,6 +5,7 @@ import {
     HiOutlineClipboardList,
     HiOutlineChartBar,
     HiOutlineUser,
+    HiOutlineSupport,
     HiOutlineLogout
 } from "react-icons/hi";
 import { useAuth } from '../context/AuthContext';
@@ -19,6 +20,7 @@ const SellerSidebar = ({ isOpen, onClose }) => {
         { name: 'Leads', icon: HiOutlineChartBar, path: '/inquiries' },
         { name: 'Messages', icon: HiOutlineViewGrid, path: '/chat-messages' },
         { name: 'Profile', icon: HiOutlineUser, path: '/profile' },
+        { name: 'Support', icon: HiOutlineSupport, path: '/contact' },
     ];
 
     return (

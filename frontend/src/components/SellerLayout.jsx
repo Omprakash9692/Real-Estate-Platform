@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import SellerSidebar from './SellerSidebar';
 import DashboardNavbar from './DashboardNavbar';
 import { useAuth } from '../context/AuthContext';
@@ -8,6 +8,10 @@ import PendingApproval from '../pages/seller/PendingApproval';
 const SellerLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const { user } = useAuth();
+    const location = useLocation();
+
+    // Allow access to contact and profile pages even if not approved
+    const isPublicDashboardRoute = ['/contact', '/profile'].includes(location.pathname);
 
     return (
         <div className="dashboard-layout">
@@ -15,7 +19,7 @@ const SellerLayout = () => {
             <div className="dashboard-main">
                 <DashboardNavbar onMenuClick={() => setIsSidebarOpen(true)} />
                 <main className="dashboard-content fade-in">
-                    {user?.isApproved ? <Outlet /> : <PendingApproval />}
+                    {user?.isApproved || isPublicDashboardRoute ? <Outlet /> : <PendingApproval />}
                 </main>
             </div>
         </div>
