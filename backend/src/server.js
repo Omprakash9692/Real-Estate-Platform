@@ -59,21 +59,7 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/contact", contactRoutes);
 
-app.post("/chat", async (req, res) => {
-  try {
-    const agentModule = await import("./ai.agent.js");
 
-    const reply = await agentModule.runAgent(req.body.message);
-
-    res.json({ reply });
-  } catch (err) {
-    console.error(err);
-
-    res.json({
-      reply: "AI error",
-    });
-  }
-});
 
 app.use("/api/chat", chatRoutes);
 app.use("/api/reviews", reviewRoutes);

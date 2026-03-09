@@ -90,7 +90,8 @@ export const getAllInquiries = async (req, res) => {
     const inquiries = await Inquiry.find()
       .populate("buyer", "name email")
       .populate("seller", "name email")
-      .populate("property", "title price");
+      .populate("property", "title price")
+      .sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -115,10 +116,6 @@ export const getDashboardStats = async (req, res) => {
     const soldProperties = await Property.countDocuments({
       status: "sold",
     });
-    const pendingSellers = await User.countDocuments({
-      role: "seller",
-      isApproved: false
-    });
 
     res.json({
       success: true,
@@ -127,7 +124,6 @@ export const getDashboardStats = async (req, res) => {
         totalProperties,
         activeListings,
         soldProperties,
-        pendingSellers
       },
     });
   } catch (error) {

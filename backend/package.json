@@ -11,9 +11,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@langchain/core": "^1.1.28",
-    "@langchain/google-genai": "^2.1.20",
-    "@langchain/langgraph": "^1.1.5",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
@@ -29,8 +26,7 @@
     "resend": "^6.9.3",
     "sib-api-v3-sdk": "^8.5.0",
     "socket.io": "^4.8.3",
-    "streamifier": "^0.1.1",
-    "zod": "^4.3.6"
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

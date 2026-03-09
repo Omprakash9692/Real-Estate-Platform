@@ -252,7 +252,6 @@ const LandingPage = () => {
               <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Browse by Category</h2>
               <p style={{ color: 'var(--text-muted)' }}>Explore curated collections of properties tailored to your specific lifestyle and needs.</p>
             </div>
-            <button className="btn btn-outline">Explore All &rarr;</button>
           </div>
           <div className="category-grid" style={{
             display: 'grid',

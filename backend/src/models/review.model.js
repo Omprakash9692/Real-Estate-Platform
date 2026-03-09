@@ -33,8 +33,8 @@ const reviewSchema = new mongoose.Schema(
     }
 );
 
-// Prevent duplicate reviews from the same buyer for the same property
-reviewSchema.index({ buyer: 1, property: 1 }, { unique: true });
+// Prevent duplicate reviews from the same buyer for the same property or the same seller
+reviewSchema.index({ buyer: 1, seller: 1, property: 1 }, { unique: true });
 
 const Review = mongoose.model("Review", reviewSchema);
 export default Review;

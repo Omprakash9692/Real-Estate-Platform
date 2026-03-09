@@ -91,9 +91,6 @@ const AdminDashboard = () => {
                             <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.15rem' }}>{card.title}</div>
                             <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>{card.value.toLocaleString()}</div>
                         </div>
-                        <div style={{ fontSize: '0.7rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: 700 }}>
-                            <HiOutlineTrendingUp /> +12% from last month
-                        </div>
                     </div>
                 ))}
             </div>

@@ -1,139 +1,71 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { HiStar } from "react-icons/hi";
 import { useAuth } from "../context/AuthContext";
 import API_URL from "../config";
 import "./ReviewSection.css";
 
-
 const ReviewSection = ({ sellerId, propertyId }) => {
-
-    const { user } = useAuth();
-
+    const { user, token } = useAuth();
     const [reviews, setReviews] = useState([]);
-
-    const [stats, setStats] = useState({
-        avgRating: 0,
-        totalReviews: 0
-    });
-
+    const [stats, setStats] = useState({ avgRating: 0, totalReviews: 0 });
     const [rating, setRating] = useState(5);
-
+    const [hoverRating, setHoverRating] = useState(0);
     const [comment, setComment] = useState("");
-
     const [loading, setLoading] = useState(true);
-
     const [submitting, setSubmitting] = useState(false);
-
     const [message, setMessage] = useState(null);
 
-
-
-    const fetchReviews = async () => {
-
+    const fetchReviews = useCallback(async () => {
         try {
-
             const url = propertyId
                 ? `${API_URL}/api/reviews/${sellerId}?propertyId=${propertyId}`
                 : `${API_URL}/api/reviews/${sellerId}`;
-
             const res = await axios.get(url);
-
             setReviews(res.data.reviews);
-
             setStats(res.data.stats);
-
             setLoading(false);
-
-        }
-
-        catch (err) {
-
+        } catch (err) {
             console.error(err);
-
             setLoading(false);
-
         }
-
-    };
-
-
-
-    useEffect(() => {
-
-        fetchReviews();
-
     }, [sellerId, propertyId]);
 
-
-
+    useEffect(() => {
+        fetchReviews();
+    }, [fetchReviews]);
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-
         setSubmitting(true);
-
         setMessage(null);
-
-
         try {
-
             await axios.post(
-
                 `${API_URL}/api/reviews`,
-
-                {
-                    sellerId,
-                    propertyId,
-                    rating,
-                    comment
-                },
-
+                { sellerId, propertyId, rating, comment },
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                        Authorization: `Bearer ${token}`
                     }
                 }
-
             );
-
-            setMessage({
-                type: "success",
-                text: "Review added successfully"
-            });
-
+            setMessage({ type: "success", text: "Review added successfully" });
             setComment("");
-
             setRating(5);
-
             fetchReviews();
-
-        }
-
-        catch (err) {
-
+        } catch (err) {
             setMessage({
-
                 type: "error",
-
-                text: err.response?.data?.message || "Error"
-
+                text: err.response?.data?.message || "Error submitting review"
             });
-
-        }
-
-        finally {
-
+        } finally {
             setSubmitting(false);
-
         }
-
     };
 
-
-
     if (loading) return <div className="no-reviews">Loading reviews...</div>;
+
+    const currentRating = hoverRating || rating;
 
     return (
         <div className="reviews-section">
@@ -151,13 +83,14 @@ const ReviewSection = ({ sellerId, propertyId }) => {
             {user && user.role === "buyer" && (
                 <div className="add-review-form">
                     <h4>Add a Review</h4>
-                    <div className="rating-select">
+                    <div className="rating-select" onMouseLeave={() => setHoverRating(0)}>
                         {[1, 2, 3, 4, 5].map((star) => (
                             <button
                                 key={star}
                                 type="button"
-                                className={star <= rating ? "star-active" : ""}
+                                className={star <= currentRating ? "star-active" : ""}
                                 onClick={() => setRating(star)}
+                                onMouseEnter={() => setHoverRating(star)}
                             >
                                 <HiStar size={24} />
                             </button>
@@ -224,6 +157,5 @@ const ReviewSection = ({ sellerId, propertyId }) => {
         </div>
     );
 };
-
 
 export default ReviewSection;

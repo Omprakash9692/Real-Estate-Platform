@@ -6,28 +6,40 @@ import { HiOutlineUser, HiOutlineAnnotation, HiOutlineHome, HiOutlineCalendar } 
 
 const AdminInquiries = () => {
     const [inquiries, setInquiries] = useState([]);
+    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const { token } = useAuth();
 
     useEffect(() => {
         const fetchInquiries = async () => {
+            if (!token) return;
+            setLoading(true);
             try {
+                console.log('Fetching inquiries...');
                 const res = await axios.get(`${API_URL}/api/admin/inquiries`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
+                console.log('Inquiries response:', res.data);
                 if (res.data.success) {
                     setInquiries(res.data.inquiries);
                 }
                 setLoading(false);
             } catch (err) {
                 console.error('Failed to load inquiries:', err);
+                setError(err.response?.data?.message || err.message);
                 setLoading(false);
             }
         };
         fetchInquiries();
-    }, []);
+    }, [token]);
 
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
+
+    if (error) return <div className="error-container" style={{ padding: '2rem', textAlign: 'center', color: '#dc2626' }}>
+        <h3>Error loading inquiries</h3>
+        <p>{error}</p>
+        <button className="btn" onClick={() => window.location.reload()}>Retry</button>
+    </div>;
 
     return (
         <>

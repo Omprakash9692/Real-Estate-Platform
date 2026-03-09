@@ -60,13 +60,13 @@
     cursor: pointer;
     padding: 0;
     color: #cbd5e1;
-    transition: all 0.2s;
+    transition: color 0.1s;
+    /* Faster response */
 }
 
 .rating-select button:hover,
 .rating-select button.star-active {
     color: #eab308;
-    transform: scale(1.1);
 }
 
 .add-review-form textarea {

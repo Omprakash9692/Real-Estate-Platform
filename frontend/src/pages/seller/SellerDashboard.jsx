@@ -114,10 +114,10 @@ const SellerDashboard = () => {
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
 
     const statCards = [
-        { title: 'Total Views', value: stats.totalViews?.toLocaleString() || '0', icon: HiOutlineEye, trend: '+0.0%', color: '#0d6e59' },
-        { title: 'Active Leads', value: stats.totalInquiries?.toLocaleString() || '0', icon: HiOutlineUserGroup, trend: '+0.0%', color: '#0d6e59' },
-        { title: 'Live Listings', value: stats.activeListings?.toLocaleString() || '0', icon: HiOutlineLibrary, trend: '0.0%', color: '#0d6e59' },
-        { title: 'Properties Sold', value: stats.soldProperties?.toLocaleString() || '0', icon: HiOutlineCheckCircle, trend: '+0.0%', color: '#0d6e59' },
+        { title: 'Total Views', value: stats.totalViews?.toLocaleString() || '0', icon: HiOutlineEye, color: '#0d6e59' },
+        { title: 'Active Leads', value: stats.totalInquiries?.toLocaleString() || '0', icon: HiOutlineUserGroup, color: '#0d6e59' },
+        { title: 'Live Listings', value: stats.activeListings?.toLocaleString() || '0', icon: HiOutlineLibrary, color: '#0d6e59' },
+        { title: 'Properties Sold', value: stats.soldProperties?.toLocaleString() || '0', icon: HiOutlineCheckCircle, color: '#0d6e59' },
     ];
 
     const filteredProperties = Array.isArray(properties) ? properties.filter(p =>
@@ -172,15 +172,6 @@ const SellerDashboard = () => {
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', color: card.color
                             }}>
                                 <card.icon size={20} />
-                            </div>
-                            <div style={{
-                                fontSize: '0.7rem', fontWeight: 700,
-                                color: card.trendDown ? '#ef4444' : '#10b981',
-                                display: 'flex', alignItems: 'center', gap: '0.2rem',
-                                background: card.trendDown ? '#fef2f2' : '#f0fdf4',
-                                padding: '0.2rem 0.5rem', borderRadius: '2rem'
-                            }}>
-                                {card.trend}
                             </div>
                         </div>
                         <div style={{ color: '#64748b', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.15rem' }}>{card.title}</div>

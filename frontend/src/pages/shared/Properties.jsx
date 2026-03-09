@@ -338,16 +338,7 @@ const Properties = () => {
                                 </div>
                             </div>
 
-                            <button
-                                onClick={() => {
-                                    applyFilters();
-                                    setShowMobileFilters(false);
-                                }}
-                                className="btn btn-primary"
-                                style={{ width: '100%', padding: '1rem', borderRadius: '1rem', fontWeight: 700 }}
-                            >
-                                Apply Filters
-                            </button>
+
                         </div>
                     </aside>
 

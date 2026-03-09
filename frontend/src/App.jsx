@@ -27,7 +27,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import SellerProfile from "./pages/shared/SellerProfile";
 import { ProtectedRoute, PublicRoute } from "./components/common/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
-import AIChatAssistant from "./components/common/AIChatAssistant";
+
 
 // Smart Layout Wrapper to dynamically apply SellerLayout for Sellers
 const SellerLayoutWrapper = () => {
@@ -92,7 +92,7 @@ function App() {
         {/* Catch-all Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {user?.role === 'buyer' && <AIChatAssistant />}
+
     </>
   );
 }
