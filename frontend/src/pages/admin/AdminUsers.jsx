@@ -56,94 +56,79 @@ const AdminUsers = () => {
 
     return (
         <>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: '2rem',
-                flexWrap: 'wrap',
-                gap: '1rem'
-            }}>
+            <div className="flex justify-between items-start mb-8 flex-wrap gap-4">
                 <div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.25rem' }}>User Management</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Monitor platform users and access levels.</p>
+                    <h1 className="text-[1.75rem] font-extrabold text-text-main mb-1">User Management</h1>
+                    <p className="text-text-muted text-[0.875rem]">Monitor platform users and access levels.</p>
                 </div>
             </div>
 
-            <div className="card-premium" style={{ overflow: 'hidden', marginBottom: '2rem' }}>
-                <div style={{ padding: '1.5rem 1.5rem 0.5rem 1.5rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>Platform Users</h2>
+            <div className="card-premium overflow-hidden mb-8 p-0">
+                <div className="pt-6 px-6 pb-2">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-[1.25rem] font-extrabold text-text-main">Platform Users</h2>
                     </div>
                 </div>
 
-                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
-                        <thead style={{ background: '#f8fafc', color: '#64748b', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                            <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>User Info</th>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>Role</th>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>Contact Details</th>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>Account Status</th>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>Actions</th>
+                <div className="overflow-x-auto touch-pan-x">
+                    <table className="w-full border-collapse min-w-[800px]">
+                        <thead className="bg-[#f8fafc] text-[#64748b] text-[0.7rem] font-bold uppercase tracking-[0.05em]">
+                            <tr className="border-b border-[#f1f5f9]">
+                                <th className="py-4 px-6 text-left">User Info</th>
+                                <th className="py-4 px-6 text-center">Role</th>
+                                <th className="py-4 px-6 text-left">Contact Details</th>
+                                <th className="py-4 px-6 text-center">Account Status</th>
+                                <th className="py-4 px-6 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users.map((user) => (
-                                <tr key={user._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                                    <td style={{ padding: '1.5rem 2rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
+                                <tr key={user._id} className="border-b border-[#f1f5f9]">
+                                    <td className="py-6 px-8">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-full bg-primary-light text-primary flex items-center justify-center font-bold">
                                                 {user.name.charAt(0).toUpperCase()}
                                             </div>
                                             <div>
-                                                <div style={{ fontWeight: 700, fontSize: '0.9375rem' }}>{user.name}</div>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ID: {user._id.slice(-8).toUpperCase()}</div>
+                                                <div className="font-bold text-[0.9375rem]">{user.name}</div>
+                                                <div className="text-[0.75rem] text-text-muted">ID: {user._id.slice(-8).toUpperCase()}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td style={{ padding: '1.5rem 1.5rem', textAlign: 'center' }}>
-                                        <span style={{
-                                            padding: '0.35rem 0.75rem',
-                                            borderRadius: '2rem',
-                                            fontSize: '0.75rem',
-                                            fontWeight: 700,
-                                            textTransform: 'uppercase',
-                                            background: user.role === 'admin' ? '#fef3c7' : (user.role === 'seller' ? '#dcfce7' : '#dbeafe'),
-                                            color: user.role === 'admin' ? '#92400e' : (user.role === 'seller' ? '#166534' : '#1e40af')
-                                        }}>
+                                    <td className="py-6 px-6 text-center">
+                                        <span className={`px-3 py-1.5 rounded-full text-[0.75rem] font-bold uppercase ${user.role === 'admin' ? 'bg-[#fef3c7] text-[#92400e]' : (user.role === 'seller' ? 'bg-[#dcfce7] text-[#166534]' : 'bg-[#dbeafe] text-[#1e40af]')}`}>
                                             {user.role}
                                         </span>
                                     </td>
-                                    <td style={{ padding: '1.5rem 1.5rem' }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                                            <div style={{ fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}><HiOutlineMail color="#94a3b8" /> {user.email}</div>
-                                            {user.phone && <div style={{ fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}><HiOutlineIdentification color="#94a3b8" /> {user.phone}</div>}
+                                    <td className="py-6 px-6">
+                                        <div className="flex flex-col gap-1">
+                                            <div className="text-[0.875rem] flex items-center gap-2 text-text-main"><HiOutlineMail color="#94a3b8" /> {user.email}</div>
+                                            {user.phone && <div className="text-[0.875rem] flex items-center gap-2 text-text-main"><HiOutlineIdentification color="#94a3b8" /> {user.phone}</div>}
                                         </div>
                                     </td>
-                                    <td style={{ padding: '1.5rem 1.5rem', textAlign: 'center' }}>
+                                    <td className="py-6 px-6 text-center">
                                         {user.isBlocked ? (
-                                            <span style={{ color: '#dc2626', fontSize: '0.8125rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center', background: '#fff5f5', padding: '0.25rem 0.5rem', borderRadius: '0.5rem', border: '1px solid #fee2e2' }}>
+                                            <span className="text-[#dc2626] text-[0.8125rem] font-bold inline-flex items-center gap-1.5 justify-center bg-[#fff5f5] py-1 px-2 rounded-lg border border-[#fee2e2]">
                                                 <HiOutlineLockClosed size={14} /> Suspended
                                             </span>
                                         ) : (
-                                            <span style={{ color: '#10b981', fontSize: '0.8125rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center', background: '#f0fdf4', padding: '0.25rem 0.5rem', borderRadius: '0.5rem', border: '1px solid #dcfce7' }}>
+                                            <span className="text-[#10b981] text-[0.8125rem] font-bold inline-flex items-center gap-1.5 justify-center bg-[#f0fdf4] py-1 px-2 rounded-lg border border-[#dcfce7]">
                                                 <HiOutlineLockOpen size={14} /> Active
                                             </span>
                                         )}
                                     </td>
-                                    <td style={{ padding: '1.5rem 1.5rem', textAlign: 'right' }}>
-                                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                                    <td className="py-6 px-6 text-right">
+                                        <div className="flex gap-2 justify-end">
                                             <button
                                                 onClick={() => handleBlock(user._id, user.isBlocked)}
-                                                style={{ width: '36px', height: '36px', borderRadius: '0.5rem', border: '1px solid #e2e8f0', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: user.isBlocked ? '#10b981' : '#f59e0b' }}
+                                                className={`w-9 h-9 rounded-lg border border-[#e2e8f0] bg-white flex items-center justify-center cursor-pointer ${user.isBlocked ? 'text-[#10b981]' : 'text-[#f59e0b]'} hover:bg-gray-50`}
                                                 title={user.isBlocked ? 'Unblock User' : 'Block User'}
                                             >
                                                 {user.isBlocked ? <HiOutlineLockOpen size={18} /> : <HiOutlineLockClosed size={18} />}
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(user._id)}
-                                                style={{ width: '36px', height: '36px', borderRadius: '0.5rem', border: 'none', background: '#fef2f2', color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                                className="w-9 h-9 rounded-lg border-none bg-[#fef2f2] text-[#dc2626] flex items-center justify-center cursor-pointer hover:bg-red-100"
                                                 title="Delete User"
                                             >
                                                 <HiOutlineTrash size={18} />

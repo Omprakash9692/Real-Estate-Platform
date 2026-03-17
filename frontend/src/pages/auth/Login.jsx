@@ -10,7 +10,6 @@ const Login = () => {
         email: '',
         password: '',
     });
-    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -27,12 +26,9 @@ const Login = () => {
         setIsLoading(true);
         setError('');
 
-        const result = await login(formData.email, formData.password, rememberMe);
+        const result = await login(formData.email, formData.password);
 
         if (result.success) {
-            // Role-based redirection is now handled safely by checking both storages in AuthContext
-            // but we can still use the result from the login call if needed.
-            // For now, let's just use the user role from the result or storage
             const storedUser = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
             if (storedUser?.role === 'admin') {
                 navigate('/admin-dashboard');
@@ -48,51 +44,26 @@ const Login = () => {
     };
 
     return (
-        <div style={{ backgroundColor: 'var(--bg-alt)', minHeight: '100vh' }}>
+        <div className="bg-bg-alt min-h-screen">
             <Navbar />
-            <div className="container" style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingTop: '4rem'
-            }}>
-                <div className="glass fade-in" style={{
-                    width: '100%',
-                    maxWidth: '450px',
-                    padding: '2.5rem',
-                    borderRadius: '1.5rem',
-                    boxShadow: 'var(--shadow-lg)'
-                }}>
-                    <h2 style={{
-                        fontSize: '2rem',
-                        fontWeight: 700,
-                        textAlign: 'center',
-                        marginBottom: '0.5rem',
-                        color: 'var(--primary)'
-                    }}>Welcome Back</h2>
-                    <p style={{
-                        textAlign: 'center',
-                        color: 'var(--text-muted)',
-                        marginBottom: '2rem'
-                    }}>Please enter your details to sign in</p>
+            <div className="container flex justify-center items-center pt-16 sm:pt-8">
+                <div className="glass fade-in w-full max-w-[450px] p-10 sm:p-6 rounded-3xl sm:rounded-2xl shadow-card">
+                    <h2 className="text-[2rem] sm:text-2xl font-bold text-center mb-2 text-primary">
+                        Welcome Back
+                    </h2>
+                    <p className="text-center text-text-muted mb-8">
+                        Please enter your details to sign in
+                    </p>
 
                     {error && (
-                        <div style={{
-                            padding: '0.75rem',
-                            backgroundColor: '#fee2e2',
-                            color: '#dc2626',
-                            borderRadius: '0.5rem',
-                            marginBottom: '1rem',
-                            fontSize: '0.875rem',
-                            textAlign: 'center'
-                        }}>
+                        <div className="p-3 bg-red-100 text-red-600 rounded-lg mb-4 text-sm text-center">
                             {error}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email Address</label>
+                            <label className="block mb-2 font-medium">Email Address</label>
                             <input
                                 type="email"
                                 name="email"
@@ -100,29 +71,12 @@ const Login = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem 1rem',
-                                    borderRadius: '0.5rem',
-                                    border: '1px solid var(--border-color)',
-                                    outline: 'none'
-                                }}
+                                className="w-full py-3 px-4 rounded-lg border border-border outline-none focus:border-primary transition-colors"
                             />
                         </div>
                         <div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                <label style={{ fontWeight: 500 }}>Password</label>
-                                <Link
-                                    to="/forgot-password"
-                                    style={{
-                                        fontSize: '0.875rem',
-                                        color: 'var(--primary)',
-                                        fontWeight: 500,
-                                        textDecoration: 'none'
-                                    }}
-                                >
-                                    Forgot?
-                                </Link>
+                            <div className="flex mb-2">
+                                <label className="font-medium">Password</label>
                             </div>
                             <input
                                 type="password"
@@ -131,55 +85,25 @@ const Login = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem 1rem',
-                                    borderRadius: '0.5rem',
-                                    border: '1px solid var(--border-color)',
-                                    outline: 'none'
-                                }}
+                                className="w-full py-3 px-4 rounded-lg border border-border outline-none focus:border-primary transition-colors"
                             />
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                            <input
-                                type="checkbox"
-                                id="remember"
-                                style={{ accentColor: 'var(--primary)' }}
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
-                            />
-                            <label htmlFor="remember" style={{ fontSize: '0.875rem', color: 'var(--text-muted)', cursor: 'pointer' }}>Remember me</label>
                         </div>
 
                         <button
-                            className="btn btn-primary"
+                            className="btn btn-primary p-3.5 text-base mt-2"
                             type="submit"
                             disabled={isLoading}
-                            style={{ padding: '0.875rem', fontSize: '1rem' }}
                         >
                             {isLoading ? 'Signing In...' : 'Sign In'}
                         </button>
                     </form>
 
-                    <p style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-muted)' }}>
+                    <p className="text-center mt-8 text-text-muted">
                         Don't have an account?{' '}
-                        <Link to="/register" style={{ color: 'var(--primary)', fontWeight: 600 }}>Create an account</Link>
+                        <Link to="/register" className="text-primary font-semibold hover:underline">
+                            Create an account
+                        </Link>
                     </p>
-                    <style>{`
-@media(max - width: 640px) {
-                    .container {
-        padding - top: 2rem!important;
-    }
-                    .glass {
-        padding: 1.5rem!important;
-        border - radius: 1rem!important;
-    }
-                    h2 {
-        font - size: 1.5rem!important;
-    }
-}
-`}</style>
                 </div>
             </div>
         </div>

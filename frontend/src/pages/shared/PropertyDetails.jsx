@@ -4,7 +4,7 @@ import axios from 'axios';
 import API_URL from "../../config";
 import {
     HiLocationMarker, HiOutlineHome, HiArrowsExpand,
-    HiPhone, HiChatAlt, HiHeart, HiOutlineLogout,
+    HiChatAlt, HiHeart, HiOutlineLogout,
     HiShare, HiFlag, HiBadgeCheck, HiChevronRight,
     HiOutlineUserGroup, HiOutlineViewGrid, HiCalendar,
     HiX, HiChevronLeft, HiCollection, HiOutlineHeart
@@ -140,59 +140,48 @@ const PropertyDetails = () => {
     const prevImage = () => setLightboxIndex((prev) => (prev - 1 + property.images.length) % property.images.length);
 
     return (
-        <div style={{ backgroundColor: '#fdfdfd', minHeight: '100vh', paddingBottom: '6rem' }}>
+        <div className="bg-[#fdfdfd] min-h-screen pb-24">
             <Navbar />
 
-            <main className="container fade-in" style={{ paddingTop: '1rem' }}>
+            <main className="container fade-in pt-4">
                 {/* Breadcrumbs */}
-                <nav className="breadcrumbs" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', fontSize: '0.875rem', color: '#64748b', marginBottom: '1.5rem' }}>
-                    <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
+                <nav className="breadcrumbs flex items-center flex-wrap gap-2 text-sm text-[#64748b] mb-6">
+                    <Link to="/" className="text-inherit no-underline">Home</Link>
                     <HiChevronRight />
-                    <Link to="/properties" style={{ color: 'inherit', textDecoration: 'none' }}>Listings</Link>
+                    <Link to="/properties" className="text-inherit no-underline">Listings</Link>
                     <HiChevronRight />
-                    <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{property.title}</span>
+                    <span className="text-text-main font-semibold">{property.title}</span>
                 </nav>
 
-                <div className="property-gallery-container" style={{ marginBottom: '2rem' }}>
-                    <div className="property-gallery" style={{
-                        display: 'grid',
-                        gridTemplateColumns: property.images.length > 1 ? 'repeat(4, 1fr)' : '1fr',
-                        gridTemplateRows: property.images.length > 1 ? 'repeat(2, 180px)' : '400px',
-                        gap: '0.75rem',
-                        borderRadius: '1.5rem',
-                        overflow: 'hidden'
-                    }}>
+                <div className="property-gallery-container mb-8">
+                    <div className="property-gallery hidden md:grid gap-3 rounded-3xl overflow-hidden"
+                        style={{
+                            gridTemplateColumns: property.images.length > 1 ? 'repeat(4, 1fr)' : '1fr',
+                            gridTemplateRows: property.images.length > 1 ? 'repeat(2, 180px)' : '400px'
+                        }}>
                         {/* Main Large Image */}
-                        <div className="gallery-item main-image" style={{
-                            gridColumn: property.images.length > 1 ? 'span 2' : 'span 1',
-                            gridRow: property.images.length > 1 ? 'span 2' : 'span 1',
-                            cursor: 'pointer',
-                            overflow: 'hidden'
-                        }} onClick={() => openLightbox(0)}>
+                        <div className="gallery-item main-image relative overflow-hidden bg-[#f1f5f9] cursor-pointer"
+                            style={{
+                                gridColumn: property.images.length > 1 ? 'span 2' : 'span 1',
+                                gridRow: property.images.length > 1 ? 'span 2' : 'span 1'
+                            }} onClick={() => openLightbox(0)}>
                             <img
                                 src={property.images[0] || 'https://placehold.co/1200x800'}
                                 alt="Main Property"
-                                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
-                                className="hover-zoom"
+                                className="w-full h-full object-cover transition-transform duration-400 ease hover:scale-105"
                             />
                         </div>
 
                         {/* Side Images */}
                         {property.images.slice(1, 5).map((img, idx) => (
-                            <div key={idx} className="gallery-item" style={{ cursor: 'pointer', overflow: 'hidden' }} onClick={() => openLightbox(idx + 1)}>
+                            <div key={idx} className="gallery-item relative overflow-hidden bg-[#f1f5f9] cursor-pointer" onClick={() => openLightbox(idx + 1)}>
                                 <img
                                     src={img}
                                     alt={`Property Interior ${idx + 1}`}
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
-                                    className="hover-zoom"
+                                    className="w-full h-full object-cover transition-transform duration-400 ease hover:scale-105"
                                 />
                                 {idx === 3 && property.images.length > 5 && (
-                                    <div style={{
-                                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                                        background: 'rgba(0,0,0,0.5)', color: 'white',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        fontSize: '1.5rem', fontWeight: 700, pointerEvents: 'none'
-                                    }}>
+                                    <div className="absolute inset-0 bg-black/50 text-white flex items-center justify-center text-2xl font-bold pointer-events-none">
                                         +{property.images.length - 5}
                                     </div>
                                 )}
@@ -201,12 +190,14 @@ const PropertyDetails = () => {
                     </div>
 
                     {/* Mobile Only Slider */}
-                    <div className="mobile-gallery-wrapper">
-                        <div className="mobile-slider">
+                    <div className="mobile-gallery-wrapper block md:hidden -mx-4 mb-6">
+                        <div className="mobile-slider flex overflow-x-auto snap-x snap-mandatory scroll-smooth p-0 whitespace-nowrap [&::-webkit-scrollbar]:hidden">
                             {property.images.map((img, idx) => (
-                                <div key={idx} className="mobile-slide" onClick={() => openLightbox(idx)}>
-                                    <img src={img} alt={`Slide ${idx + 1}`} />
-                                    <div className="slide-counter">{idx + 1} / {property.images.length}</div>
+                                <div key={idx} className="mobile-slide flex-[0_0_100%] snap-start relative aspect-[4/3] overflow-hidden" onClick={() => openLightbox(idx)}>
+                                    <img src={img} alt={`Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                                    <div className="slide-counter absolute bottom-4 right-4 bg-black/60 text-white py-1 px-3 rounded-2xl text-xs font-semibold">
+                                        {idx + 1} / {property.images.length}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -215,69 +206,31 @@ const PropertyDetails = () => {
 
                 {/* Lightbox Modal */}
                 {lightboxIndex !== null && (
-                    <div style={{
-                        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.35)', zIndex: 2000,
-                        display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
-                        paddingTop: '6rem',
-                        flexDirection: 'column',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)'
-                    }} onClick={closeLightbox}>
+                    <div className="fixed inset-0 bg-black/35 z-[2000] flex flex-col items-center justify-start pt-24 backdrop-blur-[10px]" onClick={closeLightbox}>
                         {/* Close button */}
-                        <button onClick={closeLightbox} style={{
-                            position: 'absolute', top: '2rem', right: '2rem',
-                            background: 'white', border: 'none', borderRadius: '50%',
-                            width: '44px', height: '44px', cursor: 'pointer',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            boxShadow: '0 4px 15px rgba(0,0,0,0.15)', zIndex: 2001,
-                            transition: 'all 0.2s'
-                        }}>
-                            <HiX size={24} color="var(--primary)" />
+                        <button onClick={closeLightbox} className="absolute top-8 right-8 bg-white border-none rounded-full w-11 h-11 cursor-pointer flex items-center justify-center shadow-[0_4px_15px_rgba(0,0,0,0.15)] z-[2001] transition-all duration-200 hover:bg-white/20 hover:scale-110">
+                            <HiX size={24} className="text-primary" />
                         </button>
 
-                        <div style={{
-                            width: '85%', maxWidth: '900px',
-                            backgroundColor: 'white',
-                            padding: '1rem',
-                            borderRadius: '1.5rem',
-                            boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
-                            position: 'relative'
-                        }} onClick={(e) => e.stopPropagation()}>
+                        <div className="w-[85%] max-w-[900px] bg-white p-4 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] relative" onClick={(e) => e.stopPropagation()}>
                             <img
                                 src={property.images[lightboxIndex]}
                                 alt={`Property Full ${lightboxIndex + 1}`}
-                                style={{ width: '100%', height: 'auto', maxHeight: '72vh', objectFit: 'contain', borderRadius: '1rem' }}
+                                className="w-full h-auto max-h-[72vh] object-contain rounded-2xl"
                             />
 
                             {property.images.length > 1 && (
                                 <>
-                                    <button onClick={prevImage} style={{
-                                        position: 'absolute', left: '-22px', top: '50%', transform: 'translateY(-50%)',
-                                        background: 'white', border: 'none', color: 'var(--primary)',
-                                        width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        cursor: 'pointer', borderRadius: '50%',
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.12)'
-                                    }} className="lightbox-nav">
+                                    <button onClick={prevImage} className="absolute -left-[22px] top-1/2 -translate-y-1/2 bg-white border-none text-primary w-11 h-11 flex items-center justify-center cursor-pointer rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-all duration-200 hover:bg-white/20 hover:scale-110">
                                         <HiChevronLeft size={30} />
                                     </button>
-                                    <button onClick={nextImage} style={{
-                                        position: 'absolute', right: '-22px', top: '50%', transform: 'translateY(-50%)',
-                                        background: 'white', border: 'none', color: 'var(--primary)',
-                                        width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        cursor: 'pointer', borderRadius: '50%',
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.12)'
-                                    }} className="lightbox-nav">
+                                    <button onClick={nextImage} className="absolute -right-[22px] top-1/2 -translate-y-1/2 bg-white border-none text-primary w-11 h-11 flex items-center justify-center cursor-pointer rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-all duration-200 hover:bg-white/20 hover:scale-110">
                                         <HiChevronRight size={30} />
                                     </button>
                                 </>
                             )}
 
-                            <div style={{
-                                position: 'absolute', bottom: '-45px', left: '50%', transform: 'translateX(-50%)',
-                                color: 'white', fontSize: '1rem', fontWeight: 600,
-                                textShadow: '0 2px 4px rgba(0,0,0,0.5)'
-                            }}>
+                            <div className="absolute -bottom-[45px] left-1/2 -translate-x-1/2 text-white text-base font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                                 {lightboxIndex + 1} / {property.images.length}
                             </div>
                         </div>
@@ -285,48 +238,32 @@ const PropertyDetails = () => {
                 )}
 
                 {/* Main Content & Sidebar Grid */}
-                <div className="details-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '2.5rem', alignItems: 'start' }}>
+                <div className="details-layout grid grid-cols-[1fr_380px] gap-10 items-start max-[1024px]:grid-cols-1 max-[1024px]:gap-8">
 
                     {/* Left Column: Property Info */}
                     <div className="info-column">
-                        <div style={{ marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                        <div className="mb-8">
+                            <div className="flex justify-between items-start flex-wrap gap-4">
                                 <div>
-                                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                        <span style={{
-                                            padding: '0.4rem 1rem',
-                                            borderRadius: '0.5rem',
-                                            border: '1px solid var(--primary)',
-                                            color: 'var(--primary)',
-                                            fontSize: '0.75rem',
-                                            fontWeight: 700,
-                                            textTransform: 'uppercase',
-                                            display: 'inline-block',
-                                            marginBottom: '0.75rem'
-                                        }}>
+                                    <div className="flex gap-2 flex-wrap">
+                                        <span className="py-1.5 px-4 rounded-lg border border-primary text-primary text-xs font-bold uppercase inline-block mb-3">
                                             Premium Listing
                                         </span>
                                     </div>
-                                    <h1 className="property-title" style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+                                    <h1 className="property-title text-[2.5rem] font-extrabold text-text-main mb-2 tracking-tight max-[768px]:text-[2rem] max-[480px]:text-[1.75rem]">
                                         {property.title}
                                     </h1>
-                                    <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '1rem' }}>
-                                        <HiLocationMarker style={{ color: 'var(--primary)', fontSize: '1.125rem' }} />
+                                    <p className="flex items-center gap-2 text-[#64748b] text-base">
+                                        <HiLocationMarker className="text-primary text-lg" />
                                         {property.area}, {property.city}, India
                                     </p>
                                 </div>
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <div className="flex gap-2">
                                     {(!user || user.role === 'buyer') && (
                                         <button
                                             onClick={handleWishlistToggle}
-                                            className="wishlist-action-btn"
-                                            style={{
-                                                width: '48px', height: '48px', borderRadius: '50%', border: '1px solid #e2e8f0', background: 'white',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                cursor: 'pointer', transition: 'all 0.3s ease',
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                                color: isInWishlist ? '#ef4444' : '#64748b'
-                                            }}>
+                                            className={`wishlist-action-btn w-12 h-12 rounded-full border border-[#e2e8f0] bg-white flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:scale-110 hover:shadow-[0_6px_16px_rgba(0,0,0,0.12)] hover:border-[#cbd5e1] ${isInWishlist ? 'text-red-500' : 'text-[#64748b]'}`}
+                                        >
                                             {isInWishlist ? <HiHeart size={26} fill="#ef4444" /> : <HiOutlineHeart size={26} />}
                                         </button>
                                     )}
@@ -335,44 +272,37 @@ const PropertyDetails = () => {
                         </div>
 
                         {/* Quick Stats Boxes */}
-                        <div className="stats-grid" style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
-                            gap: '0.75rem',
-                            marginBottom: '2.5rem'
-                        }}>
+                        <div className="stats-grid grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-3 mb-10 max-[768px]:grid-cols-2 max-[480px]:gap-2">
                             {[
                                 { label: 'Bedrooms', value: property.bhk || 0, icon: HiOutlineHome },
-                                { label: 'Bathrooms', value: Math.max(1, (parseInt(property.bhk) || 1) - 1), icon: HiOutlineUserGroup },
+                                { label: 'Bathrooms', value: property.bathrooms || Math.max(1, (parseInt(property.bhk) || 1) - 1), icon: HiOutlineUserGroup },
                                 { label: 'Furnishing', value: property.furnishing || 'N/A', icon: HiCollection },
                                 { label: 'Living Area', value: `${property.areaSize} sqft`, icon: HiOutlineViewGrid },
                                 { label: 'Type', value: property.propertyType, icon: HiCalendar }
                             ].map((stat, i) => (
-                                <div key={i} style={{
-                                    padding: '1rem 0.5rem', background: '#f8fafc', borderRadius: '1rem', border: '1px solid #f1f5f9', textAlign: 'center'
-                                }}>
-                                    {stat.icon && <stat.icon size={18} style={{ color: 'var(--primary)', marginBottom: '0.4rem' }} />}
-                                    <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-main)', textTransform: 'capitalize' }}>{stat.value}</div>
-                                    <div style={{ fontSize: '0.6rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>{stat.label}</div>
+                                <div key={i} className="py-4 px-2 bg-[#f8fafc] rounded-2xl border border-[#f1f5f9] text-center">
+                                    {stat.icon && <stat.icon size={18} className="text-primary mb-1.5 mx-auto" />}
+                                    <div className="font-extrabold text-[0.9rem] text-text-main capitalize">{stat.value}</div>
+                                    <div className="text-[0.6rem] text-[#94a3b8] uppercase font-bold tracking-widest">{stat.label}</div>
                                 </div>
                             ))}
                         </div>
 
                         {/* Description Section */}
-                        <div style={{ marginBottom: '2.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem' }}>Description</h3>
-                            <p style={{ color: '#475569', fontSize: '1rem', lineHeight: '1.7' }}>
+                        <div className="mb-10">
+                            <h3 className="text-xl font-bold mb-4">Description</h3>
+                            <p className="text-[#475569] text-base leading-relaxed">
                                 {property.description || "No description available for this property."}
                             </p>
                         </div>
 
                         {/* Amenities List */}
-                        <div style={{ marginBottom: '2.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.25rem' }}>Amenities</h3>
-                            <div className="amenities-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1rem' }}>
+                        <div className="mb-10">
+                            <h3 className="text-xl font-bold mb-5">Amenities</h3>
+                            <div className="amenities-grid grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4">
                                 {(property.amenities?.length ? property.amenities : ['Parking', 'Security', 'Water Supply', 'Power Backup']).map((amn, i) => (
-                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#334155', fontWeight: 500, fontSize: '0.9375rem' }}>
-                                        <HiBadgeCheck size={18} style={{ color: 'var(--primary)' }} />
+                                    <div key={i} className="flex items-center gap-3 text-[#334155] font-medium text-[0.9375rem]">
+                                        <HiBadgeCheck size={18} className="text-primary" />
                                         {amn}
                                     </div>
                                 ))}
@@ -387,55 +317,51 @@ const PropertyDetails = () => {
                             background: 'var(--primary)', color: 'white', padding: '1.5rem 2rem', borderRadius: '1.5rem', marginBottom: '1.5rem',
                             boxShadow: '0 10px 25px rgba(13, 148, 136, 0.2)'
                         }}>
-                            <div style={{ fontSize: '0.875rem', opacity: 0.8, fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                            <div className="text-[0.875rem] opacity-80 font-semibold uppercase mb-2">
                                 {property.status?.toLowerCase() === 'rent' ? 'Rental Details' : 'Listing Price'}
                             </div>
-                            <div style={{ fontSize: '2.25rem', fontWeight: 800, margin: '0.25rem 0' }}>
+                            <div className="text-[2.25rem] font-extrabold my-1">
                                 {property.status?.toLowerCase() === 'rent'
                                     ? `₹${Number(property.price).toLocaleString('en-IN')}`
                                     : formattedPrice}
-                                {property.status?.toLowerCase() === 'rent' && <span style={{ fontSize: '1rem', fontWeight: 400, opacity: 0.8 }}> /month</span>}
+                                {property.status?.toLowerCase() === 'rent' && <span className="text-base font-normal opacity-80"> /month</span>}
                             </div>
                             {property.status?.toLowerCase() === 'rent' && (
-                                <div style={{ marginTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                                        <span style={{ opacity: 0.8 }}>Security Deposit</span>
-                                        <span style={{ fontWeight: 700 }}>₹{Number(property.securityDeposit || 0).toLocaleString('en-IN')}</span>
+                                <div className="mt-4 border-t border-white/20 pt-4 flex flex-col gap-2">
+                                    <div className="flex justify-between text-[0.9rem]">
+                                        <span className="opacity-80">Security Deposit</span>
+                                        <span className="font-bold">₹{Number(property.securityDeposit || 0).toLocaleString('en-IN')}</span>
                                     </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                                        <span style={{ opacity: 0.8 }}>Maintenance</span>
-                                        <span style={{ fontWeight: 700 }}>₹{Number(property.maintenance || 0).toLocaleString('en-IN')}/mo</span>
+                                    <div className="flex justify-between text-[0.9rem]">
+                                        <span className="opacity-80">Maintenance</span>
+                                        <span className="font-bold">₹{Number(property.maintenance || 0).toLocaleString('en-IN')}/mo</span>
                                     </div>
                                 </div>
                             )}
-                            <div style={{ fontSize: '0.8125rem', opacity: 0.9, marginTop: property.status?.toLowerCase() === 'rent' ? '1rem' : '0.25rem' }}>
+                            <div className={`text-[0.8125rem] opacity-90 ${property.status?.toLowerCase() === 'rent' ? 'mt-4' : 'mt-1'}`}>
                                 Available for {property.status?.toLowerCase() === 'rent' ? 'Rent' : 'Sale'}
                             </div>
                         </div>
 
                         {/* Seller & Contact */}
-                        <div style={{ background: 'white', padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid #f1f5f9', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                                <div style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden', background: '#f1f5f9' }}>
-                                    <img src={property.seller?.profilePic || `https://ui-avatars.com/api/?name=${property.seller?.name || 'Seller'}&background=0d6e59&color=fff`} alt="Agent" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <div className="bg-white p-6 rounded-[1.5rem] border border-[#f1f5f9] shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="w-[50px] h-[50px] rounded-full overflow-hidden bg-[#f1f5f9]">
+                                    <img src={property.seller?.profilePic || `https://ui-avatars.com/api/?name=${property.seller?.name || 'Seller'}&background=0d6e59&color=fff`} alt="Agent" className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <Link to={`/seller/${property.seller?._id}`} style={{ textDecoration: 'none' }}>
-                                        <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: 'var(--text-main)' }} className="hover-primary">{property.seller?.name || 'Seller'}</h4>
+                                    <Link to={`/seller/${property.seller?._id}`} className="no-underline">
+                                        <h4 className="text-base font-extrabold m-0 text-text-main transition-colors duration-200 hover:text-primary">{property.seller?.name || 'Seller'}</h4>
                                     </Link>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, marginTop: '0.5rem' }}>
+                                    <div className="flex items-center gap-1 text-[0.75rem] text-primary font-bold mt-2">
                                         <HiBadgeCheck /> Verified Seller
                                     </div>
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                                <button className="btn btn-outline" style={{ flex: 1, padding: '0.6rem', fontSize: '0.875rem' }}>
-                                    <HiPhone /> Call
-                                </button>
+                            <div className="flex gap-3 mb-6">
                                 <button
-                                    className="btn btn-outline"
-                                    style={{ flex: 1, padding: '0.6rem', fontSize: '0.875rem' }}
+                                    className="btn btn-outline flex-1 p-2.5 text-[0.875rem] flex items-center justify-center gap-2"
                                     onClick={handleChatStart}
                                 >
                                     <HiChatAlt /> Chat
@@ -443,7 +369,7 @@ const PropertyDetails = () => {
                             </div>
 
                             {/* Inquiry Form */}
-                            <h4 style={{ fontSize: '0.9375rem', fontWeight: 700, marginBottom: '1rem' }}>Inquire</h4>
+                            <h4 className="text-[0.9375rem] font-bold mb-4">Inquire</h4>
                             <form onSubmit={handleInquirySubmit}>
                                 {user?.role === 'buyer' ? (
                                     <>
@@ -451,25 +377,24 @@ const PropertyDetails = () => {
                                             placeholder="Your Message..."
                                             value={inquiry.message}
                                             onChange={(e) => setInquiry({ ...inquiry, message: e.target.value })}
-                                            style={{ width: '100%', height: '100px', padding: '0.75rem 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', marginBottom: '1rem', outline: 'none', resize: 'none', fontSize: '0.875rem' }}
+                                            className="w-full h-[100px] p-3 rounded-xl border border-[#e2e8f0] mb-4 outline-none resize-none text-[0.875rem]"
                                             required
                                         />
                                         <button
                                             type="submit"
-                                            className="btn btn-primary"
-                                            style={{ width: '100%', padding: '0.875rem', borderRadius: '0.75rem', fontWeight: 700 }}
+                                            className="btn btn-primary w-full p-3.5 rounded-xl font-bold"
                                             disabled={inquiryStatus.loading}
                                         >
                                             {inquiryStatus.loading ? 'Sending...' : 'Send Inquiry'}
                                         </button>
-                                        {inquiryStatus.success && <p style={{ color: 'green', fontSize: '0.75rem', marginTop: '0.5rem', textAlign: 'center' }}>Inquiry sent!</p>}
+                                        {inquiryStatus.success && <p className="text-green-600 text-xs mt-2 text-center">Inquiry sent!</p>}
                                     </>
                                 ) : (
-                                    <div style={{ textAlign: 'center', padding: '1rem', background: '#f8fafc', borderRadius: '0.75rem' }}>
-                                        <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                                    <div className="text-center p-4 bg-[#f8fafc] rounded-xl">
+                                        <p className="text-[0.875rem] text-[#64748b]">
                                             {user ? 'Only buyers can send inquiries.' : 'Please login as a buyer to send inquiries.'}
                                         </p>
-                                        {!user && <Link to="/login" className="btn btn-primary" style={{ marginTop: '0.5rem', width: '100%' }}>Login</Link>}
+                                        {!user && <Link to="/login" className="btn btn-primary mt-2 w-full block">Login</Link>}
                                     </div>
                                 )}
                             </form>
@@ -478,175 +403,49 @@ const PropertyDetails = () => {
                 </div>
 
                 {/* Additional Details Box */}
-                <div className="additional-details" style={{ background: 'white', padding: '2rem', borderRadius: '1.5rem', border: '1px solid #f1f5f9', marginTop: '3rem' }}>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem' }}>
+                <div className="additional-details bg-white p-8 rounded-[1.5rem] border border-[#f1f5f9] mt-12">
+                    <h3 className="text-xl font-bold mb-6 border-b border-[#f1f5f9] pb-3">
                         Property Details
                     </h3>
-                    <div className="details-grid-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem' }}>
+                    <div className="details-grid-row grid grid-cols-2 gap-8 max-sm:grid-cols-1 max-sm:gap-0">
                         {[
                             { label: 'Property ID', value: property._id.slice(-8).toUpperCase() },
                             { label: 'Added On', value: new Date(property.createdAt).toLocaleDateString() },
                             { label: 'Property Type', value: property.propertyType },
                             { label: 'Status', value: `For ${property.status}` }
                         ].map((detail, i) => (
-                            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px dashed #f1f5f9' }}>
-                                <span style={{ color: '#64748b', fontSize: '0.875rem' }}>{detail.label}</span>
-                                <span style={{ color: 'var(--text-main)', fontWeight: 600, textTransform: 'capitalize' }}>{detail.value}</span>
+                            <div key={i} className="flex justify-between py-2 border-b border-dashed border-[#f1f5f9]">
+                                <span className="text-[#64748b] text-[0.875rem]">{detail.label}</span>
+                                <span className="text-text-main font-semibold capitalize">{detail.value}</span>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* Similar Properties */}
-                <section style={{ marginTop: '4rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <section className="mt-16">
+                    <div className="flex justify-between items-end mb-8 flex-wrap gap-4">
                         <div>
-                            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.25rem' }}>Similar Properties</h2>
-                            <p style={{ color: '#64748b', fontSize: '0.9375rem' }}>Listings you might like in {property.city}.</p>
+                            <h2 className="text-[1.75rem] font-extrabold mb-1">Similar Properties</h2>
+                            <p className="text-[#64748b] text-[0.9375rem]">Listings you might like in {property.city}.</p>
                         </div>
-                        <Link to="/properties" className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>
+                        <Link to="/properties" className="btn btn-outline flex items-center gap-2 py-2.5 px-5 text-[0.875rem]">
                             All Listings <HiChevronRight />
                         </Link>
                     </div>
-                    <div className="similar-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                    <div className="similar-grid grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
                         {similarProperties.length > 0 ? (
                             similarProperties.slice(0, 3).map(p => (
                                 <PropertyCard key={p._id} property={p} />
                             ))
                         ) : (
-                            <div style={{
-                                gridColumn: '1 / -1',
-                                padding: '3rem',
-                                background: '#f8fafc',
-                                borderRadius: '1.5rem',
-                                textAlign: 'center',
-                                border: '1px dashed #e2e8f0',
-                                color: '#64748b'
-                            }}>
+                            <div className="col-span-full p-12 bg-[#f8fafc] rounded-[1.5rem] text-center border border-dashed border-[#e2e8f0] text-[#64748b]">
                                 No similar properties found in this location.
                             </div>
                         )}
                     </div>
                 </section>
             </main>
-
-            <style>{`
-                .gallery-item {
-                    position: relative;
-                    overflow: hidden;
-                    background: #f1f5f9;
-                }
-
-                .hover-zoom:hover {
-                    transform: scale(1.05);
-                }
-
-                .lightbox-nav {
-                    transition: all 0.2s ease;
-                }
-
-                .lightbox-nav:hover {
-                    background: rgba(255, 255, 255, 0.2) !important;
-                    transform: translateY(-50%) scale(1.1) !important;
-                }
-
-                .mobile-gallery-wrapper {
-                    display: none;
-                }
-
-                @media (max-width: 1024px) {
-                    .details-layout {
-                        grid-template-columns: 1fr !important;
-                        gap: 2rem !important;
-                    }
-                    .sidebar-column {
-                        position: static !important;
-                    }
-                    .property-gallery {
-                        height: 350px !important;
-                        grid-template-rows: repeat(2, 160px) !important;
-                    }
-                }
-
-                @media (max-width: 768px) {
-                    .property-gallery {
-                        display: none !important;
-                    }
-                    
-                    .mobile-gallery-wrapper {
-                        display: block;
-                        margin: -1rem -1rem 1.5rem -1rem; /* Negative margin to span full width on small screens */
-                    }
-
-                    .mobile-slider {
-                        display: flex;
-                        overflow-x: auto;
-                        scroll-snap-type: x mandatory;
-                        scroll-behavior: smooth;
-                        -webkit-overflow-scrolling: touch;
-                        gap: 0;
-                        scrollbar-width: none;
-                        -ms-overflow-style: none;
-                    }
-
-                    .mobile-slider::-webkit-scrollbar {
-                        display: none;
-                    }
-
-                    .mobile-slide {
-                        flex: 0 0 100%;
-                        scroll-snap-align: start;
-                        position: relative;
-                        aspect-ratio: 4/3;
-                        overflow: hidden;
-                    }
-
-                    .mobile-slide img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-
-                    .slide-counter {
-                        position: absolute;
-                        bottom: 1rem;
-                        right: 1rem;
-                        background: rgba(0, 0, 0, 0.6);
-                        color: white;
-                        padding: 0.25rem 0.75rem;
-                        border-radius: 1rem;
-                        font-size: 0.75rem;
-                        font-weight: 600;
-                    }
-
-                    .property-title {
-                        font-size: 2rem !important;
-                    }
-                    .stats-grid {
-                        grid-template-columns: repeat(2, 1fr) !important;
-                    }
-                    .additional-details .details-grid-row {
-                        grid-template-columns: 1fr !important;
-                        gap: 0 !important;
-                    }
-                }
-                @media (max-width: 480px) {
-                    .property-title {
-                        font-size: 1.75rem !important;
-                    }
-                    .stats-grid {
-                        gap: 0.5rem !important;
-                    }
-                }
-              .wishlist-action-btn:hover {
-          transform: scale(1.1);
-          box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
-          border-color: #cbd5e1 !important;
-        }
-        .hover-primary:hover {
-          color: var(--primary) !important;
-        }
-      `}</style>
         </div>
     );
 };

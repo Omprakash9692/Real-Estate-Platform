@@ -38,6 +38,7 @@ export const addProperty = async (req, res) => {
       pincode: req.body.pincode,
       propertyType: req.body.propertyType,
       bhk: req.body.bhk ? String(req.body.bhk) : undefined,
+      bathrooms: req.body.bathrooms ? Number(req.body.bathrooms) : undefined,
       areaSize: req.body.areaSize ? Number(req.body.areaSize) : undefined,
       furnishing: req.body.furnishing,
       status: req.body.status,
@@ -119,6 +120,7 @@ export const updateProperty = async (req, res) => {
       "pincode",
       "propertyType",
       "bhk",
+      "bathrooms",
       "areaSize",
       "furnishing",
       "status",
@@ -359,7 +361,11 @@ export const getPropertyDetails = async (req, res) => {
       }
     }
 
-    if (!property.viewedBy.includes(visitorId)) {
+    // Identify if the visitor is the seller themselves
+    const isSellerChecking = visitorId === property.seller._id.toString();
+
+    // Only increment views if not the seller and hasn't viewed yet
+    if (!isSellerChecking && !property.viewedBy.includes(visitorId)) {
       property.views += 1;
       property.viewedBy.push(visitorId);
       await property.save();

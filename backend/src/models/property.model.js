@@ -45,6 +45,9 @@ const propertySchema = new mongoose.Schema(
     bhk: {
       type: String,
     },
+    bathrooms: {
+      type: Number,
+    },
     areaSize: {
       type: Number,
     },

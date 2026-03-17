@@ -27,66 +27,29 @@ const SellerSidebar = ({ isOpen, onClose }) => {
         <>
             {/* Backdrop for mobile */}
             <div
-                className={`sidebar-backdrop ${isOpen ? 'show' : ''}`}
+                className={`fixed inset-0 w-full h-full bg-black/30 backdrop-blur-sm z-[950] transition-all duration-300 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible hidden md:block'}`}
                 onClick={onClose}
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    background: 'rgba(0,0,0,0.3)',
-                    backdropFilter: 'blur(4px)',
-                    zIndex: 950,
-                    display: 'none',
-                    opacity: isOpen ? 1 : 0,
-                    visibility: isOpen ? 'visible' : 'hidden',
-                    transition: 'all 0.3s ease'
-                }}
             />
 
             <aside
-                className={`dashboard-sidebar ${isOpen ? 'open' : ''}`}
-                style={{
-                    width: '260px',
-                    height: '100vh',
-                    position: 'fixed',
-                    left: 0,
-                    top: 0,
-                    background: 'white',
-                    borderRight: '1px solid #f1f5f9',
-                    padding: '2rem 1.25rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    zIndex: 1000,
-                    transition: 'transform 0.3s ease'
-                }}>
+                className={`fixed left-0 top-0 w-[260px] h-screen bg-white border-r border-[#f1f5f9] py-8 px-5 flex flex-col z-[1000] transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+            >
                 {/* Logo Section */}
-                <div style={{ padding: '0 0.75rem', marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="px-3 mb-10 flex justify-between items-center">
                     <Logo fontSize="1.25rem" iconSize={20} />
                 </div>
 
                 {/* Navigation items */}
-                <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', flex: 1 }}>
+                <nav className="flex flex-col gap-1.5 flex-1">
                     {navItems.map((item) => (
                         <NavLink
                             key={item.name}
                             to={item.path}
                             onClick={onClose}
-                            className={({ isActive }) => isActive ? 'sidebar-link active' : 'sidebar-link'}
-                            style={({ isActive }) => ({
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '1rem',
-                                padding: '0.875rem 1rem',
-                                borderRadius: '0.75rem',
-                                textDecoration: 'none',
-                                fontSize: '0.9375rem',
-                                fontWeight: isActive ? 700 : 500,
-                                color: isActive ? 'var(--primary)' : '#64748b',
-                                backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
-                                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                            })}
+                            className={({ isActive }) =>
+                                `flex items-center gap-4 py-3.5 px-4 rounded-xl no-underline text-[0.9375rem] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] ${isActive ? 'font-bold text-primary bg-primary-light' : 'font-medium text-[#64748b] hover:bg-gray-50'
+                                }`
+                            }
                         >
                             <item.icon size={20} />
                             {item.name}
@@ -95,28 +58,13 @@ const SellerSidebar = ({ isOpen, onClose }) => {
                 </nav>
 
                 {/* Logout Section */}
-                <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '1.5rem', marginTop: 'auto' }}>
+                <div className="border-t border-[#f1f5f9] pt-6 mt-auto">
                     <button
                         onClick={() => {
                             onClose();
                             logout();
                         }}
-                        className="sidebar-link"
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '1rem',
-                            padding: '0.875rem 1rem',
-                            borderRadius: '0.75rem',
-                            border: 'none',
-                            background: 'transparent',
-                            fontSize: '0.9375rem',
-                            fontWeight: 600,
-                            color: '#dc2626',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                        }}
+                        className="w-full flex items-center gap-4 py-3.5 px-4 rounded-xl border-none bg-transparent text-[0.9375rem] font-semibold text-[#dc2626] cursor-pointer transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-red-50"
                     >
                         <HiOutlineLogout size={20} />
                         Logout

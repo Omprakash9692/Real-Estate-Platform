@@ -44,41 +44,35 @@ const AdminProperties = () => {
 
     return (
         <>
-            <div style={{ marginBottom: '3rem' }}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>Property Moderation</h1>
-                <p style={{ color: 'var(--text-muted)' }}>Review and manage all property listings across the platform.</p>
+            <div className="mb-12">
+                <h1 className="text-[2rem] font-extrabold text-text-main mb-2">Property Moderation</h1>
+                <p className="text-text-muted">Review and manage all property listings across the platform.</p>
             </div>
 
-            <div style={{ marginBottom: '3rem' }}>
+            <div className="mb-12">
                 {properties.length === 0 ? (
-                    <div className="card-premium" style={{ padding: '4rem', textAlign: 'center', color: '#64748b' }}>
+                    <div className="card-premium p-16 text-center text-[#64748b]">
                         No properties pending moderation.
                     </div>
                 ) : (
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                        gap: '2rem',
-                        justifyItems: 'center'
-                    }}>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 justify-items-center">
                         {properties.map((p) => (
                             <PropertyCard
                                 key={p._id}
                                 property={p}
                                 renderActions={() => (
-                                    <div style={{ flex: 1, display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                        <div style={{ fontSize: '0.75rem', color: '#64748b', flex: 1 }}>
-                                            <div style={{ fontWeight: 700 }}>Seller: {p.seller?.name || 'Unknown'}</div>
-                                            <div style={{ fontSize: '0.7rem' }}>{p.seller?.email}</div>
+                                    <div className="flex-1 flex gap-2 items-center">
+                                        <div className="text-[0.75rem] text-[#64748b] flex-1">
+                                            <div className="font-bold">Seller: {p.seller?.name || 'Unknown'}</div>
+                                            <div className="text-[0.7rem]">{p.seller?.email}</div>
                                         </div>
-                                        <div style={{ display: 'flex', gap: '0.25rem' }}>
-                                            <Link to={`/property/${p._id}`} className="btn btn-outline" style={{ padding: '0.5rem' }}>
+                                        <div className="flex gap-1">
+                                            <Link to={`/property/${p._id}`} className="btn btn-outline p-2">
                                                 <HiOutlineExternalLink size={16} />
                                             </Link>
                                             <button
                                                 onClick={() => handleDelete(p._id)}
-                                                className="btn"
-                                                style={{ background: '#fef2f2', color: '#dc2626', padding: '0.5rem', border: '1px solid #fee2e2' }}
+                                                className="btn bg-[#fef2f2] text-[#dc2626] p-2 border border-[#fee2e2] hover:bg-red-100"
                                             >
                                                 <HiOutlineTrash size={16} />
                                             </button>

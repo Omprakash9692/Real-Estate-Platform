@@ -56,138 +56,81 @@ const MyProperties = () => {
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
 
     const getAvailableStatus = (p) => {
-        // If it was already a rental mode, return rent, else sale
-        if (p.status === 'rent' || p.status === 'rented') return 'rent';
         return 'sale';
     };
 
     return (
         <div className="fade-in">
-            <div className="my-props-header" style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: '2rem',
-                flexWrap: 'wrap',
-                gap: '1.5rem'
-            }}>
-                <div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.25rem' }}>My Listings</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9375rem' }}>Manage your listed properties and their status.</p>
+            <div className="fade-in">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 flex-wrap gap-6 my-props-header text-left">
+                    <div>
+                        <h1 className="text-[1.75rem] font-extrabold text-text-main mb-1">My Listings</h1>
+                        <p className="text-text-muted text-[0.9375rem]">Manage your listed properties and their status.</p>
+                    </div>
+                    <Link to="/add-property" className="btn btn-primary py-3 px-6 rounded-xl font-bold w-full md:w-auto text-center">
+                        Add New Listing
+                    </Link>
                 </div>
-                <Link to="/add-property" className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', borderRadius: '0.75rem', fontWeight: 700 }}>
-                    Add New Listing
-                </Link>
-            </div>
 
-            <div style={{ marginBottom: '2rem' }}>
-                {!Array.isArray(properties) || properties.length === 0 ? (
-                    <div className="card-premium" style={{ padding: '6rem 2rem', textAlign: 'center' }}>
-                        <div style={{ background: '#f8fafc', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
-                            <HiOutlineLibrary size={40} color="#94a3b8" />
+                <div className="mb-8">
+                    {!Array.isArray(properties) || properties.length === 0 ? (
+                        <div className="card-premium py-24 px-8 text-center">
+                            <div className="bg-[#f8fafc] w-[80px] h-[80px] rounded-full flex items-center justify-center mx-auto mb-8">
+                                <HiOutlineLibrary size={40} color="#94a3b8" />
+                            </div>
+                            <h2 className="mb-4 text-2xl font-bold text-text-main">No properties found</h2>
+                            <p className="text-[#64748b] mb-8">Start your journey by adding your first property listing.</p>
+                            <Link to="/add-property" className="btn btn-primary">Add Your First Listing</Link>
                         </div>
-                        <h2 style={{ marginBottom: '1rem' }}>No properties found</h2>
-                        <p style={{ color: '#64748b', marginBottom: '2rem' }}>Start your journey by adding your first property listing.</p>
-                        <Link to="/add-property" className="btn btn-primary">Add Your First Listing</Link>
-                    </div>
-                ) : (
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                        gap: '2rem',
-                        justifyItems: 'center'
-                    }}>
-                        {properties.map((p) => (
-                            <PropertyCard
-                                key={p._id}
-                                property={p}
-                                renderActions={() => (
-                                    <>
-                                        <div style={{ flex: 1, display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                            <div style={{ flex: 1, position: 'relative' }}>
-                                                <select
-                                                    value={p.status === 'sale' || p.status === 'rent' ? 'available' : p.status}
-                                                    onChange={(e) => {
-                                                        const val = e.target.value;
-                                                        if (val === 'available') {
-                                                            updateStatus(p._id, getAvailableStatus(p));
-                                                        } else {
-                                                            updateStatus(p._id, val);
-                                                        }
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    onMouseDown={(e) => e.stopPropagation()}
-                                                    style={{
-                                                        width: '100%',
-                                                        padding: '0.6rem 2rem 0.6rem 0.8rem',
-                                                        fontSize: '0.8125rem',
-                                                        fontWeight: 600,
-                                                        borderRadius: '0.5rem',
-                                                        border: '1px solid #e2e8f0',
-                                                        background: 'white',
-                                                        color: p.status === 'sold' || p.status === 'rented' ? '#ef4444' : '#10b981',
-                                                        appearance: 'none',
-                                                        cursor: 'pointer',
-                                                        outline: 'none'
-                                                    }}
-                                                >
-                                                    <option value="available">Available</option>
-                                                    <option value="sold">Sold</option>
-                                                    <option value="rented">Rented</option>
-                                                </select>
-                                                <div style={{ position: 'absolute', right: '0.8rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#94a3b8' }}>
-                                                    <HiOutlineCheckCircle size={14} />
+                    ) : (
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 justify-items-center">
+                            {properties.map((p) => (
+                                <PropertyCard
+                                    key={p._id}
+                                    property={p}
+                                    renderActions={() => (
+                                        <>
+                                            <div className="flex-1 flex gap-2 items-center">
+                                                <div className="flex-1 relative">
+                                                    <select
+                                                        value={p.status === 'sale' ? 'available' : p.status}
+                                                        onChange={(e) => {
+                                                            const val = e.target.value;
+                                                            if (val === 'available') {
+                                                                updateStatus(p._id, getAvailableStatus(p));
+                                                            } else {
+                                                                updateStatus(p._id, val);
+                                                            }
+                                                        }}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        onMouseDown={(e) => e.stopPropagation()}
+                                                        className={`w-full py-2.5 pr-8 pl-3 text-[0.8125rem] font-semibold rounded-lg border border-[#e2e8f0] bg-white appearance-none cursor-pointer outline-none ${p.status === 'sold' ? 'text-[#ef4444]' : 'text-[#10b981]'}`}
+                                                    >
+                                                        <option value="available">Available</option>
+                                                        <option value="sold">Sold</option>
+                                                    </select>
+                                                    <div className="absolute right-[0.8rem] top-1/2 -translate-y-1/2 pointer-events-none text-[#94a3b8]">
+                                                        <HiOutlineCheckCircle size={14} />
+                                                    </div>
                                                 </div>
+                                                <Link to={`/edit-property/${p._id}`} className="btn btn-outline p-2.5 text-[0.8125rem] flex items-center justify-center gap-1.5 border border-[#e2e8f0]">
+                                                    <HiOutlinePencilAlt /> Edit
+                                                </Link>
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); handleDelete(p._id); }}
+                                                    className="btn p-2.5 text-[0.8125rem] bg-[#fff5f5] text-[#ef4444] border border-[#fee2e2] flex items-center justify-center gap-1.5 transition-colors hover:bg-[#fee2e2]"
+                                                >
+                                                    <HiOutlineTrash />
+                                                </button>
                                             </div>
-                                            <Link to={`/edit-property/${p._id}`} className="btn btn-outline" style={{
-                                                padding: '0.6rem',
-                                                fontSize: '0.8125rem',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '0.4rem',
-                                                border: '1px solid #e2e8f0'
-                                            }}>
-                                                <HiOutlinePencilAlt /> Edit
-                                            </Link>
-                                            <button
-                                                onClick={(e) => { e.stopPropagation(); handleDelete(p._id); }}
-                                                className="btn"
-                                                style={{
-                                                    padding: '0.6rem',
-                                                    fontSize: '0.8125rem',
-                                                    background: '#fff5f5',
-                                                    color: '#ef4444',
-                                                    border: '1px solid #fee2e2',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '0.4rem'
-                                                }}
-                                            >
-                                                <HiOutlineTrash />
-                                            </button>
-                                        </div>
-                                    </>
-                                )}
-                            />
-                        ))}
-                    </div>
-                )}
+                                        </>
+                                    )}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
-            <style>{`
-                @media (max-width: 768px) {
-                    .my-props-header {
-                        flex-direction: column !important;
-                        align-items: flex-start !important;
-                        gap: 1rem !important;
-                        text-align: left !important;
-                    }
-                    .my-props-header .btn {
-                        width: 100% !important;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

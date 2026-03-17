@@ -49,26 +49,26 @@ const Wishlist = () => {
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
 
     return (
-        <div style={{ backgroundColor: 'var(--bg-alt)', minHeight: '100vh' }}>
+        <div className="bg-bg-alt min-h-screen">
             <Navbar />
 
-            <main className="container fade-in wishlist-main" style={{ padding: '3rem 2rem' }}>
-                <div style={{ marginBottom: '3rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Your Wishlist</h1>
-                    <p style={{ color: 'var(--text-muted)' }}>Properties you've saved for later.</p>
+            <main className="container fade-in py-12 px-4 md:px-8">
+                <div className="mb-12">
+                    <h1 className="text-[2.5rem] mb-2">Your Wishlist</h1>
+                    <p className="text-text-muted">Properties you've saved for later.</p>
                 </div>
 
                 {wishlistItems.length === 0 ? (
-                    <div className="card-premium" style={{ padding: '6rem 2rem', textAlign: 'center' }}>
-                        <div style={{ backgroundColor: 'var(--bg-alt)', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', color: 'var(--text-muted)' }}>
+                    <div className="card-premium py-24 px-8 text-center">
+                        <div className="bg-bg-alt w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 text-text-muted">
                             <HiHeart size={40} />
                         </div>
-                        <h2 style={{ marginBottom: '1rem' }}>Your wishlist is empty</h2>
-                        <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Start exploring properties and save your favorites!</p>
+                        <h2 className="mb-4">Your wishlist is empty</h2>
+                        <p className="text-text-muted mb-8">Start exploring properties and save your favorites!</p>
                         <Link to="/" className="btn btn-primary">Browse Properties</Link>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-3 wishlist-grid" style={{ gap: '2rem' }}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:justify-items-center">
                         {wishlistItems.filter(item => item.property).map((item) => (
                             <PropertyCard
                                 key={item._id}
@@ -80,20 +80,7 @@ const Wishlist = () => {
                                             e.stopPropagation();
                                             removeFromWishlist(item.property._id);
                                         }}
-                                        className="btn"
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '0.75rem',
-                                            backgroundColor: '#fff5f5',
-                                            color: '#ef4444',
-                                            border: '1px solid #fee2e2',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            fontWeight: 700
-                                        }}
+                                        className="btn w-full p-3 rounded-xl bg-[#fff5f5] text-[#ef4444] border border-[#fee2e2] flex items-center justify-center gap-2 font-bold"
                                     >
                                         <HiTrash size={18} /> Remove from Wishlist
                                     </button>
@@ -103,20 +90,6 @@ const Wishlist = () => {
                     </div>
                 )}
             </main>
-            <style>{`
-                @media (max-width: 768px) {
-                    .wishlist-main {
-                        padding: 2rem 1rem !important;
-                    }
-                }
-                @media (max-width: 640px) {
-                    .wishlist-grid {
-                        grid-template-columns: 1fr !important;
-                        justify-items: center !important;
-                        gap: 2rem !important;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

@@ -40,69 +40,68 @@ const Contact = () => {
     };
 
     return (
-        <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
+        <div className="min-h-screen bg-[#f8fafc]">
             {user?.role !== 'seller' && <Navbar />}
 
-            <div className="container" style={{ padding: '4rem 1.5rem', maxWidth: '1000px' }}>
-                <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem' }}>Get in Touch</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
+            <div className="container py-16 px-6 max-w-[1000px] mx-auto">
+                <div className="text-center mb-14">
+                    <h1 className="text-[2.5rem] font-extrabold text-text-main mb-4">Get in Touch</h1>
+                    <p className="text-text-muted text-[1.1rem] max-w-[600px] mx-auto">
                         Have questions or feedback? We'd love to hear from you. Our team is here to help you with anything you need.
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '3rem', alignItems: 'start' }}>
+                <div className="grid grid-cols-[1fr_1.5fr] gap-12 items-start max-md:grid-cols-1">
                     {/* Contact Info */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        <div className="card-premium" style={{ padding: '2rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="flex flex-col gap-8">
+                        <div className="card-premium p-8">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center">
                                     <HiOutlineMail size={24} />
                                 </div>
                                 <div>
-                                    <div style={{ fontWeight: 700, fontSize: '1rem' }}>Email Us</div>
-                                    <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>support@realestate.com</div>
+                                    <div className="font-bold text-base">Email Us</div>
+                                    <div className="text-text-muted text-[0.9rem]">support@realestate.com</div>
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#dbeafe', color: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-[#dbeafe] text-[#1e40af] flex items-center justify-center">
                                     <HiOutlinePhone size={24} />
                                 </div>
                                 <div>
-                                    <div style={{ fontWeight: 700, fontSize: '1rem' }}>Call Us</div>
-                                    <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>+1 (234) 567-890</div>
+                                    <div className="font-bold text-base">Call Us</div>
+                                    <div className="text-text-muted text-[0.9rem]">+1 (234) 567-890</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="card-premium" style={{ height: '200px', background: 'var(--primary)', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '2rem', textAlign: 'center' }}>
-                            <h3 style={{ marginBottom: '0.5rem', fontWeight: 700 }}>Quick Support</h3>
-                            <p style={{ fontSize: '0.9rem', opacity: 0.9 }}>Available 24/7 for our premium members. Your satisfaction is our priority.</p>
+                        <div className="card-premium h-[200px] bg-primary text-white flex flex-col justify-center items-center p-8 text-center">
+                            <h3 className="mb-2 font-bold text-xl">Quick Support</h3>
+                            <p className="text-[0.9rem] opacity-90">Available 24/7 for our premium members. Your satisfaction is our priority.</p>
                         </div>
                     </div>
 
                     {/* Contact Form */}
-                    <div className="card-premium" style={{ padding: '2.5rem' }}>
+                    <div className="card-premium p-10">
                         {success ? (
-                            <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-                                <HiOutlineCheckCircle size={64} color="var(--primary)" style={{ marginBottom: '1.5rem' }} />
-                                <h2 style={{ marginBottom: '1rem' }}>Message Sent!</h2>
-                                <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Thank you for reaching out. We've received your message and will get back to you shortly.</p>
+                            <div className="text-center py-8">
+                                <HiOutlineCheckCircle size={64} className="text-primary mx-auto mb-6" />
+                                <h2 className="mb-4 text-2xl font-bold">Message Sent!</h2>
+                                <p className="text-text-muted mb-8">Thank you for reaching out. We've received your message and will get back to you shortly.</p>
                                 <button
                                     onClick={() => setSuccess(false)}
-                                    className="btn btn-primary"
-                                    style={{ padding: '0.75rem 2rem' }}
+                                    className="btn btn-primary py-3 px-8"
                                 >
                                     Send Another Message
                                 </button>
                             </div>
                         ) : (
-                            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                                <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
                                     <div className="input-group">
-                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
-                                            <HiOutlineUser size={16} style={{ marginRight: '0.3rem' }} /> Name
+                                        <label className="block mb-2 font-semibold text-[0.9rem] flex items-center">
+                                            <HiOutlineUser size={16} className="mr-1" /> Name
                                         </label>
                                         <input
                                             type="text"
@@ -111,12 +110,12 @@ const Contact = () => {
                                             value={formData.name}
                                             onChange={handleChange}
                                             placeholder="John Doe"
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+                                            className="w-full p-3 rounded-xl border border-[#e2e8f0] outline-none transition-colors focus:border-primary"
                                         />
                                     </div>
                                     <div className="input-group">
-                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
-                                            <HiOutlineMail size={16} style={{ marginRight: '0.3rem' }} /> Email
+                                        <label className="block mb-2 font-semibold text-[0.9rem] flex items-center">
+                                            <HiOutlineMail size={16} className="mr-1" /> Email
                                         </label>
                                         <input
                                             type="email"
@@ -125,14 +124,14 @@ const Contact = () => {
                                             value={formData.email}
                                             onChange={handleChange}
                                             placeholder="john@example.com"
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+                                            className="w-full p-3 rounded-xl border border-[#e2e8f0] outline-none transition-colors focus:border-primary"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="input-group">
-                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
-                                        <HiOutlinePhone size={16} style={{ marginRight: '0.3rem' }} /> Phone
+                                    <label className="block mb-2 font-semibold text-[0.9rem] flex items-center">
+                                        <HiOutlinePhone size={16} className="mr-1" /> Phone
                                     </label>
                                     <input
                                         type="tel"
@@ -140,13 +139,13 @@ const Contact = () => {
                                         value={formData.phone}
                                         onChange={handleChange}
                                         placeholder="+1 234 567 890"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0' }}
+                                        className="w-full p-3 rounded-xl border border-[#e2e8f0] outline-none transition-colors focus:border-primary"
                                     />
                                 </div>
 
                                 <div className="input-group">
-                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
-                                        <HiOutlineAnnotation size={16} style={{ marginRight: '0.3rem' }} /> Message
+                                    <label className="block mb-2 font-semibold text-[0.9rem] flex items-center">
+                                        <HiOutlineAnnotation size={16} className="mr-1" /> Message
                                     </label>
                                     <textarea
                                         name="message"
@@ -155,12 +154,12 @@ const Contact = () => {
                                         onChange={handleChange}
                                         placeholder="Tell us how we can help..."
                                         rows="5"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', resize: 'none' }}
+                                        className="w-full p-3 rounded-xl border border-[#e2e8f0] outline-none resize-none transition-colors focus:border-primary"
                                     />
                                 </div>
 
                                 {error && (
-                                    <div style={{ color: '#dc2626', fontSize: '0.875rem', padding: '0.75rem', background: '#fef2f2', borderRadius: '0.5rem' }}>
+                                    <div className="text-red-600 text-[0.875rem] p-3 bg-red-50 rounded-lg">
                                         {error}
                                     </div>
                                 )}
@@ -168,8 +167,7 @@ const Contact = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="btn btn-primary"
-                                    style={{ width: '100%', padding: '1rem', borderRadius: '0.75rem', fontWeight: 700, fontSize: '1rem', marginTop: '1rem' }}
+                                    className="btn btn-primary w-full p-4 rounded-xl font-bold text-base mt-4"
                                 >
                                     {loading ? 'Sending...' : 'Send Message'}
                                 </button>

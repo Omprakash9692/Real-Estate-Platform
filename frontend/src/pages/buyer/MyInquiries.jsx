@@ -63,12 +63,12 @@ const MyInquiries = () => {
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
 
     if (error) return (
-        <div style={{ backgroundColor: user?.role !== 'seller' ? 'var(--bg-alt)' : 'transparent', minHeight: '100vh' }}>
+        <div className={user?.role !== 'seller' ? 'bg-bg-alt min-h-screen' : 'bg-transparent min-h-screen'}>
             {user?.role !== 'seller' && <Navbar />}
-            <div className="container py-12" style={{ textAlign: 'center' }}>
-                <div className="card-premium" style={{ padding: '4rem 2rem' }}>
-                    <h2 style={{ color: 'var(--danger)', marginBottom: '1rem' }}>Error</h2>
-                    <p style={{ marginBottom: '2rem' }}>{error}</p>
+            <div className="container py-12 text-center">
+                <div className="card-premium py-16 px-8">
+                    <h2 className="text-[var(--danger)] mb-4">Error</h2>
+                    <p className="mb-8">{error}</p>
                     <button onClick={() => window.location.reload()} className="btn btn-primary">Try Again</button>
                 </div>
             </div>
@@ -78,25 +78,25 @@ const MyInquiries = () => {
     const isSeller = user?.role === 'seller';
 
     return (
-        <div style={{ backgroundColor: user?.role !== 'seller' ? 'var(--bg-alt)' : 'transparent', minHeight: user?.role !== 'seller' ? '100vh' : 'auto' }}>
+        <div className={user?.role !== 'seller' ? 'bg-bg-alt min-h-screen' : 'bg-transparent h-auto'}>
             {user?.role !== 'seller' && <Navbar />}
-            <div className={`container fade-in ${user?.role !== 'seller' ? 'py-12' : ''}`} style={{ paddingTop: user?.role !== 'seller' ? '3rem' : '0' }}>
-                <div style={{ marginBottom: '3rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>
+            <div className={`container fade-in ${user?.role !== 'seller' ? 'py-12 pt-12' : 'pt-0'}`}>
+                <div className="mb-12">
+                    <h1 className="text-[2.5rem] md:text-[1.75rem] mb-2 sm:mb-1">
                         {isSeller ? 'Customer Inquiries' : 'My Inquiries'}
                     </h1>
-                    <p style={{ color: 'var(--text-muted)' }}>
+                    <p className="text-text-muted">
                         {isSeller ? 'Review and respond to interest in your properties.' : 'Track the status of your property inquiries.'}
                     </p>
                 </div>
 
                 {inquiries.length === 0 ? (
-                    <div className="card-premium" style={{ padding: '6rem 2rem', textAlign: 'center' }}>
-                        <div style={{ backgroundColor: 'var(--bg-alt)', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', color: 'var(--text-muted)' }}>
+                    <div className="card-premium py-24 px-8 text-center">
+                        <div className="bg-bg-alt w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 text-text-muted">
                             <HiOutlineChatAlt2 size={40} />
                         </div>
-                        <h2 style={{ marginBottom: '1rem' }}>No inquiries {isSeller ? 'received' : 'sent'}</h2>
-                        <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
+                        <h2 className="mb-4">No inquiries {isSeller ? 'received' : 'sent'}</h2>
+                        <p className="text-text-muted mb-8">
                             {isSeller ? "You haven't received any inquiries yet. Better listings get more attention!" : "You haven't contacted any sellers yet. Interested in a property? Send an inquiry!"}
                         </p>
                         <Link to="/" className="btn btn-primary">
@@ -104,48 +104,45 @@ const MyInquiries = () => {
                         </Link>
                     </div>
                 ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div className="flex flex-col gap-6">
                         {inquiries.map((inq) => (
-                            <div key={inq._id} className="card-premium inquiry-card" style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'stretch' }}>
-                                <div className="inquiry-main-content" style={{ display: 'flex', gap: '2rem', flex: 1 }}>
-                                    <div className="inquiry-icon" style={{ backgroundColor: 'var(--primary-light)', padding: '1.25rem', borderRadius: '1.25rem', color: 'var(--primary)', height: 'fit-content' }}>
-                                        <HiHome size={32} />
+                            <div key={inq._id} className="card-premium p-8 lg:p-6 flex flex-col lg:flex-row justify-between items-stretch gap-6 lg:gap-0">
+                                <div className="flex flex-col md:flex-row gap-4 md:gap-8 flex-1">
+                                    <div className="bg-primary-light p-3 md:p-5 rounded-xl md:rounded-2xl text-primary h-fit">
+                                        <HiHome className="w-6 h-6 md:w-8 md:h-8" />
                                     </div>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                                            <h3 style={{ fontSize: '1.25rem' }}>{inq.property?.title}</h3>
-                                            <span className="badge" style={{
-                                                backgroundColor: inq.isRead ? '#f3f4f6' : '#eff6ff',
-                                                color: inq.isRead ? 'var(--text-muted)' : '#2563eb'
-                                            }}>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <h3 className="text-[1.25rem]">{inq.property?.title}</h3>
+                                            <span className={`badge ${inq.isRead ? 'bg-[#f3f4f6] text-text-muted' : 'bg-[#eff6ff] text-[#2563eb]'}`}>
                                                 {inq.isRead ? 'READ' : 'NEW'}
                                             </span>
                                         </div>
 
                                         {isSeller && (
-                                            <div className="buyer-info-grid" style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.25rem', padding: '1rem', background: 'var(--bg-alt)', borderRadius: '0.75rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
-                                                    <HiUser className="text-muted" /> <span style={{ fontWeight: 600 }}>{inq.buyer?.name}</span>
+                                            <div className="flex flex-col md:flex-row gap-2 md:gap-6 mb-5 p-4 bg-bg-alt rounded-xl">
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <HiUser className="text-muted" /> <span className="font-semibold">{inq.buyer?.name}</span>
                                                 </div>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+                                                <div className="flex items-center gap-2 text-sm">
                                                     <HiMail className="text-muted" /> {inq.buyer?.email}
                                                 </div>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+                                                <div className="flex items-center gap-2 text-sm">
                                                     <HiPhone className="text-muted" /> {inq.buyer?.phone || 'No phone provided'}
                                                 </div>
                                             </div>
                                         )}
 
-                                        <p style={{ color: 'var(--text-main)', fontSize: '1rem', fontStyle: 'italic', marginBottom: '1.25rem', paddingLeft: '1rem', borderLeft: '3px solid var(--border-color)' }}>
+                                        <p className="text-text-main text-base italic mb-5 pl-4 border-l-[3px] border-[var(--border-color)]">
                                             "{inq.message}"
                                         </p>
 
-                                        <div className="inquiry-meta" style={{ display: 'flex', gap: '2rem', fontSize: '0.8125rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <div className="flex flex-col md:flex-row gap-2 md:gap-8 text-[0.8125rem] text-text-muted font-medium">
+                                            <div className="flex items-center gap-2">
                                                 <HiCalendar size={16} /> {isSeller ? 'Received' : 'Sent'} on {new Date(inq.createdAt).toLocaleDateString()}
                                             </div>
                                             {!isSeller && (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <div className="flex items-center gap-2">
                                                     <HiCheckCircle size={16} /> {inq.isRead ? 'Seller viewed' : 'Waiting for seller'}
                                                 </div>
                                             )}
@@ -153,20 +150,19 @@ const MyInquiries = () => {
                                     </div>
                                 </div>
 
-                                <div className="inquiry-actions" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginLeft: '2rem', justifyContent: 'center' }}>
-                                    <Link to={`/property/${inq.property?._id}`} className="btn btn-outline" style={{ gap: '0.5rem', whiteSpace: 'nowrap' }}>
+                                <div className="flex flex-row lg:flex-col flex-wrap gap-4 ml-0 lg:ml-8 justify-center [&>*]:flex-1 [&>*]:min-w-[150px]">
+                                    <Link to={`/property/${inq.property?._id}`} className="btn btn-outline gap-2 whitespace-nowrap">
                                         View Property <HiExternalLink />
                                     </Link>
                                     {isSeller && !inq.isRead && (
-                                        <button onClick={() => markAsRead(inq._id)} className="btn btn-primary" style={{ whiteSpace: 'nowrap' }}>
+                                        <button onClick={() => markAsRead(inq._id)} className="btn btn-primary whitespace-nowrap">
                                             Mark as Read
                                         </button>
                                     )}
                                     {isSeller && (
                                         <button
                                             onClick={() => handleStartChat(inq)}
-                                            className="btn btn-primary"
-                                            style={{ backgroundColor: '#2563eb', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+                                            className="btn btn-primary bg-[#2563eb] flex items-center justify-center gap-2"
                                         >
                                             <HiChatAlt2 /> Message
                                         </button>
@@ -177,51 +173,6 @@ const MyInquiries = () => {
                     </div>
                 )}
             </div>
-            <style>{`
-                @media (max-width: 1024px) {
-                    .inquiry-card {
-                        flex-direction: column !important;
-                        padding: 1.5rem !important;
-                        gap: 1.5rem !important;
-                    }
-                    .inquiry-actions {
-                        margin-left: 0 !important;
-                        flex-direction: row !important;
-                        flex-wrap: wrap !important;
-                    }
-                    .inquiry-actions > * {
-                        flex: 1 !important;
-                        min-width: 150px !important;
-                    }
-                }
-
-                @media (max-width: 768px) {
-                    .inquiry-main-content {
-                        flex-direction: column !important;
-                        gap: 1rem !important;
-                    }
-                    .buyer-info-grid {
-                        flex-direction: column !important;
-                        gap: 0.5rem !important;
-                    }
-                    .inquiry-meta {
-                        flex-direction: column !important;
-                        gap: 0.5rem !important;
-                    }
-                    h1 {
-                        font-size: 1.75rem !important;
-                        margin-bottom: 0.25rem !important;
-                    }
-                    .inquiry-icon {
-                        padding: 0.75rem !important;
-                        border-radius: 0.75rem !important;
-                    }
-                    .inquiry-icon svg {
-                        width: 24px !important;
-                        height: 24px !important;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

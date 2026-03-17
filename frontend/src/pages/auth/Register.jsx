@@ -35,7 +35,7 @@ const Register = () => {
 
         if (result.success) {
             setSuccess('Registration successful! Redirecting to login...');
-            setTimeout(() => navigate('/login'), 2000);
+            setTimeout(() => navigate('/login'), 1500);
         } else {
             setError(result.message);
         }
@@ -43,66 +43,32 @@ const Register = () => {
     };
 
     return (
-        <div style={{ backgroundColor: 'var(--bg-alt)', minHeight: '100vh' }}>
+        <div className="bg-bg-alt min-h-screen">
             <Navbar />
-            <div className="container" style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingTop: '2rem',
-                paddingBottom: '4rem'
-            }}>
-                <div className="glass fade-in" style={{
-                    width: '100%',
-                    maxWidth: '500px',
-                    padding: '2.5rem',
-                    borderRadius: '1.5rem',
-                    boxShadow: 'var(--shadow-lg)'
-                }}>
-                    <h2 style={{
-                        fontSize: '2rem',
-                        fontWeight: 700,
-                        textAlign: 'center',
-                        marginBottom: '0.5rem',
-                        color: 'var(--primary)'
-                    }}>Create Account</h2>
-                    <p style={{
-                        textAlign: 'center',
-                        color: 'var(--text-muted)',
-                        marginBottom: '2rem'
-                    }}>Join our community to find or list properties</p>
+            <div className="container flex justify-center items-center pt-8 pb-16 sm:pt-4 sm:pb-8">
+                <div className="glass fade-in w-full max-w-[500px] p-10 sm:p-6 rounded-3xl sm:rounded-2xl shadow-card">
+                    <h2 className="text-[2rem] sm:text-2xl font-bold text-center mb-2 text-primary">
+                        Create Account
+                    </h2>
+                    <p className="text-center text-text-muted mb-8">
+                        Join our community to find or list properties
+                    </p>
 
                     {error && (
-                        <div style={{
-                            padding: '0.75rem',
-                            backgroundColor: '#fee2e2',
-                            color: '#dc2626',
-                            borderRadius: '0.5rem',
-                            marginBottom: '1rem',
-                            fontSize: '0.875rem',
-                            textAlign: 'center'
-                        }}>
+                        <div className="p-3 bg-red-100 text-red-600 rounded-lg mb-4 text-sm text-center">
                             {error}
                         </div>
                     )}
 
                     {success && (
-                        <div style={{
-                            padding: '0.75rem',
-                            backgroundColor: '#dcfce7',
-                            color: '#16a34a',
-                            borderRadius: '0.5rem',
-                            marginBottom: '1rem',
-                            fontSize: '0.875rem',
-                            textAlign: 'center'
-                        }}>
+                        <div className="p-3 bg-green-100 text-green-600 rounded-lg mb-4 text-sm text-center">
                             {success}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 sm:gap-4">
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Full Name</label>
+                            <label className="block mb-2 font-medium">Full Name</label>
                             <input
                                 type="text"
                                 name="name"
@@ -110,17 +76,11 @@ const Register = () => {
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem 1rem',
-                                    borderRadius: '0.5rem',
-                                    border: '1px solid var(--border-color)',
-                                    outline: 'none'
-                                }}
+                                className="w-full py-3 px-4 rounded-lg border border-border outline-none focus:border-primary transition-colors"
                             />
                         </div>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email Address</label>
+                            <label className="block mb-2 font-medium">Email Address</label>
                             <input
                                 type="email"
                                 name="email"
@@ -128,17 +88,11 @@ const Register = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem 1rem',
-                                    borderRadius: '0.5rem',
-                                    border: '1px solid var(--border-color)',
-                                    outline: 'none'
-                                }}
+                                className="w-full py-3 px-4 rounded-lg border border-border outline-none focus:border-primary transition-colors"
                             />
                         </div>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Password</label>
+                            <label className="block mb-2 font-medium">Password</label>
                             <input
                                 type="password"
                                 name="password"
@@ -146,56 +100,32 @@ const Register = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
-                                style={{
-                                    width: '100%',
-                                    padding: '0.75rem 1rem',
-                                    borderRadius: '0.5rem',
-                                    border: '1px solid var(--border-color)',
-                                    outline: 'none'
-                                }}
+                                className="w-full py-3 px-4 rounded-lg border border-border outline-none focus:border-primary transition-colors"
                             />
                         </div>
 
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: 500 }}>Select Role</label>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <label style={{
-                                    flex: 1,
-                                    cursor: 'pointer',
-                                    padding: '0.75rem',
-                                    borderRadius: '0.5rem',
-                                    border: `2px solid ${formData.role === 'buyer' ? 'var(--primary)' : 'var(--border-color)'}`,
-                                    backgroundColor: formData.role === 'buyer' ? 'var(--secondary)' : 'white',
-                                    textAlign: 'center',
-                                    transition: 'all 0.2s ease'
-                                }}>
+                            <label className="block mb-3 font-medium">Select Role</label>
+                            <div className="flex gap-4">
+                                <label className={`flex-1 cursor-pointer p-3 rounded-lg border-2 text-center transition-all duration-200 ${formData.role === 'buyer' ? 'border-primary bg-secondary' : 'border-border bg-white'}`}>
                                     <input
                                         type="radio"
                                         name="role"
                                         value="buyer"
                                         checked={formData.role === 'buyer'}
                                         onChange={handleChange}
-                                        style={{ display: 'none' }}
+                                        className="hidden"
                                     />
                                     Buyer
                                 </label>
-                                <label style={{
-                                    flex: 1,
-                                    cursor: 'pointer',
-                                    padding: '0.75rem',
-                                    borderRadius: '0.5rem',
-                                    border: `2px solid ${formData.role === 'seller' ? 'var(--primary)' : 'var(--border-color)'}`,
-                                    backgroundColor: formData.role === 'seller' ? 'var(--secondary)' : 'white',
-                                    textAlign: 'center',
-                                    transition: 'all 0.2s ease'
-                                }}>
+                                <label className={`flex-1 cursor-pointer p-3 rounded-lg border-2 text-center transition-all duration-200 ${formData.role === 'seller' ? 'border-primary bg-secondary' : 'border-border bg-white'}`}>
                                     <input
                                         type="radio"
                                         name="role"
                                         value="seller"
                                         checked={formData.role === 'seller'}
                                         onChange={handleChange}
-                                        style={{ display: 'none' }}
+                                        className="hidden"
                                     />
                                     Seller
                                 </label>
@@ -203,37 +133,20 @@ const Register = () => {
                         </div>
 
                         <button
-                            className="btn btn-primary"
+                            className="btn btn-primary p-3.5 text-base mt-2"
                             type="submit"
                             disabled={isLoading}
-                            style={{ padding: '0.875rem', fontSize: '1rem', marginTop: '0.5rem' }}
                         >
                             {isLoading ? 'Creating Account...' : 'Create Account'}
                         </button>
                     </form>
 
-                    <p style={{ textAlign: 'center', marginTop: '2rem', color: 'var(--text-muted)' }}>
+                    <p className="text-center mt-8 text-text-muted">
                         Already have an account?{' '}
-                        <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 600 }}>Sign in here</Link>
+                        <Link to="/login" className="text-primary font-semibold hover:underline">
+                            Sign in here
+                        </Link>
                     </p>
-                    <style>{`
-                @media (max-width: 640px) {
-                    .container {
-                        padding-top: 1rem !important;
-                        padding-bottom: 2rem !important;
-                    }
-                    .glass {
-                        padding: 1.5rem !important;
-                        border-radius: 1rem !important;
-                    }
-                    h2 {
-                        font-size: 1.5rem !important;
-                    }
-                    form {
-                        gap: 1rem !important;
-                    }
-                }
-            `}</style>
                 </div>
             </div>
         </div>

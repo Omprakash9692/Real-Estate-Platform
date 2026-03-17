@@ -24,7 +24,6 @@ const AdminContacts = () => {
             setLoading(false);
         }
     };
-
     useEffect(() => {
         fetchContacts();
     }, [token]);
@@ -33,87 +32,54 @@ const AdminContacts = () => {
 
     return (
         <>
-            <div style={{ marginBottom: '2.5rem' }}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>Contact Requests</h1>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Read and manage inquiries from platform users.</p>
+            <div className="mb-10">
+                <h1 className="text-[2rem] font-extrabold text-text-main mb-2">Contact Requests</h1>
+                <p className="text-text-muted text-[0.9rem]">Read and manage inquiries from platform users.</p>
             </div>
 
-            <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
-                <div style={{ borderBottom: '1px solid #f1f5f9', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h2 style={{ fontSize: '1.2rem', fontWeight: 800 }}>Inbox ({contacts.length})</h2>
+            <div className="card-premium p-0 overflow-hidden">
+                <div className="border-b border-[#f1f5f9] p-6 flex justify-between items-center">
+                    <h2 className="text-[1.2rem] font-extrabold">Inbox ({contacts.length})</h2>
                 </div>
 
                 {contacts.length === 0 ? (
-                    <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                        <HiOutlineMail size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
+                    <div className="p-16 text-center text-text-muted">
+                        <HiOutlineMail size={48} className="opacity-20 mb-4 mx-auto" />
                         <p>No contact messages yet. Inbox is clear.</p>
                     </div>
                 ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div className="flex flex-col">
                         {contacts.map((contact, index) => (
-                            <div key={contact._id} style={{
-                                padding: '2rem',
-                                borderBottom: index !== contacts.length - 1 ? '1px solid #f1f5f9' : 'none',
-                                background: 'white',
-                                transition: 'all 0.3s ease'
-                            }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-                                    <div style={{ display: 'flex', gap: '1.25rem' }}>
-                                        <div style={{
-                                            width: '56px',
-                                            height: '56px',
-                                            borderRadius: '50%',
-                                            background: contact.role === 'seller' ? '#dcfce7' : '#dbeafe',
-                                            color: contact.role === 'seller' ? '#166534' : '#1e40af',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontWeight: 700,
-                                            fontSize: '1.25rem',
-                                            flexShrink: 0
-                                        }}>
+                            <div key={contact._id} className={`p-8 bg-white transition-all duration-300 ease-in-out border-b ${index !== contacts.length - 1 ? 'border-[#f1f5f9]' : 'border-transparent'}`}>
+                                <div className="flex justify-between items-start mb-6">
+                                    <div className="flex gap-5">
+                                        <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-[1.25rem] shrink-0 ${contact.role === 'seller' ? 'bg-[#dcfce7] text-[#166534]' : 'bg-[#dbeafe] text-[#1e40af]'}`}>
                                             {contact.name.charAt(0).toUpperCase()}
                                         </div>
                                         <div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
-                                                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)' }}>{contact.name}</h3>
-                                                <span style={{
-                                                    fontSize: '0.7rem',
-                                                    padding: '0.2rem 0.6rem',
-                                                    borderRadius: '2rem',
-                                                    background: contact.role === 'seller' ? '#dcfce7' : '#dbeafe',
-                                                    color: contact.role === 'seller' ? '#166534' : '#1e40af',
-                                                    fontWeight: 700,
-                                                    textTransform: 'uppercase'
-                                                }}>
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <h3 className="text-[1.1rem] font-extrabold text-text-main">{contact.name}</h3>
+                                                <span className={`text-[0.7rem] px-[0.6rem] py-[0.2rem] rounded-full font-bold uppercase ${contact.role === 'seller' ? 'bg-[#dcfce7] text-[#166534]' : 'bg-[#dbeafe] text-[#1e40af]'}`}>
                                                     {contact.role}
                                                 </span>
                                             </div>
-                                            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                            <div className="flex gap-6 flex-wrap">
+                                                <div className="flex items-center gap-[0.4rem] text-[0.85rem] text-text-muted">
                                                     <HiOutlineMail size={16} /> {contact.email}
                                                 </div>
                                                 {contact.phone && (
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                                    <div className="flex items-center gap-[0.4rem] text-[0.85rem] text-text-muted">
                                                         <HiOutlinePhone size={16} /> {contact.phone}
                                                     </div>
                                                 )}
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                                <div className="flex items-center gap-[0.4rem] text-[0.85rem] text-text-muted">
                                                     <HiOutlineClock size={16} /> {new Date(contact.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{
-                                    background: '#f8fafc',
-                                    padding: '1.25rem 1.5rem',
-                                    borderRadius: '1rem',
-                                    fontSize: '0.95rem',
-                                    lineHeight: '1.6',
-                                    color: '#334155',
-                                    border: '1px solid #f1f5f9'
-                                }}>
+                                <div className="bg-[#f8fafc] py-5 px-6 rounded-2xl text-[0.95rem] leading-[1.6] text-[#334155] border border-[#f1f5f9]">
                                     {contact.message}
                                 </div>
                             </div>

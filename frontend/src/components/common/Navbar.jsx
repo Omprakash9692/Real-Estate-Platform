@@ -13,35 +13,35 @@ const Navbar = () => {
   const navLinks = (
     <>
       {(!user || user.role !== 'buyer') && (
-        <Link to="/properties" className="nav-link" onClick={() => setIsOpen(false)}>Browse Properties</Link>
+        <Link to="/properties" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Browse Properties</Link>
       )}
 
       {user && user.role === 'buyer' && (
         <>
-          <Link to="/" className="nav-link" onClick={() => setIsOpen(false)}>Home</Link>
-          <Link to="/properties" className="nav-link" onClick={() => setIsOpen(false)}>Property</Link>
-          <Link to="/wishlist" className="nav-link" onClick={() => setIsOpen(false)}>Wishlist</Link>
-          <Link to="/chat-messages" className="nav-link" onClick={() => setIsOpen(false)}>Messages</Link>
-          <Link to="/contact" className="nav-link" onClick={() => setIsOpen(false)}>Contact Us</Link>
+          <Link to="/" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Home</Link>
+          <Link to="/properties" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Property</Link>
+          <Link to="/wishlist" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Wishlist</Link>
+          <Link to="/chat-messages" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Messages</Link>
+          <Link to="/contact" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Contact Us</Link>
         </>
       )}
 
       {!user && (
         <>
-          <Link to="/login" className="nav-link" onClick={() => setIsOpen(false)}>Login</Link>
-          <Link to="/register" className="nav-link" onClick={() => setIsOpen(false)}>Register</Link>
+          <Link to="/login" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Login</Link>
+          <Link to="/register" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Register</Link>
         </>
       )}
 
       {user && user.role === 'seller' && (
         <>
-          <Link to="/dashboard" className="nav-link" onClick={() => setIsOpen(false)}>Dashboard</Link>
+          <Link to="/dashboard" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Dashboard</Link>
         </>
       )}
 
       {user && user.role === 'admin' && (
         <>
-          <Link to="/admin-dashboard" className="nav-link" onClick={() => setIsOpen(false)}>Admin Panel</Link>
+          <Link to="/admin-dashboard" className="nav-link text-text-main font-semibold text-[15px] px-4 py-2 rounded-3xl transition-all duration-300 no-underline hover:text-primary hover:bg-primary/10" onClick={() => setIsOpen(false)}>Admin Panel</Link>
         </>
       )}
     </>
@@ -49,61 +49,35 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="glass" style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        padding: 'clamp(0.5rem, 2vw, 1rem) 0',
-        marginBottom: '1rem'
-      }}>
-        <div className="container" style={{
-          padding: '0 1.5rem',
-          maxWidth: '1400px'
-        }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'auto 1fr auto',
-            alignItems: 'center',
-            gap: '1rem'
-          }}>
+      <nav className="glass sticky top-0 z-[1000] py-2 lg:py-4 mb-4">
+        <div className="container px-6 max-w-[1400px] mx-auto">
+          <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
             {/* Left: Logo */}
-            <div style={{ justifySelf: 'start' }}>
+            <div className="justify-self-start">
               <Logo />
             </div>
 
             {/* Center: Desktop Menu */}
             <div
-              className="desktop-menu"
-              style={{
-                justifySelf: 'center',
-                display: 'flex',
-                alignItems: 'center',
-                background: 'rgba(255, 255, 255, 0.5)',
-                padding: '0.4rem 0.75rem',
-                borderRadius: '2rem',
-                border: '1px solid var(--glass-border)',
-                gap: '0.5rem',
-                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)'
-              }}
+              className="hidden lg:flex justify-self-center items-center bg-white/50 px-3 py-1.5 rounded-full border border-white/30 gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.05)]"
             >
               {navLinks}
             </div>
 
             {/* Right: Profile Section */}
-            <div style={{ justifySelf: 'end', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <div className="justify-self-end flex items-center gap-5">
               {user ? (
-                <div className="profile-section" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                  <Link to="/profile" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="flex items-center gap-5">
+                  <Link to="/profile" className="flex items-center">
                     <img
                       src={user.profilePic || `https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`}
                       alt="Profile"
-                      style={{ width: '40px', height: '40px', borderRadius: '50%', border: '2px solid var(--primary-light)', objectFit: 'cover' }}
+                      className="w-10 h-10 rounded-full border-2 border-primary-light object-cover"
                     />
                   </Link>
                   <button
                     onClick={logout}
-                    className="btn btn-outline logout-btn"
-                    style={{ padding: '0.4rem 1rem', borderRadius: '0.75rem', fontWeight: 600, fontSize: '0.875rem' }}
+                    className="btn btn-outline hidden lg:flex py-1.5 px-4 rounded-xl font-semibold text-sm"
                   >
                     Logout
                   </button>
@@ -111,7 +85,7 @@ const Navbar = () => {
               ) : null}
 
               {/* Mobile Toggle */}
-              <div className="mobile-toggle" onClick={toggleMenu} style={{ display: 'none', cursor: 'pointer', color: 'var(--text-main)' }}>
+              <div className="lg:hidden cursor-pointer text-text-main flex" onClick={toggleMenu}>
                 {isOpen ? <HiX size={28} /> : <HiMenuAlt3 size={28} />}
               </div>
             </div>
@@ -121,106 +95,43 @@ const Navbar = () => {
 
       {/* Mobile Menu Backdrop */}
       <div
-        className={`mobile-backdrop ${isOpen ? 'active' : ''}`}
+        className={`fixed inset-0 w-full h-full bg-black/40 backdrop-blur-sm z-[2001] transition-all duration-300 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onClick={() => setIsOpen(false)}
       />
 
       {/* Mobile Menu Drawer */}
-      <div className={`mobile-drawer ${isOpen ? 'open' : ''}`}>
-        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-            <Logo onClick={() => setIsOpen(false)} />
-            <HiX size={28} onClick={() => setIsOpen(false)} style={{ cursor: 'pointer', color: 'var(--text-main)' }} />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', flex: 1 }}>
-            {navLinks}
-          </div>
-
-          {user && (
-            <div style={{ marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                <img
-                  src={user.profilePic || `https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`}
-                  alt="Profile"
-                  style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
-                />
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.9375rem' }}>{user.name}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{user.email}</div>
-                </div>
-              </div>
-              <button
-                onClick={logout}
-                className="btn btn-primary"
-                style={{ width: '100%' }}
-              >
-                Logout
-              </button>
-            </div>
-          )}
+      <div className={`fixed top-0 -left-[300px] w-[300px] h-full bg-white z-[2002] transition-transform duration-300 shadow-[10px_0_30px_rgba(0,0,0,0.1)] border-r border-border flex flex-col p-6 ${isOpen ? 'translate-x-[300px]' : ''}`}>
+        <div className="flex justify-between items-center mb-10">
+          <Logo onClick={() => setIsOpen(false)} />
+          <HiX size={28} onClick={() => setIsOpen(false)} className="cursor-pointer text-text-main" />
         </div>
+
+        <div className="flex flex-col gap-6 flex-1 text-lg">
+          {navLinks}
+        </div>
+
+        {user && (
+          <div className="mt-auto pt-6 border-t border-border">
+            <div className="flex items-center gap-4 mb-6">
+              <img
+                src={user.profilePic || `https://ui-avatars.com/api/?name=${user.name}&background=0d6e59&color=fff`}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+              <div>
+                <div className="font-semibold text-[15px]">{user.name}</div>
+                <div className="text-xs text-text-muted">{user.email}</div>
+              </div>
+            </div>
+            <button
+              onClick={logout}
+              className="btn btn-primary w-full"
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
-
-      <style>{`
-          .nav-link {
-              color: var(--text-main);
-              font-weight: 600;
-              font-size: 0.9375rem;
-              padding: 0.5rem 1rem;
-              border-radius: 1.5rem;
-              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-              text-decoration: none;
-          }
-          .nav-link:hover {
-              color: var(--primary);
-              background: rgba(13, 148, 136, 0.08);
-          }
-          .nav-link.active {
-              background: var(--primary);
-              color: white;
-          }
-          
-          .mobile-backdrop {
-              position: fixed;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: rgba(0, 0, 0, 0.4);
-              backdrop-filter: blur(4px);
-              z-index: 2001;
-              opacity: 0;
-              visibility: hidden;
-              transition: all 0.3s ease;
-          }
-          .mobile-backdrop.active {
-              opacity: 1;
-              visibility: visible;
-          }
-
-          .mobile-drawer {
-              position: fixed;
-              top: 0;
-              left: -300px;
-              width: 300px;
-              height: 100%;
-              background: #ffffff;
-              z-index: 2002;
-              transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-              box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
-              border-right: 1px solid var(--border-color);
-          }
-          .mobile-drawer.open {
-              transform: translateX(300px);
-          }
-
-          @media (max-width: 1024px) {
-              .desktop-menu { display: none !important; }
-              .mobile-toggle { display: block !important; }
-              .logout-btn { display: none !important; }
-          }
-      `}</style>
     </>
   );
 };

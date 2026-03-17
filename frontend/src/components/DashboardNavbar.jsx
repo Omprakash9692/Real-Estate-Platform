@@ -4,41 +4,15 @@ import Logo from './common/Logo';
 
 const DashboardNavbar = ({ onMenuClick }) => {
     return (
-        <header style={{
-            height: '64px',
-            background: 'var(--glass-bg)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            borderBottom: '1px solid var(--glass-border)',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 1rem',
-            position: 'sticky',
-            top: 0,
-            zIndex: 900,
-            width: '100%',
-            gap: '1rem'
-        }} className="dashboard-mobile-header">
+        <header className="h-[64px] bg-white/70 backdrop-blur-[12px] border-b border-white/20 flex items-center px-4 sticky top-0 z-[900] w-full gap-4 md:hidden">
             <button
                 onClick={onMenuClick}
-                style={{
-                    background: 'rgba(13, 148, 136, 0.05)',
-                    border: 'none',
-                    color: 'var(--primary)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '12px',
-                    flexShrink: 0
-                }}
+                className="bg-primary/5 border-none text-primary cursor-pointer flex items-center justify-center w-10 h-10 rounded-xl shrink-0"
             >
                 <HiMenuAlt2 size={24} />
             </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+            <div className="flex items-center overflow-hidden">
                 <Logo fontSize="1.125rem" iconSize={18} />
             </div>
         </header>

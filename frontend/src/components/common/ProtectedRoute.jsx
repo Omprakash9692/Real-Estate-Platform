@@ -6,7 +6,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
     const { user, loading } = useAuth();
 
     if (loading) {
-        return <div style={{ display: 'flex', justifyContent: 'center', padding: '100px' }}><div className="loader"></div></div>;
+        return <div className="flex justify-center p-[100px]"><div className="loader"></div></div>;
     }
 
     const isGuestAllowed = allowedRoles?.includes(undefined);
@@ -30,7 +30,7 @@ const PublicRoute = () => {
     const { user, loading } = useAuth();
 
     if (loading) {
-        return <div style={{ display: 'flex', justifyContent: 'center', padding: '100px' }}><div className="loader"></div></div>;
+        return <div className="flex justify-center p-[100px]"><div className="loader"></div></div>;
     }
 
     if (user) {

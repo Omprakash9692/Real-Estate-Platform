@@ -23,95 +23,36 @@ const PendingApproval = () => {
     };
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '70vh',
-            textAlign: 'center',
-            padding: '2rem'
-        }}>
-            <div style={{
-                width: '100px',
-                height: '100px',
-                borderRadius: '50%',
-                background: '#fef3c7',
-                color: '#d97706',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '2rem',
-                boxShadow: '0 8px 16px rgba(217, 119, 6, 0.1)',
-                animation: 'pulse 2s infinite'
-            }}>
+        <div className="flex flex-col items-center justify-center min-h-[70vh] text-center p-8">
+            <div className="w-[100px] h-[100px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center mb-8 shadow-[0_8px_16px_rgba(217,119,6,0.1)] animate-pulse">
                 <HiOutlineClock size={48} />
             </div>
 
-            <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1e293b', marginBottom: '1rem' }}>Approval Pending</h1>
-            <p style={{ maxWidth: '500px', color: '#64748b', fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '2.5rem' }}>
+            <h1 className="text-[2rem] font-extrabold text-[#1e293b] mb-4">Approval Pending</h1>
+            <p className="max-w-[500px] text-[#64748b] text-[1.1rem] leading-relaxed mb-10">
                 Hello {user?.name}, your seller account is currently under review by our administration team.
                 Approval usually takes less than 24 hours. You'll gain full dashboard access once verified.
             </p>
 
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <a href="/properties" style={{
-                    padding: '0.875rem 1.5rem',
-                    borderRadius: '0.75rem',
-                    background: 'var(--primary)',
-                    color: 'white',
-                    fontWeight: 700,
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    boxShadow: '0 4px 12px rgba(var(--primary-rgb), 0.2)',
-                    transition: 'all 0.3s ease'
-                }}>
+            <div className="flex gap-4 flex-wrap justify-center">
+                <a href="/properties" className="py-3.5 px-6 rounded-xl bg-primary text-white font-bold no-underline flex items-center gap-2 shadow-[0_4px_12px_rgba(var(--primary-rgb),0.2)] transition-all duration-300">
                     Browse Properties
                 </a>
 
                 <button
                     onClick={handleManualRefresh}
                     disabled={refreshing}
-                    style={{
-                        padding: '0.875rem 1.5rem',
-                        borderRadius: '0.75rem',
-                        background: '#eef2ff',
-                        border: '1px solid #e0e7ff',
-                        color: 'var(--primary)',
-                        fontWeight: 700,
-                        cursor: refreshing ? 'not-allowed' : 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        transition: 'all 0.3s ease'
-                    }}
+                    className={`py-3.5 px-6 rounded-xl bg-[#eef2ff] border border-[#e0e7ff] text-primary font-bold flex items-center gap-2 transition-all duration-300 ${refreshing ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                 >
-                    <HiOutlineRefresh size={20} className={refreshing ? 'spin-anim' : ''} />
+                    <HiOutlineRefresh size={20} className={refreshing ? 'animate-spin' : ''} />
                     {refreshing ? 'Checking...' : 'Check Status Now'}
                 </button>
             </div>
 
-            <div style={{ marginTop: '4rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#94a3b8', fontSize: '0.9rem' }}>
+            <div className="mt-16 flex items-center gap-2 text-[#94a3b8] text-[0.9rem]">
                 <HiOutlineSupport size={18} />
-                Need help? <Link to="/contact" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>Contact Support</Link>
+                Need help? <Link to="/contact" className="text-primary no-underline font-semibold">Contact Support</Link>
             </div>
-
-            <style>{`
-                @keyframes pulse {
-                    0% { transform: scale(1); opacity: 1; }
-                    50% { transform: scale(1.05); opacity: 0.8; }
-                    100% { transform: scale(1); opacity: 1; }
-                }
-                @keyframes spin {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                .spin-anim {
-                    animation: spin 1s linear infinite;
-                }
-            `}</style>
         </div>
     );
 };

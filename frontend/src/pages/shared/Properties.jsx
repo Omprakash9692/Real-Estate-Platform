@@ -172,51 +172,39 @@ const Properties = () => {
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     return (
-        <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', paddingBottom: '4rem' }}>
+        <div className="bg-[#f8fafc] min-h-screen pb-16">
             <Navbar />
 
-            <div className="container" style={{ paddingTop: '1rem' }}>
+            <div className="container pt-4">
                 {/* Mobile Filter Toggle */}
-                <div className="mobile-filter-btn" style={{ display: 'none', marginBottom: '1.5rem' }}>
+                <div className="mobile-filter-btn hidden mb-6 max-[1024px]:block">
                     <button
                         onClick={() => setShowMobileFilters(true)}
-                        className="btn btn-outline"
-                        style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '0.75rem', background: 'white', py: '1rem' }}
+                        className="btn btn-outline w-full flex justify-center gap-3 bg-white py-4"
                     >
                         <HiFilter /> Show Filters & Search
                     </button>
                 </div>
 
-                <div className="properties-layout" style={{ display: 'grid', gridTemplateColumns: 'minmax(280px, 300px) 1fr', gap: '2rem' }}>
+                <div className="properties-layout grid grid-cols-[minmax(280px,300px)_1fr] gap-8 max-[1024px]:grid-cols-1">
 
                     {/* Sidebar Filters */}
-                    <aside className={`filters-sidebar ${showMobileFilters ? 'show' : ''}`} style={{
-                        background: 'white',
-                        borderRadius: '1.5rem',
-                        padding: '2rem',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-                        height: 'fit-content',
-                        position: 'sticky',
-                        top: '100px',
-                        border: '1px solid #f1f5f9',
-                        zIndex: 90
-                    }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <HiFilter style={{ color: 'var(--primary)' }} />
-                                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>Filters</h2>
+                    <aside className={`filters-sidebar bg-white rounded-[1.5rem] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] max-h-[calc(100vh-120px)] overflow-y-auto sticky top-[100px] border border-[#f1f5f9] z-[90] max-[1024px]:fixed max-[1024px]:max-h-screen max-[1024px]:top-0 max-[1024px]:bottom-0 max-[1024px]:w-full max-[1024px]:max-w-[350px] max-[1024px]:rounded-none max-[1024px]:transition-[left] max-[1024px]:duration-300 max-[1024px]:ease ${showMobileFilters ? 'max-[1024px]:left-0' : 'max-[1024px]:-left-full'}`}>
+                        <div className="flex justify-between items-center mb-8">
+                            <div className="flex items-center gap-2">
+                                <HiFilter className="text-primary" />
+                                <h2 className="text-xl font-bold m-0">Filters</h2>
                             </div>
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                            <div className="flex gap-4 items-center">
                                 <button
                                     onClick={resetFilters}
-                                    style={{ background: 'none', border: 'none', color: 'var(--primary)', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}
+                                    className="bg-transparent border-none text-primary text-sm font-semibold cursor-pointer"
                                 >
                                     Reset
                                 </button>
                                 <button
-                                    className="mobile-close-filters"
+                                    className="mobile-close-filters hidden max-[1024px]:flex items-center justify-center bg-[#f1f5f9] border-none p-2 rounded-full cursor-pointer"
                                     onClick={() => setShowMobileFilters(false)}
-                                    style={{ display: 'none', background: '#f1f5f9', border: 'none', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer' }}
                                 >
                                     <HiX />
                                 </button>
@@ -225,10 +213,10 @@ const Properties = () => {
 
                         <div className="filters-scroll-area">
                             {/* Location */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontWeight: 700, marginBottom: '0.75rem', fontSize: '0.9375rem' }}>Location</label>
-                                <div style={{ position: 'relative' }}>
-                                    <HiSearch style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                            <div className="mb-8">
+                                <label className="block font-bold mb-3 text-[0.9375rem]">Location</label>
+                                <div className="relative">
+                                    <HiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
                                     <input
                                         type="text"
                                         placeholder="Search location..."
@@ -238,23 +226,16 @@ const Properties = () => {
                                             setFilters(updatedFilters);
                                             debouncedFetch(updatedFilters);
                                         }}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem 1rem 0.75rem 2.5rem',
-                                            borderRadius: '0.75rem',
-                                            border: '1px solid #e2e8f0',
-                                            outline: 'none',
-                                            fontSize: '0.875rem'
-                                        }}
+                                        className="w-full py-3 pr-4 pl-10 rounded-xl border border-[#e2e8f0] outline-none text-sm"
                                     />
                                 </div>
                             </div>
 
                             {/* Price Range */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                    <label style={{ fontWeight: 700, fontSize: '0.9375rem' }}>Price Range</label>
-                                    <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.875rem' }}>
+                            <div className="mb-8">
+                                <div className="flex justify-between items-center mb-4">
+                                    <label className="font-bold text-[0.9375rem]">Price Range</label>
+                                    <span className="text-primary font-bold text-[0.875rem]">
                                         {filters.maxPrice >= 10000000
                                             ? `₹${(filters.maxPrice / 10000000).toFixed(2)} Cr`
                                             : `₹${(filters.maxPrice / 100000).toFixed(1)} L`}
@@ -267,25 +248,25 @@ const Properties = () => {
                                     step="500000"
                                     value={filters.maxPrice}
                                     onChange={handlePriceChange}
-                                    style={{ width: '100%', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                    className="w-full accent-primary cursor-pointer"
                                 />
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', color: '#94a3b8', fontSize: '0.75rem' }}>
+                                <div className="flex justify-between mt-2 text-[#94a3b8] text-[0.75rem]">
                                     <span>₹1L</span>
                                     <span>₹10Cr</span>
                                 </div>
                             </div>
 
                             {/* Property Type */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontWeight: 700, marginBottom: '1rem', fontSize: '0.9375rem' }}>Property Type</label>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <div className="mb-8">
+                                <label className="block font-bold mb-4 text-[0.9375rem]">Property Type</label>
+                                <div className="flex flex-col gap-3">
                                     {propertyTypes.map(type => (
-                                        <label key={type.value} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.875rem', color: '#64748b' }}>
+                                        <label key={type.value} className="flex items-center gap-3 cursor-pointer text-sm text-[#64748b]">
                                             <input
                                                 type="checkbox"
                                                 checked={filters.propertyType.includes(type.value)}
                                                 onChange={() => handleCheckboxChange('propertyType', type.value)}
-                                                style={{ width: '18px', height: '18px', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                                className="w-[18px] h-[18px] cursor-pointer accent-primary"
                                             />
                                             {type.label}
                                         </label>
@@ -294,25 +275,17 @@ const Properties = () => {
                             </div>
 
                             {/* BHK */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontWeight: 700, marginBottom: '1rem', fontSize: '0.9375rem' }}>BHK (Bedrooms)</label>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                            <div className="mb-8">
+                                <label className="block font-bold mb-4 text-[0.9375rem]">BHK (Bedrooms)</label>
+                                <div className="flex flex-wrap gap-2">
                                     {bhkOptions.map(option => (
                                         <button
                                             key={option}
                                             onClick={() => handleBhkSelect(option)}
-                                            style={{
-                                                flex: '1 0 50px',
-                                                padding: '0.5rem',
-                                                borderRadius: '0.5rem',
-                                                border: filters.bhk === option ? '1px solid var(--primary)' : '1px solid #e2e8f0',
-                                                background: filters.bhk === option ? 'var(--primary-light)' : 'white',
-                                                color: filters.bhk === option ? 'var(--primary-dark)' : '#64748b',
-                                                fontSize: '0.875rem',
-                                                fontWeight: 700,
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s'
-                                            }}
+                                            className={`flex-1 min-w-[50px] p-2 rounded-lg text-sm font-bold cursor-pointer transition-all duration-200 ${filters.bhk === option
+                                                ? 'border border-primary bg-primary-light text-primary-dark'
+                                                : 'border border-[#e2e8f0] bg-white text-[#64748b]'
+                                                }`}
                                         >
                                             {option}
                                         </button>
@@ -321,16 +294,16 @@ const Properties = () => {
                             </div>
 
                             {/* Furnishing */}
-                            <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ display: 'block', fontWeight: 700, marginBottom: '1rem', fontSize: '0.9375rem' }}>Furnishing</label>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <div className="mb-8">
+                                <label className="block font-bold mb-4 text-[0.9375rem]">Furnishing</label>
+                                <div className="flex flex-col gap-3">
                                     {furnishingOptions.map(option => (
-                                        <label key={option.value} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.875rem', color: '#64748b' }}>
+                                        <label key={option.value} className="flex items-center gap-3 cursor-pointer text-sm text-[#64748b]">
                                             <input
                                                 type="checkbox"
                                                 checked={filters.furnishing?.includes(option.value)}
                                                 onChange={() => handleCheckboxChange('furnishing', option.value)}
-                                                style={{ width: '18px', height: '18px', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                                className="w-[18px] h-[18px] cursor-pointer accent-primary"
                                             />
                                             {option.label}
                                         </label>
@@ -345,70 +318,39 @@ const Properties = () => {
                     {/* Main Content */}
                     <main>
                         {/* Header Section */}
-                        <div className="content-header" style={{
-                            background: 'white',
-                            padding: '1.25rem 2rem',
-                            borderRadius: '1.25rem',
-                            marginBottom: '2rem',
-                            boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            border: '1px solid #f1f5f9'
-                        }}>
+                        <div className="content-header bg-white py-5 px-8 rounded-[1.25rem] mb-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex justify-between items-center border border-[#f1f5f9] max-[1024px]:p-4 max-[1024px]:flex-col max-[1024px]:gap-4 max-[1024px]:items-start">
                             <div>
-                                <span style={{ color: '#64748b', fontSize: '0.9375rem' }}>
-                                    Showing <strong style={{ color: 'var(--text-main)' }}>{loading ? '...' : properties.length}</strong> properties
+                                <span className="text-[#64748b] text-[0.9375rem]">
+                                    Showing <strong className="text-text-main">{loading ? '...' : properties.length}</strong> properties
                                 </span>
                             </div>
-                            <div className="view-controls" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                <div className="view-mode-toggle" style={{ display: 'flex', gap: '0.5rem', padding: '0.25rem', background: '#f1f5f9', borderRadius: '0.75rem' }}>
+                            <div className="view-controls flex items-center gap-6 max-[1024px]:w-full max-[1024px]:justify-between">
+                                <div className="view-mode-toggle flex gap-2 p-1 bg-[#f1f5f9] rounded-xl max-sm:hidden">
                                     <button
                                         onClick={() => setViewMode('grid')}
-                                        style={{
-                                            padding: '0.5rem',
-                                            borderRadius: '0.5rem',
-                                            background: viewMode === 'grid' ? 'white' : 'transparent',
-                                            boxShadow: viewMode === 'grid' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
-                                            border: 'none',
-                                            color: viewMode === 'grid' ? 'var(--primary)' : '#94a3b8',
-                                            cursor: 'pointer'
-                                        }}
+                                        className={`p-2 rounded-lg border-none cursor-pointer ${viewMode === 'grid'
+                                            ? 'bg-white shadow-[0_2px_8px_rgba(0,0,0,0.05)] text-primary'
+                                            : 'bg-transparent text-[#94a3b8]'
+                                            }`}
                                     >
                                         <HiViewGrid size={20} />
                                     </button>
                                     <button
                                         onClick={() => setViewMode('list')}
-                                        style={{
-                                            padding: '0.5rem',
-                                            borderRadius: '0.5rem',
-                                            background: viewMode === 'list' ? 'white' : 'transparent',
-                                            boxShadow: viewMode === 'list' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
-                                            border: 'none',
-                                            color: viewMode === 'list' ? 'var(--primary)' : '#94a3b8',
-                                            cursor: 'pointer'
-                                        }}
+                                        className={`p-2 rounded-lg border-none cursor-pointer ${viewMode === 'list'
+                                            ? 'bg-white shadow-[0_2px_8px_rgba(0,0,0,0.05)] text-primary'
+                                            : 'bg-transparent text-[#94a3b8]'
+                                            }`}
                                     >
                                         <HiViewList size={20} />
                                     </button>
                                 </div>
-                                <div className="sort-control" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ fontSize: '0.875rem', color: '#64748b' }}>Sort:</span>
+                                <div className="sort-control flex items-center gap-2">
+                                    <span className="text-sm text-[#64748b]">Sort:</span>
                                     <select
                                         value={filters.sort}
                                         onChange={handleSortChange}
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            background: 'white',
-                                            border: '1px solid #e2e8f0',
-                                            borderRadius: '0.75rem',
-                                            fontSize: '0.875rem',
-                                            fontWeight: 600,
-                                            cursor: 'pointer',
-                                            outline: 'none',
-                                            color: 'var(--text-main)',
-                                            appearance: 'auto'
-                                        }}
+                                        className="py-2 px-4 bg-white border border-[#e2e8f0] rounded-xl text-sm font-semibold cursor-pointer outline-none text-text-main appearance-auto"
                                     >
                                         <option value="latest">Latest</option>
                                         <option value="priceLow">Price: Low to High</option>
@@ -420,41 +362,28 @@ const Properties = () => {
 
                         {/* Property Grid */}
                         {loading ? (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                            <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">
                                 {[1, 2, 3, 4, 5, 6].map(i => (
-                                    <div key={i} className="skeleton" style={{ height: '400px', borderRadius: '1.25rem' }}></div>
+                                    <div key={i} className="skeleton h-[400px] rounded-[1.25rem]"></div>
                                 ))}
                             </div>
                         ) : error ? (
-                            <div style={{ padding: '4rem', textAlign: 'center', background: 'white', borderRadius: '1.5rem' }}>
-                                <HiX size={48} style={{ color: '#ef4444', marginBottom: '1rem' }} />
-                                <h3 style={{ color: 'var(--text-main)', marginBottom: '0.5rem' }}>{error}</h3>
+                            <div className="p-16 text-center bg-white rounded-[1.5rem]">
+                                <HiX size={48} className="text-red-500 mb-4 mx-auto" />
+                                <h3 className="text-text-main mb-2">{error}</h3>
                                 <button onClick={applyFilters} className="btn btn-outline">Try Again</button>
                             </div>
                         ) : properties.length === 0 ? (
-                            <div style={{ padding: '6rem 2rem', textAlign: 'center', background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9' }}>
-                                <div style={{
-                                    width: '80px',
-                                    height: '80px',
-                                    background: '#f1f5f9',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    margin: '0 auto 1.5rem'
-                                }}>
-                                    <HiAdjustments size={32} style={{ color: '#94a3b8' }} />
+                            <div className="py-24 px-8 text-center bg-white rounded-[1.5rem] border border-[#f1f5f9]">
+                                <div className="w-[80px] h-[80px] bg-[#f1f5f9] rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <HiAdjustments size={32} className="text-[#94a3b8]" />
                                 </div>
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.5rem' }}>No properties found</h2>
-                                <p style={{ color: '#64748b', maxWidth: '400px', margin: '0 auto 2rem' }}>Broaden your search criteria.</p>
-                                <button onClick={resetFilters} className="btn btn-primary" style={{ padding: '0.75rem 2rem' }}>Clear All</button>
+                                <h2 className="text-2xl font-bold text-text-main mb-2">No properties found</h2>
+                                <p className="text-[#64748b] max-w-[400px] mx-auto mb-8">Broaden your search criteria.</p>
+                                <button onClick={resetFilters} className="btn btn-primary px-8 py-3">Clear All</button>
                             </div>
                         ) : (
-                            <div className={`property-list ${viewMode}`} style={{
-                                display: 'grid',
-                                gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(280px, 1fr))' : '1fr',
-                                gap: '1.5rem'
-                            }}>
+                            <div className={`property-list ${viewMode} grid gap-6 ${viewMode === 'grid' ? 'grid-cols-[repeat(auto-fill,minmax(280px,1fr))] max-sm:grid-cols-1 max-sm:justify-items-center' : 'grid-cols-1'}`}>
                                 {properties.filter(p => p).map(p => (
                                     <PropertyCard
                                         key={p._id}
@@ -472,72 +401,9 @@ const Properties = () => {
             {showMobileFilters && (
                 <div
                     onClick={() => setShowMobileFilters(false)}
-                    style={{
-                        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                        background: 'rgba(0,0,0,0.5)', zIndex: 80
-                    }}
+                    className="fixed inset-0 bg-black/50 z-80"
                 />
             )}
-
-            <style>{`
-                .skeleton {
-                    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-                    background-size: 200% 100%;
-                    animation: loading 1.5s infinite;
-                }
-                @keyframes loading {
-                    0% { background-position: 200% 0; }
-                    100% { background-position: -200% 0; }
-                }
-
-                @media (max-width: 1024px) {
-                    .properties-layout {
-                        grid-template-columns: 1fr !important;
-                    }
-                    .mobile-filter-btn {
-                        display: block !important;
-                    }
-                    .filters-sidebar {
-                        position: fixed !important;
-                        top: 0 !important;
-                        left: -100% !important;
-                        bottom: 0 !important;
-                        width: 100% !important;
-                        max-width: 350px !important;
-                        border-radius: 0 !important;
-                        transition: left 0.3s ease !important;
-                        overflow-y: auto !important;
-                    }
-                    .filters-sidebar.show {
-                        left: 0 !important;
-                    }
-                    .mobile-close-filters {
-                        display: flex !important;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    .content-header {
-                        padding: 1rem !important;
-                        flex-direction: column !important;
-                        gap: 1rem !important;
-                        align-items: flex-start !important;
-                    }
-                    .view-controls {
-                        width: 100% !important;
-                        justify-content: space-between !important;
-                    }
-                }
-
-                @media (max-width: 640px) {
-                    .view-mode-toggle {
-                        display: none !important;
-                    }
-                    .property-list.grid {
-                        grid-template-columns: 1fr !important;
-                        justify-items: center !important;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

@@ -74,9 +74,7 @@ const SellerDashboard = () => {
     };
 
     const handleStatusUpdate = async (id, currentStatus) => {
-        const newStatus = (currentStatus === 'sold' || currentStatus === 'rented')
-            ? 'sale'
-            : (properties.find(p => p._id === id).status === 'rent' ? 'rented' : 'sold');
+        const newStatus = currentStatus === 'sold' ? 'sale' : 'sold';
 
         try {
             await axios.patch(`${API_URL}/api/property/${id}/status`, { status: newStatus }, {
@@ -124,123 +122,87 @@ const SellerDashboard = () => {
         p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.area.toLowerCase().includes(searchTerm.toLowerCase())
-    ) : [];
+    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : [];
 
     return (
         <>
             {/* Header */}
-            <header className="dashboard-header" style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: '2rem',
-                flexWrap: 'wrap',
-                gap: '1.5rem'
-            }}>
-                <div style={{ minWidth: '280px' }}>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Seller Dashboard</h1>
-                    <p style={{ color: '#64748b', fontSize: '0.9375rem' }}>Manage your property portfolio and track performance.</p>
+            <header className="flex flex-col md:flex-row justify-between items-start mb-8 flex-wrap gap-6 md:gap-6">
+                <div className="min-w-0 w-full md:w-auto md:min-w-[280px]">
+                    <h1 className="text-[1.5rem] sm:text-[1.75rem] font-extrabold text-text-main mb-1">Seller Dashboard</h1>
+                    <p className="text-[#64748b] text-[0.9375rem]">Manage your property portfolio and track performance.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <div className="flex gap-3 flex-wrap w-full md:w-auto">
                     <button
                         onClick={handleExport}
-                        className="btn btn-outline" style={{ background: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, flex: '1', justifyContent: 'center', whiteSpace: 'nowrap' }}
+                        className="btn btn-outline bg-white flex items-center gap-2 font-bold flex-1 justify-center whitespace-nowrap"
                     >
                         <HiOutlineDownload size={20} /> Export
                     </button>
-                    <Link to="/add-property" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, padding: '0.75rem 1.25rem', flex: '1', justifyContent: 'center', whiteSpace: 'nowrap' }}>
+                    <Link to="/add-property" className="btn btn-primary flex items-center gap-2 font-bold py-3 px-5 flex-1 justify-center whitespace-nowrap">
                         <HiPlus size={20} /> Add New
                     </Link>
                 </div>
             </header>
 
             {/* Stats Grid */}
-            <div className="stats-grid" style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: '1.25rem',
-                marginBottom: '3rem'
-            }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4 sm:gap-5 mb-12">
                 {statCards.map((card, i) => (
-                    <div key={i} style={{
-                        background: 'white', padding: '1.5rem', borderRadius: '1.25rem', border: '1px solid #f1f5f9',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.02)'
-                    }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-                            <div style={{
-                                width: '40px', height: '40px', borderRadius: '0.75rem', background: '#f1f5f9',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', color: card.color
-                            }}>
+                    <div key={i} className="bg-white p-6 rounded-[1.25rem] border border-[#f1f5f9] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                        <div className="flex justify-between items-start mb-5">
+                            <div className="w-10 h-10 rounded-xl bg-[#f1f5f9] flex items-center justify-center text-[var(--card-color)]" style={{ '--card-color': card.color }}>
                                 <card.icon size={20} />
                             </div>
                         </div>
-                        <div style={{ color: '#64748b', fontSize: '0.8125rem', fontWeight: 600, marginBottom: '0.15rem' }}>{card.title}</div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>{card.value}</div>
+                        <div className="text-[#64748b] text-[0.8125rem] font-semibold mb-1">{card.title}</div>
+                        <div className="text-[1.5rem] font-extrabold text-text-main">{card.value}</div>
                     </div>
                 ))}
             </div>
 
             {/* Listings Section */}
-            <div style={{ marginBottom: '3rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-                    <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>Property Listings</h2>
-                    <div style={{ position: 'relative', width: '300px', maxWidth: '100%' }}>
-                        <HiOutlineSearch style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <div className="mb-12">
+                <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+                    <h2 className="text-[1.25rem] font-extrabold text-text-main">Property Listings</h2>
+                    <div className="relative w-full max-w-[300px]">
+                        <HiOutlineSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8]" />
                         <input
                             type="text"
                             placeholder="Search listings..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{
-                                padding: '0.6rem 1rem 0.6rem 2.5rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0',
-                                outline: 'none', fontSize: '0.875rem', width: '100%', boxSizing: 'border-box'
-                            }}
+                            className="py-2.5 pr-4 pl-10 rounded-xl border border-[#e2e8f0] outline-none text-[0.875rem] w-full"
                         />
                     </div>
                 </div>
 
                 {filteredProperties.length === 0 ? (
-                    <div className="card-premium" style={{ padding: '4rem', textAlign: 'center', color: '#64748b' }}>
+                    <div className="card-premium py-16 text-center text-[#64748b]">
                         No properties found matching "{searchTerm}".
                     </div>
                 ) : (
                     <>
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                            gap: '1.5rem',
-                            justifyItems: 'center'
-                        }}>
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 justify-items-center">
                             {filteredProperties.slice(0, 3).map((p) => (
                                 <PropertyCard
                                     key={p._id}
                                     property={p}
                                     renderActions={() => (
-                                        <div style={{ flex: 1, display: 'flex', gap: '0.4rem' }}>
+                                        <div className="flex-1 flex gap-[0.4rem]">
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); handleStatusUpdate(p._id, p.status); }}
-                                                className="btn btn-outline"
-                                                style={{
-                                                    flex: 1,
-                                                    padding: '0.5rem',
-                                                    fontSize: '0.75rem',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    gap: '0.3rem',
-                                                    color: p.status === 'sold' || p.status === 'rented' ? 'var(--primary)' : '#64748b'
-                                                }}
-                                                title={p.status === 'sold' || p.status === 'rented' ? "Mark as Available" : "Mark as Sold"}
+                                                className={`btn btn-outline flex-1 p-2 text-[0.75rem] flex items-center justify-center gap-1 ${p.status === 'sold' ? 'text-primary border-primary hover:bg-primary-light' : 'text-[#64748b]'}`}
+                                                title={p.status === 'sold' ? "Mark as Available" : "Mark as Sold"}
                                             >
-                                                <HiOutlineCheckCircle size={14} /> {p.status === 'sold' || p.status === 'rented' ? 'Available' : 'Sold'}
+                                                <HiOutlineCheckCircle size={14} /> {p.status === 'sold' ? 'Available' : 'Sold'}
                                             </button>
-                                            <Link to={`/edit-property/${p._id}`} className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
+                                            <Link to={`/edit-property/${p._id}`} className="btn btn-outline flex-1 p-2 text-[0.75rem] flex items-center justify-center gap-1">
                                                 <HiOutlinePencilAlt size={14} /> Edit
                                             </Link>
-                                            <button onClick={() => handleDelete(p._id)} className="btn btn-outline" style={{ flex: 1, padding: '0.5rem', fontSize: '0.75rem', color: '#ef4444', borderColor: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>
+                                            <button onClick={() => handleDelete(p._id)} className="btn btn-outline flex-1 p-2 text-[0.75rem] text-[#ef4444] border-[#fee2e2] flex items-center justify-center gap-1 hover:bg-red-50">
                                                 <HiOutlineTrash size={14} /> Delete
                                             </button>
-                                            <Link to={`/property/${p._id}`} className="btn btn-primary" style={{ padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Link to={`/property/${p._id}`} className="btn btn-primary p-2 flex items-center justify-center">
                                                 <HiExternalLink size={14} />
                                             </Link>
                                         </div>
@@ -250,18 +212,8 @@ const SellerDashboard = () => {
                         </div>
 
                         {filteredProperties.length > 3 && (
-                            <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-                                <Link to="/my-properties" className="btn btn-outline" style={{
-                                    padding: '0.8rem 2.5rem',
-                                    fontWeight: 800,
-                                    fontSize: '0.9rem',
-                                    borderRadius: '0.75rem',
-                                    background: 'white',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '0.5rem'
-                                }}>
+                            <div className="text-center mt-10">
+                                <Link to="/my-properties" className="btn btn-outline py-3 px-10 font-extrabold text-[0.9rem] rounded-xl bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] inline-flex items-center gap-2">
                                     Show More Listings <HiOutlinePencilAlt size={18} style={{ transform: 'rotate(90deg)' }} />
                                 </Link>
                             </div>
@@ -271,91 +223,60 @@ const SellerDashboard = () => {
             </div>
 
             {/* Bottom Widgets Grid */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '2rem',
-                marginBottom: '2rem'
-            }}>
+            {/* Bottom Widgets Grid */}
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mb-8">
                 {/* Recent Inquiries */}
-                <div style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-                    <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Recent Lead Inquiries</h2>
-                    <p style={{ color: '#64748b', fontSize: '0.8125rem', marginBottom: '1.5rem' }}>New messages from potential buyers.</p>
+                <div className="bg-white rounded-3xl border border-[#f1f5f9] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                    <h2 className="text-[1.125rem] font-extrabold text-text-main mb-1">Recent Lead Inquiries</h2>
+                    <p className="text-[#64748b] text-[0.8125rem] mb-6">New messages from potential buyers.</p>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div className="flex flex-col gap-5">
                         {inquiries.map((inq, i) => (
-                            <div key={inq._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: '200px' }}>
-                                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid white', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+                            <div key={inq._id} className="flex justify-between items-center flex-wrap gap-4">
+                                <div className="flex items-center gap-4 min-w-[200px]">
+                                    <div className="w-10 h-10 rounded-full bg-[#f1f5f9] flex items-center justify-center border-2 border-white shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
                                         <HiOutlineBell size={18} color="var(--primary)" />
                                     </div>
                                     <div>
-                                        <div style={{ fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-main)' }}>{inq.buyer?.name || 'Potential Buyer'}</div>
-                                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{inq.property?.title?.length > 30 ? inq.property?.title?.slice(0, 30) + '...' : inq.property?.title}</div>
+                                        <div className="font-bold text-[0.875rem] text-text-main">{inq.buyer?.name || 'Potential Buyer'}</div>
+                                        <div className="text-[0.75rem] text-[#64748b]">{inq.property?.title?.length > 30 ? inq.property?.title?.slice(0, 30) + '...' : inq.property?.title}</div>
                                     </div>
                                 </div>
-                                <div style={{ textAlign: 'right', flex: '1' }}>
-                                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.15rem' }}>{new Date(inq.createdAt).toLocaleDateString()}</div>
-                                    <span style={{ padding: '0.15rem 0.5rem', borderRadius: '2rem', background: inq.status === 'read' ? '#f1f5f9' : 'var(--primary-light)', color: inq.status === 'read' ? '#64748b' : 'var(--primary)', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase' }}>
+                                <div className="text-right flex-1">
+                                    <div className="text-[0.7rem] text-[#94a3b8] mb-0.5">{new Date(inq.createdAt).toLocaleDateString()}</div>
+                                    <span className={`py-0.5 px-2 rounded-full text-[0.65rem] font-extrabold uppercase ${inq.status === 'read' ? 'bg-[#f1f5f9] text-[#64748b]' : 'bg-primary-light text-primary'}`}>
                                         {inq.status === 'read' ? 'Read' : 'New'}
                                     </span>
                                 </div>
                             </div>
                         ))}
-                        {inquiries.length === 0 && <p style={{ textAlign: 'center', color: '#64748b', padding: '1rem' }}>No recent inquiries.</p>}
+                        {inquiries.length === 0 && <p className="text-center text-[#64748b] p-4">No recent inquiries.</p>}
                     </div>
                 </div>
 
                 {/* Quick Tips */}
-                <div style={{ background: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
-                    <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem' }}>Quick Tips</h2>
+                <div className="bg-white rounded-3xl border border-[#f1f5f9] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                    <h2 className="text-[1.125rem] font-extrabold text-text-main mb-6">Quick Tips</h2>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <div style={{ background: '#f0fdfa', padding: '1rem', borderRadius: '1rem', border: '1px solid #ccfbf1' }}>
-                            <h4 style={{ color: 'var(--primary)', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+                    <div className="flex flex-col gap-4">
+                        <div className="bg-[#f0fdfa] p-4 rounded-2xl border border-[#ccfbf1]">
+                            <h4 className="text-primary mb-1 flex items-center gap-2 text-[0.875rem]">
                                 <HiOutlineEye size={16} /> High Views!
                             </h4>
-                            <p style={{ fontSize: '0.75rem', color: '#134e4a', lineHeight: '1.5' }}>
+                            <p className="text-[0.75rem] text-[#134e4a] leading-relaxed">
                                 Your listings are trending. Try adding video tours to increase interest.
                             </p>
                         </div>
 
-                        <div style={{ padding: '1rem', borderRadius: '1rem', background: '#f9fafb' }}>
-                            <h4 style={{ color: '#4b5563', marginBottom: '0.25rem', fontWeight: 700, fontSize: '0.875rem' }}>Market Insight</h4>
-                            <p style={{ fontSize: '0.75rem', color: '#6b7280', lineHeight: '1.5' }}>
+                        <div className="p-4 rounded-2xl bg-[#f9fafb]">
+                            <h4 className="text-[#4b5563] mb-1 font-bold text-[0.875rem]">Market Insight</h4>
+                            <p className="text-[0.75rem] text-[#6b7280] leading-relaxed">
                                 Properties in your area are selling fast. Your prices are competitive.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <style>{`
-                @media (max-width: 768px) {
-                    .dashboard-header {
-                        flex-direction: column !important;
-                        align-items: flex-start !important;
-                        gap: 1.5rem !important;
-                    }
-                    .dashboard-header > div {
-                        width: 100% !important;
-                        min-width: 0 !important;
-                    }
-                    .stats-grid {
-                        grid-template-columns: 1fr 1fr !important;
-                        gap: 1rem !important;
-                    }
-                }
-                @media (max-width: 640px) {
-                    .stats-grid {
-                        grid-template-columns: 1fr !important;
-                    }
-                }
-                @media (max-width: 480px) {
-                    .dashboard-header h1 {
-                        font-size: 1.5rem !important;
-                    }
-                }
-            `}</style>
         </>
     );
 };

@@ -74,87 +74,58 @@ const Profile = () => {
     };
 
     return (
-        <div style={{ backgroundColor: user?.role !== 'seller' ? 'var(--bg-alt)' : 'transparent', minHeight: user?.role !== 'seller' ? '100vh' : 'auto' }}>
+        <div className={user?.role !== 'seller' ? 'bg-bg-alt min-h-screen' : 'bg-transparent min-h-auto'}>
             {user?.role !== 'seller' && <Navbar />}
-            <div className="container fade-in" style={{ maxWidth: '800px', margin: user?.role !== 'seller' ? '0 auto' : '0', paddingTop: user?.role !== 'seller' ? '3rem' : '0', paddingBottom: '4rem' }}>
-                <header className="profile-header" style={{ marginBottom: '3rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Personal Profile</h1>
-                    <p style={{ color: 'var(--text-muted)' }}>Manage your personal information and account settings.</p>
+            <div className={`container fade-in max-w-[800px] mb-16 ${user?.role !== 'seller' ? 'mx-auto pt-12' : 'mx-0 pt-0'}`}>
+                <header className="mb-12 md:text-center md:mb-8">
+                    <h1 className="text-[2.5rem] mb-2 md:text-[2rem]">Personal Profile</h1>
+                    <p className="text-text-muted">Manage your personal information and account settings.</p>
                 </header>
 
-                <div className="card-premium profile-card" style={{ padding: '3rem' }}>
-                    <div className="profile-info-header" style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '4rem' }}>
-                        <div style={{ position: 'relative' }}>
-                            <div className="profile-avatar" style={{
-                                width: '120px',
-                                height: '120px',
-                                borderRadius: '2.5rem',
-                                background: 'var(--primary-light)',
-                                overflow: 'hidden',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '3rem',
-                                fontWeight: 700,
-                                color: 'var(--primary)',
-                                border: '4px solid white',
-                                boxShadow: 'var(--shadow-lg)'
-                            }}>
+                <div className="card-premium p-12 md:p-6">
+                    <div className="flex items-center gap-8 mb-16 md:flex-col md:text-center md:gap-4 md:mb-10">
+                        <div className="relative">
+                            <div className="w-[120px] h-[120px] rounded-[2.5rem] bg-primary-light overflow-hidden flex items-center justify-center text-[3rem] font-bold text-primary border-4 border-white shadow-lg">
                                 {imagePreview ? (
-                                    <img src={imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                                 ) : user?.profilePic ? (
-                                    <img src={user.profilePic} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <img src={user.profilePic} alt="Profile" className="w-full h-full object-cover" />
                                 ) : (
                                     user?.name?.[0].toUpperCase()
                                 )}
                             </div>
                             {isEditing && (
-                                <label style={{
-                                    position: 'absolute',
-                                    bottom: '-10px',
-                                    right: '-10px',
-                                    background: 'var(--primary)',
-                                    color: 'white',
-                                    width: '40px',
-                                    height: '40px',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-                                    border: '3px solid white'
-                                }}>
-                                    <input type="file" onChange={handleImageChange} style={{ display: 'none' }} accept="image/*" />
+                                <label className="absolute -bottom-2.5 -right-2.5 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.2)] border-4 border-white">
+                                    <input type="file" onChange={handleImageChange} className="hidden" accept="image/*" />
                                     <HiOutlineUser size={20} />
                                 </label>
                             )}
                         </div>
                         <div>
-                            <h2 style={{ fontSize: '1.75rem', marginBottom: '0.25rem' }}>{user?.name}</h2>
-                            <span className="badge badge-sale" style={{ background: 'var(--primary-light)', color: 'var(--primary)', padding: '0.5rem 1rem', borderRadius: '0.75rem' }}>
+                            <h2 className="text-[1.75rem] mb-1">{user?.name}</h2>
+                            <span className="badge badge-sale bg-primary-light text-primary px-4 py-2 rounded-xl">
                                 {user?.role?.toUpperCase()}
                             </span>
                         </div>
                     </div>
 
-                    {error && <div style={{ padding: '1rem', background: '#fee2e2', color: '#dc2626', borderRadius: '0.75rem', marginBottom: '2rem' }}>{error}</div>}
+                    {error && <div className="p-4 bg-red-100 text-red-600 rounded-xl mb-8">{error}</div>}
 
                     {isEditing ? (
-                        <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                        <form onSubmit={handleUpdate} className="flex flex-col gap-8">
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Full Name</label>
+                                <label className="block mb-2 text-sm font-semibold">Full Name</label>
                                 <input
                                     type="text"
                                     name="name"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    style={{ width: '100%', padding: '0.875rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none' }}
+                                    className="w-full p-3.5 rounded-xl border border-border outline-none focus:border-primary transition-colors"
                                     required
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Phone Number</label>
+                                <label className="block mb-2 text-sm font-semibold">Phone Number</label>
                                 <input
                                     type="tel"
                                     name="phone"
@@ -162,63 +133,63 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                     maxLength="10"
                                     pattern="\d*"
-                                    style={{ width: '100%', padding: '0.875rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none' }}
+                                    className="w-full p-3.5 rounded-xl border border-border outline-none focus:border-primary transition-colors"
                                     placeholder="Enter your 10-digit phone number"
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Address</label>
+                                <label className="block mb-2 text-sm font-semibold">Address</label>
                                 <textarea
                                     name="address"
                                     value={formData.address}
                                     onChange={handleInputChange}
-                                    style={{ width: '100%', height: '100px', padding: '0.875rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none', resize: 'none' }}
+                                    className="w-full h-[100px] p-3.5 rounded-xl border border-border outline-none resize-none focus:border-primary transition-colors"
                                     placeholder="Enter your full address"
                                 ></textarea>
                             </div>
-                            <div className="form-actions" style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                                <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                            <div className="flex gap-4 mt-4 md:flex-col">
+                                <button type="submit" disabled={loading} className="btn btn-primary flex-1 flex items-center justify-center gap-2">
                                     <HiCheck size={20} /> {loading ? 'Saving...' : 'Save Changes'}
                                 </button>
-                                <button type="button" onClick={() => setIsEditing(false)} className="btn btn-outline" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                                <button type="button" onClick={() => setIsEditing(false)} className="btn btn-outline flex-1 flex items-center justify-center gap-2">
                                     <HiX size={20} /> Cancel
                                 </button>
                             </div>
                         </form>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '1rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                        <div className="flex flex-col gap-10">
+                            <div className="flex items-center gap-6">
+                                <div className="w-12 h-12 rounded-2xl bg-[#f8fafc] flex items-center justify-center text-primary">
                                     <HiOutlineMail size={24} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.125rem' }}>Email Address</div>
-                                    <div style={{ fontWeight: 600 }}>{user?.email}</div>
+                                    <div className="text-sm text-text-muted mb-0.5">Email Address</div>
+                                    <div className="font-semibold">{user?.email}</div>
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '1rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                            <div className="flex items-center gap-6">
+                                <div className="w-12 h-12 rounded-2xl bg-[#f8fafc] flex items-center justify-center text-primary">
                                     <HiOutlinePhone size={24} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.125rem' }}>Phone Number</div>
-                                    <div style={{ fontWeight: 600 }}>{user?.phone || 'Not provided'}</div>
+                                    <div className="text-sm text-text-muted mb-0.5">Phone Number</div>
+                                    <div className="font-semibold">{user?.phone || 'Not provided'}</div>
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '1rem', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                            <div className="flex items-center gap-6">
+                                <div className="w-12 h-12 rounded-2xl bg-[#f8fafc] flex items-center justify-center text-primary">
                                     <HiOutlineLocationMarker size={24} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.125rem' }}>Location / Address</div>
-                                    <div style={{ fontWeight: 600 }}>{user?.address || 'Not provided'}</div>
+                                    <div className="text-sm text-text-muted mb-0.5">Location / Address</div>
+                                    <div className="font-semibold">{user?.address || 'Not provided'}</div>
                                 </div>
                             </div>
 
-                            <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
-                                <button onClick={() => setIsEditing(true)} className="btn btn-primary" style={{ padding: '0.875rem 2.5rem' }}>
+                            <div className="mt-8 pt-8 border-t border-border">
+                                <button onClick={() => setIsEditing(true)} className="btn btn-primary px-10 py-3.5">
                                     Edit Profile Details
                                 </button>
                             </div>
@@ -226,29 +197,6 @@ const Profile = () => {
                     )}
                 </div>
             </div>
-            <style>{`
-@media(max - width: 768px) {
-                    .profile - header {
-        text - align: center!important;
-        margin - bottom: 2rem!important;
-    }
-                    .profile - header h1 {
-        font - size: 2rem!important;
-    }
-                    .profile - card {
-        padding: 1.5rem!important;
-    }
-                    .profile - info - header {
-        flex - direction: column!important;
-        text - align: center!important;
-        gap: 1rem!important;
-        margin - bottom: 2.5rem!important;
-    }
-                    .form - actions {
-        flex - direction: column!important;
-    }
-}
-`}</style>
         </div>
     );
 };

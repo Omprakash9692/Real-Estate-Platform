@@ -45,72 +45,50 @@ const SellerRequests = () => {
 
     return (
         <div className="seller-requests-container">
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Seller Verification</h1>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Review and approve new seller registration requests.</p>
+            <div className="mb-8">
+                <h1 className="text-[1.75rem] font-extrabold text-text-main mb-1">Seller Verification</h1>
+                <p className="text-text-muted text-[0.875rem]">Review and approve new seller registration requests.</p>
             </div>
 
             <div className="card-premium">
-                <div style={{ padding: '1.5rem' }}>
-                    <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1.5rem' }}>Pending Requests ({requests.length})</h2>
+                <div className="p-6">
+                    <h2 className="text-[1.25rem] font-extrabold text-text-main mb-6">Pending Requests ({requests.length})</h2>
 
                     {requests.length === 0 ? (
-                        <div style={{ textAlign: 'center', padding: '3rem 0', color: 'var(--text-muted)' }}>
-                            <HiOutlineCheckCircle size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
+                        <div className="text-center py-12 text-text-muted">
+                            <HiOutlineCheckCircle size={48} className="opacity-20 mb-4 mx-auto" />
                             <p>No pending seller requests at the moment.</p>
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1.5rem' }}>
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-6">
                             {requests.map((request) => (
-                                <div key={request._id} className="request-card" style={{
-                                    border: '1px solid #f1f5f9',
-                                    borderRadius: '1rem',
-                                    padding: '1.5rem',
-                                    background: '#f8fafc',
-                                    transition: 'all 0.3s ease'
-                                }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
-                                        <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.25rem' }}>
+                                <div key={request._id} className="request-card border border-[#f1f5f9] rounded-2xl p-6 bg-[#f8fafc] transition-all duration-300 ease-in-out hover:-translate-y-1">
+                                    <div className="flex items-center gap-4 mb-5">
+                                        <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-[1.25rem]">
                                             {request.name.charAt(0).toUpperCase()}
                                         </div>
                                         <div>
-                                            <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-main)' }}>{request.name}</div>
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                            <div className="font-bold text-[1.1rem] text-text-main">{request.name}</div>
+                                            <div className="text-[0.75rem] text-text-muted flex items-center gap-1">
                                                 <HiOutlineClock /> Joined {new Date(request.createdAt).toLocaleDateString()}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: '#475569' }}>
-                                            <HiOutlineMail size={18} color="var(--primary)" /> {request.email}
+                                    <div className="flex flex-col gap-3 mb-6">
+                                        <div className="flex items-center gap-3 text-[0.9rem] text-[#475569]">
+                                            <HiOutlineMail size={18} className="text-primary" /> {request.email}
                                         </div>
                                         {request.phone && (
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: '#475569' }}>
-                                                <HiOutlinePhone size={18} color="var(--primary)" /> {request.phone}
+                                            <div className="flex items-center gap-3 text-[0.9rem] text-[#475569]">
+                                                <HiOutlinePhone size={18} className="text-primary" /> {request.phone}
                                             </div>
                                         )}
                                     </div>
 
                                     <button
                                         onClick={() => handleApprove(request._id)}
-                                        style={{
-                                            width: '100%',
-                                            padding: '0.75rem',
-                                            borderRadius: '0.75rem',
-                                            border: 'none',
-                                            background: 'var(--primary)',
-                                            color: 'white',
-                                            fontWeight: 700,
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            transition: 'transform 0.2s ease'
-                                        }}
-                                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                        className="w-full p-3 rounded-xl border-none bg-primary text-white font-bold cursor-pointer flex items-center justify-center gap-2 transition-transform duration-200 ease-in-out hover:-translate-y-[2px]"
                                     >
                                         <HiOutlineCheckCircle size={20} />
                                         Approve Seller

@@ -5,7 +5,7 @@ import API_URL from "../../config";
 import Navbar from '../../components/common/Navbar';
 import PropertyCard from '../../components/common/PropertyCard';
 import ReviewSection from '../../components/ReviewSection';
-import { HiStar, HiBadgeCheck, HiMail, HiPhone, HiCalendar } from "react-icons/hi";
+import { HiStar, HiBadgeCheck, HiMail, HiCalendar } from "react-icons/hi";
 
 const SellerProfile = () => {
     const { id } = useParams();
@@ -40,89 +40,60 @@ const SellerProfile = () => {
     }, [id]);
 
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
-    if (!seller) return <div className="container" style={{ padding: '4rem', textAlign: 'center' }}>Seller not found</div>;
+    if (!seller) return <div className="container p-16 text-center">Seller not found</div>;
 
     return (
-        <div style={{ backgroundColor: '#fdfdfd', minHeight: '100vh', paddingBottom: '6rem' }}>
+        <div className="bg-[#fdfdfd] min-h-screen pb-24">
             <Navbar />
 
-            <div className="container fade-in" style={{ paddingTop: '3rem' }}>
+            <div className="container fade-in pt-12">
                 {/* Header Profile Card */}
-                <div style={{
-                    background: 'white',
-                    borderRadius: '1.5rem',
-                    padding: '2.5rem',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.04)',
-                    border: '1px solid #f1f5f9',
-                    marginBottom: '3rem',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '2.5rem',
-                    alignItems: 'center'
-                }}>
-                    <div style={{
-                        width: '150px',
-                        height: '150px',
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        border: '4px solid #f1f5f9'
-                    }}>
+                <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-[#f1f5f9] mb-12 flex flex-wrap gap-10 items-center justify-center sm:justify-start text-center sm:text-left">
+                    <div className="w-[150px] h-[150px] rounded-full overflow-hidden border-4 border-[#f1f5f9]">
                         <img
                             src={seller.profilePic || `https://ui-avatars.com/api/?name=${seller.name}&background=0d6e59&color=fff&size=150`}
                             alt={seller.name}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            className="w-full h-full object-cover"
                         />
                     </div>
 
-                    <div style={{ flex: 1, minWidth: '300px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                            <h1 style={{ fontSize: '2.25rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>{seller.name}</h1>
-                            <HiBadgeCheck size={28} color="var(--primary)" />
+                    <div className="flex-1 min-w-[300px]">
+                        <div className="flex items-center justify-center sm:justify-start gap-3 mb-2">
+                            <h1 className="text-4xl font-extrabold text-text-main m-0">{seller.name}</h1>
+                            <HiBadgeCheck size={28} className="text-primary" />
                         </div>
 
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '1.5rem', color: '#64748b' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <HiStar color="#eab308" size={20} />
-                                <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{stats.avgRating}</span>
+                        <div className="flex flex-wrap justify-center sm:justify-start gap-6 mb-6 text-[#64748b]">
+                            <div className="flex items-center gap-2">
+                                <HiStar className="text-[#eab308]" size={20} />
+                                <span className="font-bold text-text-main">{stats.avgRating}</span>
                                 <span>({stats.totalReviews} reviews)</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <div className="flex items-center gap-2">
                                 <HiCalendar size={20} />
                                 <span>Joined {new Date(seller.createdAt).toLocaleDateString()}</span>
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <a href={`mailto:${seller.email}`} className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div className="flex justify-center sm:justify-start gap-4">
+                            <a href={`mailto:${seller.email}`} className="btn btn-outline flex items-center gap-2">
                                 <HiMail /> Email Seller
                             </a>
-                            {seller.phone && (
-                                <a href={`tel:${seller.phone}`} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <HiPhone /> Call Seller
-                                </a>
-                            )}
                         </div>
                     </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '3rem' }}>
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
                     {/* Left Side: Properties */}
                     <div>
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '2rem' }}>Properties by this Seller</h2>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                        <h2 className="text-[1.75rem] font-extrabold mb-8">Properties by this Seller</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
                             {properties.length > 0 ? (
                                 properties.map(property => (
                                     <PropertyCard key={property._id} property={property} />
                                 ))
                             ) : (
-                                <div style={{
-                                    gridColumn: '1 / -1',
-                                    padding: '3rem',
-                                    background: '#f8fafc',
-                                    borderRadius: '1.5rem',
-                                    textAlign: 'center',
-                                    border: '1px dashed #e2e8f0'
-                                }}>
+                                <div className="col-span-full p-12 bg-[#f8fafc] rounded-3xl text-center border font-dashed border-[#e2e8f0]">
                                     No properties listed by this seller yet.
                                 </div>
                             )}
@@ -135,24 +106,6 @@ const SellerProfile = () => {
                     </div>
                 </div>
             </div>
-
-            <style>{`
-                @media (max-width: 1024px) {
-                    div[style*="grid-template-columns: 1fr 400px"] {
-                        grid-template-columns: 1fr !important;
-                    }
-                }
-                @media (max-width: 640px) {
-                    div[style*="padding: 2.5rem"] {
-                        padding: 1.5rem !important;
-                        text-align: center;
-                        justify-content: center;
-                    }
-                    div[style*="display: flex; gap: 1rem"] {
-                        justify-content: center;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

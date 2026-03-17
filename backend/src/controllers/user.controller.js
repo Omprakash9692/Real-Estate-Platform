@@ -73,9 +73,9 @@ export const updateProfile = async (req, res) => {
             user.profilePic = result.secure_url;
         }
 
-        user.name = name || user.name;
-        user.phone = phone || user.phone;
-        user.address = address || user.address;
+        if (name !== undefined) user.name = name;
+        if (phone !== undefined) user.phone = phone;
+        if (address !== undefined) user.address = address;
 
         const updatedUser = await user.save();
         res.json({

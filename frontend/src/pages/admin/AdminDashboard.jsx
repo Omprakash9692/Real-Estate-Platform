@@ -51,78 +51,56 @@ const AdminDashboard = () => {
 
     return (
         <>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginBottom: '2rem',
-                flexWrap: 'wrap',
-                gap: '1.5rem'
-            }}>
+            <div className="flex justify-between items-start mb-8 flex-wrap gap-6">
                 <div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Admin Overview</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9375rem' }}>Welcome back, administrator. Here's today's summary.</p>
+                    <h1 className="text-[1.75rem] font-extrabold text-text-main mb-1">Admin Overview</h1>
+                    <p className="text-text-muted text-[0.9375rem]">Welcome back, administrator. Here's today's summary.</p>
                 </div>
                 <button
                     onClick={() => { setLoading(true); window.location.reload(); }}
-                    className="btn btn-outline"
-                    style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem', background: 'white' }}
+                    className="btn btn-outline py-[0.6rem] px-5 text-[0.875rem] bg-white"
                 >
                     Refresh Data
                 </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5 mb-12">
                 {statCards.map((card, i) => (
-                    <div key={i} className="card-premium" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <div style={{
-                            width: '44px',
-                            height: '44px',
-                            borderRadius: '0.875rem',
-                            backgroundColor: card.bg,
-                            color: card.color,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
+                    <div key={i} className="card-premium p-6 flex flex-col gap-4">
+                        <div className="w-11 h-11 rounded-[0.875rem] flex items-center justify-center" style={{ backgroundColor: card.bg, color: card.color }}>
                             <card.icon size={22} />
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.15rem' }}>{card.title}</div>
-                            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)' }}>{card.value.toLocaleString()}</div>
+                            <div className="text-[0.8125rem] font-semibold text-text-muted mb-1">{card.title}</div>
+                            <div className="text-[1.75rem] font-extrabold text-text-main">{card.value.toLocaleString()}</div>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '2rem',
-                marginBottom: '2rem'
-            }}>
-                <div className="card-premium" style={{ padding: '1.5rem' }}>
-                    <h3 style={{ marginBottom: '1.25rem', fontSize: '1.125rem', fontWeight: 700 }}>System Health</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 mb-8">
+                <div className="card-premium p-6">
+                    <h3 className="mb-5 text-[1.125rem] font-bold">System Health</h3>
+                    <div className="flex flex-col gap-5">
                         {['Database', 'Media Storage', 'Auth Service', 'API Gateway'].map((service, i) => (
-                            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>{service}</div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-                                    <span style={{ fontSize: '0.8125rem', color: '#10b981', fontWeight: 700 }}>Online</span>
+                            <div key={i} className="flex justify-between items-center">
+                                <div className="text-[0.875rem] font-semibold">{service}</div>
+                                <div className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-[#10b981]"></span>
+                                    <span className="text-[0.8125rem] text-[#10b981] font-bold">Online</span>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="card-premium" style={{ padding: '1.5rem', background: 'var(--primary)', color: 'white' }}>
-                    <h3 style={{ marginBottom: '0.75rem', fontSize: '1.125rem', fontWeight: 700 }}>Admin Tools</h3>
-                    <p style={{ fontSize: '0.8125rem', marginBottom: '1.5rem', opacity: 0.9 }}>Quickly manage platform resources and tasks.</p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        <button className="btn" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', width: '100%', justifyContent: 'flex-start', fontSize: '0.875rem' }}>System Logs</button>
-                        <button className="btn" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', width: '100%', justifyContent: 'flex-start', fontSize: '0.875rem' }}>DB Backup</button>
-                        <button className="btn" style={{ background: 'rgba(255,255,255,0.2)', color: 'white', width: '100%', justifyContent: 'flex-start', fontSize: '0.875rem' }}>Settings</button>
+                <div className="card-premium p-6 bg-primary text-white">
+                    <h3 className="mb-3 text-[1.125rem] font-bold">Admin Tools</h3>
+                    <p className="text-[0.8125rem] mb-6 opacity-90">Quickly manage platform resources and tasks.</p>
+                    <div className="flex flex-col gap-3">
+                        <button className="btn bg-white/20 text-white w-full justify-start text-[0.875rem]">System Logs</button>
+                        <button className="btn bg-white/20 text-white w-full justify-start text-[0.875rem]">DB Backup</button>
+                        <button className="btn bg-white/20 text-white w-full justify-start text-[0.875rem]">Settings</button>
                     </div>
                 </div>
             </div>

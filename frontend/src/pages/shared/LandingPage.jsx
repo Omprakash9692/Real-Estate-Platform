@@ -113,61 +113,50 @@ const LandingPage = () => {
   ];
 
   return (
-    <div style={{ backgroundColor: 'var(--bg-main)', minHeight: '100vh' }}>
+    <div className="bg-bg-main min-h-screen">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="container fade-in hero-section" style={{ padding: '4rem 2rem', display: 'flex', alignItems: 'center', gap: '4rem', overflow: 'hidden' }}>
-        <div className="hero-content" style={{ flex: 1 }}>
-          <span className="badge" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary-dark)', marginBottom: '1.5rem', display: 'inline-block' }}>
+      <section className="container fade-in hero-section py-16 px-8 flex items-center gap-16 overflow-hidden max-lg:flex-col max-lg:text-center max-lg:py-8 max-lg:px-4 max-lg:gap-8">
+        <div className="hero-content flex-1 max-lg:flex max-lg:flex-col max-lg:items-center">
+          <span className="badge bg-primary-light text-primary-dark mb-6 inline-block">
             Trusted by 20,000+ homeowners
           </span>
-          <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)', marginBottom: '1.5rem', transition: 'font-size 0.3s' }}>
+          <h1 className="hero-title text-[clamp(2rem,5vw,4.5rem)] mb-6 transition-all duration-300 max-lg:text-[clamp(1.75rem,8vw,2.5rem)] max-lg:leading-tight max-lg:text-center">
             Find Your <span className="text-gradient">Perfect</span> Next Chapter.
           </h1>
-          <p className="hero-subtitle" style={{ fontSize: '1.125rem', color: 'var(--text-muted)', marginBottom: '3rem', maxWidth: '540px' }}>
+          <p className="hero-subtitle text-[1.125rem] text-text-muted mb-12 max-w-[540px] max-lg:text-base max-lg:mb-10 max-lg:mx-auto max-lg:text-center max-lg:px-4">
             Experience the most advanced real estate search platform. Discover verified listings, connect with top agents, and find a place you'll love.
           </p>
 
           {/* Integrated Search */}
-          <form onSubmit={handleSearch} className="glass search-form" style={{
-            padding: '1.25rem',
-            borderRadius: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08)',
-            maxWidth: '900px',
-            border: '1px solid rgba(255, 255, 255, 0.5)',
-            position: 'relative',
-            zIndex: 10
-          }}>
-            <div className="search-field" style={{ flex: 1.2, display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem 0.75rem', transition: 'all 0.3s ease', minWidth: '220px' }}>
-              <div style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center' }}>
+          <form onSubmit={handleSearch} className="glass search-form p-5 rounded-[2rem] flex items-center gap-4 shadow-[0_20px_40px_rgba(0,0,0,0.08)] max-w-[900px] border border-white/50 relative z-10 max-lg:flex-col max-lg:w-full max-lg:max-w-[500px] max-lg:mx-auto max-lg:gap-2 max-lg:rounded-[1.5rem]">
+            <div className="search-field flex-[1.2] flex items-center gap-3 py-2 px-3 transition-all duration-300 min-w-[220px] max-lg:w-full max-lg:py-4 max-lg:px-2 max-lg:border-b max-lg:border-[#f1f5f9]">
+              <div className="text-primary flex items-center">
                 <HiLocationMarker size={26} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                <label style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Location</label>
+              <div className="flex flex-col flex-1">
+                <label className="text-[0.7rem] font-extrabold text-text-muted uppercase tracking-[0.05em] mb-1">Location</label>
                 <input
                   type="text"
                   placeholder="Where are you looking?"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%', fontSize: '1rem', fontWeight: 600, color: 'var(--text-main)' }}
+                  className="border-none bg-transparent outline-none w-full text-base font-semibold text-text-main"
                 />
               </div>
             </div>
-            <div className="search-divider" style={{ width: '1px', height: '44px', background: 'var(--border-color)', opacity: 0.6, flexShrink: 0 }}></div>
-            <div className="search-field" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem 0.75rem', transition: 'all 0.3s ease', minWidth: '200px' }}>
-              <div style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center' }}>
+            <div className="search-divider w-[1px] h-[44px] bg-border-color opacity-60 shrink-0 max-lg:hidden"></div>
+            <div className="search-field flex-1 flex items-center gap-3 py-2 px-3 transition-all duration-300 min-w-[200px] max-lg:w-full max-lg:py-4 max-lg:px-2 max-lg:mb-2 max-lg:border-none">
+              <div className="text-primary flex items-center">
                 <HiHome size={26} />
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                <label style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Property Type</label>
+              <div className="flex flex-col flex-1">
+                <label className="text-[0.7rem] font-extrabold text-text-muted uppercase tracking-[0.05em] mb-1">Property Type</label>
                 <select
                   value={propertyType}
                   onChange={(e) => setPropertyType(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%', cursor: 'pointer', fontSize: '1rem', fontWeight: 600, color: 'var(--text-main)', padding: 0 }}
+                  className="border-none bg-transparent outline-none w-full cursor-pointer text-base font-semibold text-text-main p-0 appearance-none"
                 >
                   <option value="Select Type">Select Type</option>
                   <option value="flat">Flat/Apartment</option>
@@ -177,119 +166,72 @@ const LandingPage = () => {
                 </select>
               </div>
             </div>
-            <button type="submit" className="btn btn-primary search-button" style={{
-              height: '64px',
-              minWidth: '140px',
-              borderRadius: '1.25rem',
-              fontSize: '1rem',
-              fontWeight: 700,
-              boxShadow: '0 12px 24px rgba(13, 148, 136, 0.25)'
-            }}>
+            <button type="submit" className="btn btn-primary search-button h-[64px] min-w-[140px] rounded-[1.25rem] text-base font-bold shadow-[0_12px_24px_rgba(13,148,136,0.25)] flex items-center justify-center gap-2 max-lg:w-full max-lg:h-[56px] max-lg:rounded-2xl max-lg:mt-2">
               <HiSearch size={22} /> Search
             </button>
           </form>
 
           {/* Stats */}
-          <div className="stats-container" style={{ display: 'flex', gap: 'clamp(1rem, 3vw, 4rem)', marginTop: '4rem' }}>
-            <div style={{ flex: 1 }}>
-              <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800 }}>12k+</h3>
-              <p style={{ textTransform: 'uppercase', fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.05em' }}>Ready Properties</p>
+          <div className="stats-container flex gap-[clamp(1rem,3vw,4rem)] mt-16 max-lg:justify-center max-lg:gap-8 max-md:flex-wrap">
+            <div className="flex-1 max-md:flex-none max-md:shrink-0 max-md:basis-[120px]">
+              <h3 className="text-[clamp(1.5rem,3vw,2rem)] font-extrabold">12k+</h3>
+              <p className="uppercase text-[0.7rem] text-text-muted font-extrabold tracking-[0.05em]">Ready Properties</p>
             </div>
-            <div className="stat-item" style={{ borderLeft: '1px solid var(--border-color)', paddingLeft: 'clamp(1rem, 3vw, 4rem)', flex: 1 }}>
-              <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800 }}>500+</h3>
-              <p style={{ textTransform: 'uppercase', fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.05em' }}>Agent Network</p>
+            <div className="stat-item border-l border-border-color pl-[clamp(1rem,3vw,4rem)] flex-1 max-lg:pl-8 max-md:border-none max-md:pl-0 max-md:flex-none max-md:shrink-0 max-md:basis-[120px]">
+              <h3 className="text-[clamp(1.5rem,3vw,2rem)] font-extrabold">500+</h3>
+              <p className="uppercase text-[0.7rem] text-text-muted font-extrabold tracking-[0.05em]">Agent Network</p>
             </div>
-            <div className="stat-item" style={{ borderLeft: '1px solid var(--border-color)', paddingLeft: 'clamp(1rem, 3vw, 4rem)', flex: 1 }}>
-              <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800 }}>4.9/5</h3>
-              <p style={{ textTransform: 'uppercase', fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.05em' }}>User Rating</p>
+            <div className="stat-item border-l border-border-color pl-[clamp(1rem,3vw,4rem)] flex-1 max-lg:pl-8 max-md:border-none max-md:pl-0 max-md:flex-none max-md:shrink-0 max-md:basis-[120px]">
+              <h3 className="text-[clamp(1.5rem,3vw,2rem)] font-extrabold">4.9/5</h3>
+              <p className="uppercase text-[0.7rem] text-text-muted font-extrabold tracking-[0.05em]">User Rating</p>
             </div>
           </div>
         </div>
 
         {/* Hero Image */}
-        <div className="hero-image-container" style={{ flex: 1, position: 'relative' }}>
-          <div style={{
-            borderRadius: '3rem',
-            overflow: 'hidden',
-            boxShadow: '0 40px 80px -20px rgba(0,0,0,0.25)',
-            position: 'relative'
-          }}>
+        <div className="hero-image-container flex-1 relative max-md:hidden">
+          <div className="rounded-[3rem] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.25)] relative">
             <img
               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               alt="Luxury Home"
-              style={{ width: '100%', height: '600px', objectFit: 'cover' }}
+              className="w-full h-[600px] object-cover"
             />
             {/* Verified Badge Overlay */}
-            <div className="glass" style={{
-              position: 'absolute',
-              bottom: '2rem',
-              left: '2rem',
-              padding: '1.5rem',
-              borderRadius: '1.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              maxWidth: '300px'
-            }}>
-              <div style={{ backgroundColor: 'var(--primary-light)', padding: '0.75rem', borderRadius: '1rem' }}>
-                <HiShieldCheck size={24} style={{ color: 'var(--primary)' }} />
+            <div className="glass absolute bottom-8 left-8 p-6 rounded-3xl flex items-center gap-4 max-w-[300px]">
+              <div className="bg-primary-light p-3 rounded-2xl">
+                <HiShieldCheck size={24} className="text-primary" />
               </div>
               <div>
-                <h4 style={{ fontSize: '0.9375rem' }}>Verified Listing</h4>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Inspected by our professional team</p>
+                <h4 className="text-[0.9375rem] m-0 font-bold">Verified Listing</h4>
+                <p className="text-[0.75rem] text-text-muted m-0">Inspected by our professional team</p>
               </div>
-              <span className="badge" style={{ backgroundColor: 'rgba(13,148,136,0.1)', color: 'var(--primary)', fontSize: '0.625rem' }}>Pre-Approved</span>
+              <span className="badge bg-primary/10 text-primary text-[0.625rem]">Pre-Approved</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Category Section */}
-      <section style={{ padding: '6rem 0', backgroundColor: 'var(--bg-alt)' }}>
+      <section className="py-24 bg-bg-alt">
         <div className="container">
-          <div className="category-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
-            <div style={{ maxWidth: '500px' }}>
-              <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Browse by Category</h2>
-              <p style={{ color: 'var(--text-muted)' }}>Explore curated collections of properties tailored to your specific lifestyle and needs.</p>
+          <div className="category-header flex justify-between items-end mb-12 max-sm:flex-col max-sm:items-start max-sm:gap-6">
+            <div className="max-w-[500px]">
+              <h2 className="text-[2.5rem] font-extrabold mb-4 max-sm:text-[2rem]">Browse by Category</h2>
+              <p className="text-text-muted">Explore curated collections of properties tailored to your specific lifestyle and needs.</p>
             </div>
           </div>
-          <div className="category-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '1.5rem'
-          }}>
+          <div className="category-grid grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-6 max-sm:grid-cols-2 max-sm:gap-4">
             {categories.map((cat, idx) => (
               <div
                 key={idx}
-                className="category-card"
+                className="category-card py-10 px-6 text-center cursor-pointer bg-white rounded-3xl border border-border-color transition-all duration-300 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] hover:-translate-y-2 hover:border-primary hover:shadow-[0_12px_25px_-5px_rgba(13,148,136,0.1)] group max-sm:py-6 max-sm:px-4"
                 onClick={() => navigate(`/properties?type=${cat.type}`)}
-                style={{
-                  padding: '2.5rem 1.5rem',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  background: 'white',
-                  borderRadius: '1.5rem',
-                  border: '1px solid var(--border-color)',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
-                }}
               >
-                <div style={{
-                  width: '64px',
-                  height: '64px',
-                  backgroundColor: 'var(--primary-light)',
-                  color: 'var(--primary)',
-                  borderRadius: '1.25rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1.5rem',
-                  transition: 'all 0.3s ease'
-                }} className="category-icon-wrapper">
+                <div className="category-icon-wrapper w-16 h-16 bg-primary-light text-primary rounded-[1.25rem] flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:scale-110 max-sm:w-12 max-sm:h-12 max-sm:mb-4 max-sm:rounded-2xl">
                   {cat.icon}
                 </div>
-                <h3 style={{ marginBottom: '0.5rem', fontSize: '1.25rem' }}>{cat.name}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>{cat.count.toLocaleString()} Properties</p>
+                <h3 className="mb-2 text-xl font-bold max-sm:text-base">{cat.name}</h3>
+                <p className="text-text-muted text-[0.875rem]">{cat.count.toLocaleString()} Properties</p>
               </div>
             ))}
           </div>
@@ -297,59 +239,39 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section style={{ padding: '8rem 0' }}>
-        <div className="container features-container" style={{ display: 'flex', gap: '6rem', alignItems: 'center' }}>
-          <div className="features-list-container" style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem' }}>
+      <section className="py-32">
+        <div className="container features-container flex gap-24 items-center max-lg:flex-col max-lg:gap-12">
+          <div className="features-list-container flex-1 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-8 max-md:grid-cols-1 max-md:gap-8">
             {features.map((f, idx) => (
-              <div key={idx} className="fade-in feature-card-item" style={{
-                animationDelay: `${idx * 0.1}s`,
-                padding: '2rem',
-                background: 'white',
-                borderRadius: '1.5rem',
-                border: '1px solid var(--border-color)',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start'
-              }}>
-                <div style={{
-                  width: '56px',
-                  height: '56px',
-                  backgroundColor: 'var(--primary-light)',
-                  color: 'var(--primary)',
-                  borderRadius: '1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1.5rem',
-                }}>
+              <div key={idx} className="fade-in feature-card-item p-8 bg-white rounded-3xl border border-border-color transition-all duration-300 flex flex-col items-start hover:border-primary hover:-translate-y-[5px] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.05)]" style={{ animationDelay: `${idx * 0.1}s` }}>
+                <div className="w-14 h-14 bg-primary-light text-primary rounded-2xl flex items-center justify-center mb-6">
                   {f.icon}
                 </div>
-                <h3 style={{ fontSize: '1.125rem', marginBottom: '0.75rem', fontWeight: 800 }}>{f.title}</h3>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: '1.6' }}>{f.desc}</p>
+                <h3 className="text-[1.125rem] mb-3 font-extrabold">{f.title}</h3>
+                <p className="text-text-muted text-[0.875rem] leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
-          <div style={{ flex: 1 }}>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', marginBottom: '2rem' }}>
+          <div className="flex-1">
+            <h2 className="text-[clamp(2rem,4vw,3.5rem)] font-extrabold mb-8">
               Why RealEstate<br />is the <span className="text-gradient">Preferred Choice.</span>
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '1.125rem', marginBottom: '3rem', lineHeight: '1.8' }}>
+            <p className="text-text-muted text-[1.125rem] mb-12 leading-[1.8]">
               We've reinvented the property search experience from the ground up. By focusing on transparency, technological precision, and user-centric design, we help you find not just a house, but a home.
             </p>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <ul className="flex flex-col gap-6">
               {[
                 'Direct connection with certified agents',
                 'Real-time market valuation data',
                 'Secure document management system',
                 '24/7 Premium customer support'
               ].map((item, idx) => (
-                <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontWeight: 500 }}>
-                  <HiLightningBolt style={{ color: 'var(--primary)' }} /> {item}
+                <li key={idx} className="flex items-center gap-4 font-medium">
+                  <HiLightningBolt className="text-primary" /> {item}
                 </li>
               ))}
             </ul>
-            <a href="#process" style={{ display: 'inline-block', marginTop: '3rem', color: 'var(--primary)', fontWeight: 600, borderBottom: '2px solid' }}>
+            <a href="#process" className="inline-block mt-12 text-primary font-semibold border-b-2 hover:text-primary-dark">
               Learn more about our process &rarr;
             </a>
           </div>
@@ -357,24 +279,19 @@ const LandingPage = () => {
       </section>
 
       {/* How It Works Section */}
-      <section id="process" style={{ padding: '8rem 0', backgroundColor: 'var(--bg-main)' }}>
+      <section id="process" className="py-32 bg-bg-main">
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-            <span className="badge" style={{ backgroundColor: 'rgba(13, 148, 136, 0.1)', color: 'var(--primary)', marginBottom: '1rem', display: 'inline-block' }}>
+          <div className="text-center mb-20">
+            <span className="badge bg-primary/10 text-primary mb-4 inline-block">
               How It Works
             </span>
-            <h2 style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>Our Seamless <span className="text-gradient">Process</span></h2>
-            <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', fontSize: '1.125rem' }}>
+            <h2 className="text-5xl mb-6 max-sm:text-4xl text-text-main font-extrabold">Our Seamless <span className="text-gradient">Process</span></h2>
+            <p className="text-text-muted max-w-[600px] mx-auto text-lg">
               We've simplified the journey of finding your dream home into three clear, stress-free steps.
             </p>
           </div>
 
-          <div className="process-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '3rem',
-            position: 'relative'
-          }}>
+          <div className="process-grid grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-12 relative max-md:gap-14">
             {[
               {
                 step: '01',
@@ -395,50 +312,15 @@ const LandingPage = () => {
                 icon: <HiShieldCheck size={32} />
               }
             ].map((p, idx) => (
-              <div key={idx} className="process-card" style={{
-                padding: '3rem 2rem',
-                background: 'rgba(255, 255, 255, 0.4)',
-                backdropFilter: 'blur(10px)',
-                borderRadius: '2rem',
-                border: '1px solid rgba(255, 255, 255, 0.5)',
-                position: 'relative',
-                transition: 'all 0.3s ease',
-                textAlign: 'center'
-              }}>
-                <div style={{
-                  position: 'absolute',
-                  top: '-1.5rem',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '64px',
-                  height: '64px',
-                  background: 'var(--primary)',
-                  color: 'white',
-                  borderRadius: '1.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.5rem',
-                  fontWeight: 800,
-                  boxShadow: '0 8px 20px rgba(13, 148, 136, 0.3)'
-                }}>
+              <div key={idx} className="process-card py-12 px-8 bg-white/40 backdrop-blur-md rounded-[2rem] border border-white/50 relative transition-all duration-300 text-center hover:-translate-y-2 hover:bg-white hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:border-primary-light">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-primary text-white rounded-[1.5rem] flex items-center justify-center text-2xl font-extrabold shadow-[0_8px_20px_rgba(13,148,136,0.3)]">
                   {p.step}
                 </div>
-                <div style={{
-                  width: '80px',
-                  height: '80px',
-                  backgroundColor: 'var(--primary-light)',
-                  color: 'var(--primary)',
-                  borderRadius: '2rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '1rem auto 2rem',
-                }}>
+                <div className="w-20 h-20 bg-primary-light text-primary rounded-[2rem] flex items-center justify-center mx-auto mt-4 mb-8">
                   {p.icon}
                 </div>
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{p.title}</h3>
-                <p style={{ color: 'var(--text-muted)', lineHeight: '1.7' }}>{p.desc}</p>
+                <h3 className="text-[1.5rem] mb-4 font-bold">{p.title}</h3>
+                <p className="text-text-muted leading-[1.7]">{p.desc}</p>
               </div>
             ))}
           </div>
@@ -446,44 +328,46 @@ const LandingPage = () => {
       </section>
 
       {/* Featured Collections */}
-      <section style={{ padding: '6rem 0', backgroundColor: 'var(--bg-alt)' }}>
+      <section className="py-24 bg-bg-alt">
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <span className="badge" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)', marginBottom: '1rem', display: 'inline-block' }}>
+          <div className="text-center mb-16">
+            <span className="badge bg-primary-light text-primary mb-4 inline-block">
               Handpicked For You
             </span>
-            <h2 style={{ fontSize: '3rem', marginBottom: '1.5rem' }}>Featured Collections</h2>
-            <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto' }}>
+            <h2 className="text-5xl mb-6 max-sm:text-4xl font-extrabold text-text-main">Featured Collections</h2>
+            <p className="text-text-muted max-w-[600px] mx-auto text-lg pt-1 pb-1">
               Discover high-value properties curated by our experts for their exceptional design, location, and investment potential.
             </p>
           </div>
 
           {loading ? (
-            <div className="loader-container">
-              <div className="loader"></div>
+            <div className="flex justify-center items-center py-20 min-h-[400px]">
+              <div className="loader w-10 h-10 border-4 border-solid border-secondary border-t-primary rounded-full animate-spin mx-auto"></div>
             </div>
           ) : error ? (
-            <div style={{ textAlign: 'center', padding: '5rem 0', color: '#ef4444' }}>
+            <div className="text-center py-20 text-red-500 min-h-[300px]">
               <p>{error}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-3">
-              {properties.filter(p => p).map((property) => (
-                <PropertyCard
-                  key={property._id}
-                  property={property}
-                  isWishlisted={wishlistedIds.includes(String(property._id))}
-                  onToggleWishlist={handleToggleWishlist}
-                />
-              ))}
+            <div className="grid gap-8 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] max-sm:grid-cols-1">
+              {properties.filter(p => p)
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 6)
+                .map((property) => (
+                  <PropertyCard
+                    key={property._id}
+                    property={property}
+                    isWishlisted={wishlistedIds.includes(String(property._id))}
+                    onToggleWishlist={handleToggleWishlist}
+                  />
+                ))}
             </div>
           )}
 
-          <div style={{ textAlign: 'center', marginTop: '5rem' }}>
+          <div className="text-center mt-20">
             <button
               onClick={() => navigate('/properties')}
-              className="btn btn-primary"
-              style={{ padding: '1rem 3rem', borderRadius: '1.5rem' }}
+              className="btn btn-primary py-4 px-12 rounded-3xl"
             >
               Discover More Properties
             </button>
@@ -491,38 +375,21 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <footer style={{ backgroundColor: '#fff', borderTop: '1px solid var(--border-color)', paddingTop: '6rem' }}>
+      <footer className="bg-white border-t border-border-color pt-24 pb-0">
         <div className="container">
-          <div className="footer-main-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: '1.5fr 1fr 1fr 1.5fr',
-            gap: '4rem',
-            marginBottom: '4rem'
-          }}>
+          <div className="footer-main-grid grid grid-cols-[1.5fr_1fr_1fr_1.5fr] gap-16 mb-16 max-lg:grid-cols-2 max-lg:gap-12 max-sm:grid-cols-1 min-[640px]:max-[1024px]:justify-items-center">
             {/* Column 1: Brand & About */}
-            <div className="footer-brand-section">
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '1.5rem',
-                fontWeight: 800,
-                color: 'var(--primary)',
-                marginBottom: '1.5rem'
-              }}>
-                <div style={{ background: 'var(--primary)', color: 'white', padding: '6px 10px', borderRadius: '10px', fontSize: '1rem' }}>RE</div>
+            <div className="footer-brand-section max-sm:text-center max-sm:flex max-sm:flex-col max-sm:items-center">
+              <div className="flex items-center gap-2 text-2xl font-extrabold text-primary mb-6">
+                <div className="bg-primary text-white py-1.5 px-2.5 rounded-xl text-base">RE</div>
                 RealEstate
               </div>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', lineHeight: '1.7', fontSize: '0.9375rem' }}>
+              <p className="text-text-muted mb-8 leading-relaxed text-[0.9375rem]">
                 The most trusted platform for buying, selling, and renting premium real estate globally. We make property hunting seamless.
               </p>
-              <div style={{ display: 'flex', gap: '1rem' }}>
+              <div className="flex gap-4">
                 {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map((Icon, idx) => (
-                  <a key={idx} href="#" className="social-icon" style={{
-                    width: '36px', height: '36px', borderRadius: '50%', background: 'var(--bg-alt)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-main)',
-                    transition: 'all 0.3s ease'
-                  }}>
+                  <a key={idx} href="#" className="social-icon w-9 h-9 rounded-full bg-bg-alt flex items-center justify-center text-text-main transition-all duration-300 hover:-translate-y-1 hover:bg-primary hover:text-white">
                     <Icon size={16} />
                   </a>
                 ))}
@@ -531,27 +398,27 @@ const LandingPage = () => {
 
             {/* Column 2: Quick Links */}
             <div>
-              <h4 style={{ fontSize: '1.125rem', fontWeight: 800, marginBottom: '2rem' }}>Company</h4>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9375rem' }}>
-                <li><a href="#" className="footer-link">About Us</a></li>
-                <li><a href="#" className="footer-link">Our Services</a></li>
-                <li><a href="#" className="footer-link">Market Trends</a></li>
-                <li><a href="#" className="footer-link">Careers</a></li>
+              <h4 className="text-[1.125rem] font-extrabold mb-8">Company</h4>
+              <ul className="flex flex-col gap-5 text-text-muted text-[0.9375rem]">
+                <li><a href="#" className="footer-link transition-colors duration-300 hover:text-primary hover:underline">About Us</a></li>
+                <li><a href="#" className="footer-link transition-colors duration-300 hover:text-primary hover:underline">Our Services</a></li>
+                <li><a href="#" className="footer-link transition-colors duration-300 hover:text-primary hover:underline">Market Trends</a></li>
+                <li><a href="#" className="footer-link transition-colors duration-300 hover:text-primary hover:underline">Careers</a></li>
               </ul>
             </div>
 
             {/* Column 3: Contact Info */}
             <div>
-              <h4 style={{ fontSize: '1.125rem', fontWeight: 800, marginBottom: '2rem' }}>Support</h4>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9375rem' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <HiMail style={{ color: 'var(--primary)' }} /> contact@reestate.com
+              <h4 className="text-[1.125rem] font-extrabold mb-8">Support</h4>
+              <ul className="flex flex-col gap-5 text-text-muted text-[0.9375rem]">
+                <li className="flex items-center gap-3">
+                  <HiMail className="text-primary text-xl" /> contact@reestate.com
                 </li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <HiPhone style={{ color: 'var(--primary)' }} /> +91 98765 43210
+                <li className="flex items-center gap-3">
+                  <HiPhone className="text-primary text-xl" /> +91 98765 43210
                 </li>
-                <li style={{ display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
-                  <HiLocationMarker style={{ color: 'var(--primary)', flexShrink: 0, marginTop: '2px' }} />
+                <li className="flex items-start gap-3">
+                  <HiLocationMarker className="text-primary shrink-0 mt-[2px] text-xl" />
                   123 Business Hub, Rourkela, Odisha, India
                 </li>
               </ul>
@@ -559,23 +426,17 @@ const LandingPage = () => {
 
             {/* Column 4: Newsletter */}
             <div>
-              <h4 style={{ fontSize: '1.125rem', fontWeight: 800, marginBottom: '2rem' }}>Newsletter</h4>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem', lineHeight: '1.6' }}>
+              <h4 className="text-[1.125rem] font-extrabold mb-8">Newsletter</h4>
+              <p className="text-text-muted text-[0.875rem] mb-6 leading-relaxed">
                 Subscribe to get the latest listings and market insights directly in your inbox.
               </p>
-              <div style={{ position: 'relative' }}>
+              <div className="relative">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  style={{
-                    width: '100%', padding: '1rem 1.25rem', borderRadius: '1rem', border: '1px solid var(--border-color)',
-                    background: 'var(--bg-alt)', outline: 'none', fontSize: '0.875rem'
-                  }}
+                  className="w-full py-4 pr-[85px] pl-5 rounded-2xl border border-border-color bg-bg-alt outline-none text-[0.875rem] focus:border-primary transition-colors"
                 />
-                <button className="btn btn-primary" style={{
-                  position: 'absolute', right: '5px', top: '5px', bottom: '5px',
-                  padding: '0 1.25rem', borderRadius: '0.75rem', fontSize: '0.8125rem'
-                }}>
+                <button className="btn btn-primary absolute right-1.5 top-1.5 bottom-1.5 px-5 rounded-xl text-[0.8125rem]">
                   Join
                 </button>
               </div>
@@ -583,240 +444,17 @@ const LandingPage = () => {
           </div>
 
           {/* Bottom Bar */}
-          <div style={{
-            borderTop: '1px solid var(--border-color)',
-            padding: '2rem 0',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            fontSize: '0.875rem',
-            color: 'var(--text-muted)',
-            flexWrap: 'wrap',
-            gap: '1rem'
-          }}>
+          <div className="border-t border-border-color py-8 flex justify-between items-center text-[0.875rem] text-text-muted flex-wrap gap-4 max-sm:flex-col-reverse max-sm:justify-center">
             <p>© {new Date().getFullYear()} RE RealEstate. All rights reserved.</p>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-              <a href="#" className="footer-link">Privacy Policy</a>
-              <a href="#" className="footer-link">Terms of Service</a>
-              <a href="#" className="footer-link">Cookies Settings</a>
+            <div className="flex gap-8 max-sm:w-full max-sm:justify-center max-sm:flex-wrap max-sm:gap-4">
+              <a href="#" className="footer-link transition-colors duration-300 hover:text-primary hover:underline">Privacy Policy</a>
+              <a href="#" className="footer-link transition-colors duration-300 hover:text-primary hover:underline">Terms of Service</a>
+              <a href="#" className="footer-link transition-colors duration-300 hover:text-primary hover:underline">Cookies Settings</a>
             </div>
           </div>
         </div>
       </footer>
 
-      <style>{`
-                .loader {
-                    border: 4px solid var(--secondary);
-                    border-top: 4px solid var(--primary);
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    animation: spin 1s linear infinite;
-                    margin: 0 auto;
-                }
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-
-                .feature-card-item:hover {
-                    border-color: var(--primary) !important;
-                    transform: translateY(-5px);
-                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-                }
-
-                .footer-link:hover {
-                    color: var(--primary);
-                    text-decoration: underline;
-                }
-
-                .social-icon:hover {
-                    background-color: var(--primary) !important;
-                    color: white !important;
-                    transform: translateY(-3px);
-                }
-
-                @media (max-width: 1024px) {
-                    .footer-main-grid {
-                        grid-template-columns: 1fr 1fr !important;
-                        gap: 3rem !important;
-                    }
-                }
-
-                @media (max-width: 640px) {
-                    .footer-main-grid {
-                        grid-template-columns: 1fr !important;
-                    }
-                    .footer-brand-section {
-                        text-align: center;
-                        align-items: center;
-                        display: flex;
-                        flex-direction: column;
-                    }
-                }
-
-                @media (max-width: 1024px) {
-                    .hero-section {
-                        flex-direction: column !important;
-                        text-align: center !important;
-                        padding: 2rem 1rem !important;
-                        gap: 2rem !important;
-                    }
-                    .hero-content {
-                        display: flex !important;
-                        flex-direction: column !important;
-                        align-items: center !important;
-                    }
-                    .hero-title {
-                        font-size: clamp(1.75rem, 8vw, 2.5rem) !important;
-                        line-height: 1.1 !important;
-                        margin-bottom: 1.25rem !important;
-                        text-align: center !important;
-                    }
-                    .hero-subtitle {
-                        font-size: 1rem !important;
-                        margin: 0 auto 2.5rem !important;
-                        text-align: center !important;
-                        padding: 0 1rem !important;
-                    }
-                    .search-form {
-                        flex-direction: column !important;
-                        width: 100% !important;
-                        max-width: 500px !important;
-                        margin: 0 auto !important;
-                        padding: 1.5rem !important;
-                        gap: 0.5rem !important;
-                        border-radius: 1.5rem !important;
-                    }
-                    .search-divider {
-                        display: none !important;
-                    }
-                    .search-field {
-                        width: 100% !important;
-                        padding: 1rem 0.5rem !important;
-                        border-bottom: 1px solid #f1f5f9 !important;
-                        gap: 1.25rem !important;
-                    }
-                    .search-field:last-of-type {
-                        border-bottom: none !important;
-                        margin-bottom: 0.5rem !important;
-                    }
-                    .search-button {
-                        width: 100% !important;
-                        height: 56px !important;
-                        border-radius: 1rem !important;
-                    }
-                    .stats-container {
-                        justify-content: center !important;
-                        gap: 2rem !important;
-                    }
-                    .stat-item {
-                        padding-left: 2rem !important;
-                    }
-                    .features-container {
-                        flex-direction: column !important;
-                        gap: 3rem !important;
-                    }
-                    .footer-grid {
-                        grid-template-columns: 1fr 1fr !important;
-                        gap: 3rem !important;
-                    }
-                }
-
-                @media (max-width: 991px) {
-                    .hero-search-bar {
-                        flex-direction: column !important;
-                        height: auto !important;
-                        padding: 1.5rem !important;
-                        gap: 1.25rem !important;
-                        border-radius: 2rem !important;
-                        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
-                    }
-                    .search-divider {
-                        display: none !important;
-                    }
-                    .search-field {
-                        width: 100% !important;
-                        padding: 0.5rem 0 !important;
-                    }
-                    .search-button {
-                        width: 100% !important;
-                        height: 56px !important;
-                        border-radius: 1rem !important;
-                        margin-top: 0.5rem !important;
-                    }
-                }
-
-                @media (max-width: 768px) {
-                    .hero-image-container {
-                        display: none !important;
-                    }
-                    .stats-container {
-                        flex-wrap: wrap !important;
-                    }
-                    .stat-item {
-                        border-left: none !important;
-                        padding-left: 0 !important;
-                        flex: 1 1 120px !important;
-                    }
-                    .features-list-container {
-                        grid-template-columns: 1fr !important;
-                        gap: 2rem !important;
-                    }
-                }
-
-                @media (max-width: 640px) {
-                    .category-header {
-                        flex-direction: column !important;
-                        align-items: flex-start !important;
-                        gap: 1.5rem !important;
-                    }
-                    .footer-grid {
-                        grid-template-columns: 1fr !important;
-                        gap: 2.5rem !important;
-                    }
-                    .category-grid {
-                        grid-template-columns: repeat(2, 1fr) !important;
-                        gap: 1rem !important;
-                    }
-                    .category-card {
-                        padding: 1.5rem 1rem !important;
-                    }
-                    .category-icon-wrapper {
-                        width: 48px !important;
-                        height: 48px !important;
-                        margin-bottom: 1rem !important;
-                        border-radius: 1rem !important;
-                    }
-                    .category-card h3 {
-                        fontSize: '1rem' !important;
-                    }
-                    .grid.grid-cols-3 {
-                        grid-template-columns: 1fr !important;
-                        justify-items: center !important;
-                        gap: 2rem !important;
-                    }
-                }
-                .category-card:hover {
-                    transform: translateY(-8px);
-                    border-color: var(--primary) !important;
-                    box-shadow: 0 12px 25px -5px rgba(13, 148, 136, 0.1) !important;
-                }
-                .category-card:hover .category-icon-wrapper {
-                    background-color: var(--primary) !important;
-                    color: white !important;
-                    transform: scale(1.1);
-                }
-                .process-card:hover {
-                    transform: translateY(-10px);
-                    background: white !important;
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-                    border-color: var(--primary-light) !important;
-                }
-                html {
-                    scroll-behavior: smooth;
-                }
-            `}</style>
     </div>
   );
 };

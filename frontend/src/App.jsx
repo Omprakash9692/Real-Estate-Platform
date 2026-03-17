@@ -22,8 +22,6 @@ import AdminInquiries from "./pages/admin/AdminInquiries";
 import AdminContacts from "./pages/admin/AdminContacts";
 import SellerRequests from "./pages/admin/SellerRequests";
 import Contact from "./pages/shared/Contact";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import ResetPassword from "./pages/auth/ResetPassword";
 import SellerProfile from "./pages/shared/SellerProfile";
 import { ProtectedRoute, PublicRoute } from "./components/common/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
@@ -44,8 +42,6 @@ function App() {
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
 
         {/* Fully Public Routes (Always accessible) */}

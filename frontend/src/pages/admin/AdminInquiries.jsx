@@ -35,7 +35,7 @@ const AdminInquiries = () => {
 
     if (loading) return <div className="loader-full-page"><div className="loader"></div></div>;
 
-    if (error) return <div className="error-container" style={{ padding: '2rem', textAlign: 'center', color: '#dc2626' }}>
+    if (error) return <div className="error-container p-8 text-center text-[#dc2626]">
         <h3>Error loading inquiries</h3>
         <p>{error}</p>
         <button className="btn" onClick={() => window.location.reload()}>Retry</button>
@@ -43,84 +43,59 @@ const AdminInquiries = () => {
 
     return (
         <>
-            <div style={{ marginBottom: '3rem' }}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>Platform Inquiries</h1>
-                <p style={{ color: 'var(--text-muted)' }}>Review communication between buyers and sellers.</p>
+            <div className="mb-12">
+                <h1 className="text-[2rem] font-extrabold text-text-main mb-2">Platform Inquiries</h1>
+                <p className="text-text-muted">Review communication between buyers and sellers.</p>
             </div>
 
-            <div className="admin-inquiries-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="admin-inquiries-list flex flex-col gap-6">
                 {inquiries.map((inq) => (
-                    <div key={inq._id} className="card-premium inquiry-card-premium" style={{ padding: '2rem' }}>
-                        <div className="inquiry-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '1.5rem', gap: '1rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <div style={{ backgroundColor: 'var(--primary-light)', padding: '0.75rem', borderRadius: '0.75rem', color: 'var(--primary)' }}>
+                    <div key={inq._id} className="card-premium p-6 md:p-8">
+                        <div className="flex flex-col sm:flex-row justify-between items-start mb-6 border-b border-[#f1f5f9] pb-6 gap-4 sm:gap-4">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-primary-light p-3 rounded-xl text-primary">
                                     <HiOutlineHome size={24} />
                                 </div>
-                                <div>
-                                    <div style={{ fontWeight: 700 }}>{inq.property?.title || 'Unknown Property'}</div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Property ID: {inq.property?._id}</div>
+                                <div className="w-full sm:w-auto text-left">
+                                    <div className="font-bold">{inq.property?.title || 'Unknown Property'}</div>
+                                    <div className="text-xs text-text-muted">Property ID: {inq.property?._id}</div>
                                 </div>
                             </div>
-                            <div style={{ textAlign: 'right', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-                                <HiOutlineCalendar style={{ verticalAlign: 'middle', marginRight: '0.25rem' }} /> {new Date(inq.createdAt).toLocaleDateString()}
+                            <div className="text-sm text-text-muted text-left sm:text-right w-full sm:w-auto">
+                                <HiOutlineCalendar className="inline align-middle mr-1" /> {new Date(inq.createdAt).toLocaleDateString()}
                             </div>
                         </div>
 
-                        <div className="inquiry-details-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                            <div className="detail-box" style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '1rem', border: '1px solid #f1f5f9' }}>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>Buyer Details</div>
-                                <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.25rem' }}>{inq.buyer?.name}</div>
-                                <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{inq.buyer?.email}</div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-6">
+                            <div className="bg-[#f8fafc] p-4 md:p-5 rounded-2xl border border-[#f1f5f9]">
+                                <div className="text-xs font-bold text-text-muted uppercase mb-3 tracking-widest">Buyer Details</div>
+                                <div className="font-bold text-text-main mb-1">{inq.buyer?.name}</div>
+                                <div className="text-sm text-text-muted break-all">{inq.buyer?.email}</div>
                             </div>
-                            <div className="detail-box" style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: '1rem', border: '1px solid #f1f5f9' }}>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>Seller Details</div>
-                                <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.25rem' }}>{inq.seller?.name}</div>
-                                <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{inq.seller?.email}</div>
+                            <div className="bg-[#f8fafc] p-4 md:p-5 rounded-2xl border border-[#f1f5f9]">
+                                <div className="text-xs font-bold text-text-muted uppercase mb-3 tracking-widest">Seller Details</div>
+                                <div className="font-bold text-text-main mb-1">{inq.seller?.name}</div>
+                                <div className="text-sm text-text-muted break-all">{inq.seller?.email}</div>
                             </div>
                         </div>
 
-                        <div style={{ background: 'var(--bg-alt)', padding: '1.5rem', borderRadius: '1rem', borderLeft: '4px solid var(--primary)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: 'var(--primary)', fontWeight: 700, fontSize: '0.875rem' }}>
+                        <div className="bg-bg-alt p-6 rounded-2xl border-l-[4px] border-primary">
+                            <div className="flex items-center gap-2 mb-2 text-primary font-bold text-sm">
                                 <HiOutlineAnnotation /> MESSAGE
                             </div>
-                            <p style={{ fontStyle: 'italic', color: 'var(--text-main)', lineHeight: '1.6' }}>"{inq.message}"</p>
+                            <p className="italic text-text-main leading-relaxed">"{inq.message}"</p>
                         </div>
                     </div>
                 ))}
 
                 {inquiries.length === 0 && (
-                    <div className="card-premium" style={{ padding: '6rem 2rem', textAlign: 'center' }}>
-                        <div style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}><HiOutlineAnnotation size={48} /></div>
+                    <div className="card-premium py-24 px-8 text-center">
+                        <div className="text-text-muted mb-4"><HiOutlineAnnotation size={48} className="mx-auto" /></div>
                         <h2>No inquiries found</h2>
-                        <p style={{ color: 'var(--text-muted)' }}>There are no inquiries recorded on the platform yet.</p>
+                        <p className="text-text-muted">There are no inquiries recorded on the platform yet.</p>
                     </div>
                 )}
             </div>
-            <style>{`
-                @media (max-width: 768px) {
-                    .inquiry-card-premium {
-                        padding: 1.5rem !important;
-                    }
-                }
-                @media (max-width: 640px) {
-                    .inquiry-header {
-                        flex-direction: column !important;
-                        align-items: flex-start !important;
-                        gap: 1rem !important;
-                    }
-                    .inquiry-header div:last-child {
-                        text-align: left !important;
-                        width: 100%;
-                    }
-                    .inquiry-details-grid {
-                        grid-template-columns: 1fr !important;
-                        gap: 1rem !important;
-                    }
-                    .detail-box {
-                        padding: 1rem !important;
-                    }
-                }
-            `}</style>
         </>
     );
 };
