@@ -57,7 +57,7 @@ export const getPublicProfile = async (req, res) => {
 // UPDATE PROFILE
 export const updateProfile = async (req, res) => {
     try {
-        const { name, phone, address } = req.body;
+        const { name, phone, address, removeProfilePic } = req.body;
         const user = await User.findById(req.user._id);
 
         if (!user) {
@@ -71,6 +71,8 @@ export const updateProfile = async (req, res) => {
         if (req.file) {
             const result = await uploadToCloudinary(req.file.buffer);
             user.profilePic = result.secure_url;
+        } else if (removeProfilePic === 'true') {
+            user.profilePic = null;
         }
 
         if (name !== undefined) user.name = name;

@@ -1,46 +1,41 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../../components/common/Navbar';
 import API_URL from "../../config";
-import { useAuth } from "../../context/AuthContext";
 
-const Login = () => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    });
+const ResetPassword = () => {
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const { login } = useAuth();
     const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError('');
-    };
+    const { token } = useParams();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            return setError('Passwords do not match');
+        }
+
         setIsLoading(true);
         setError('');
+        setSuccess('');
 
-        const result = await login(formData.email, formData.password);
-
-        if (result.success) {
-            const storedUser = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
-            if (storedUser?.role === 'admin') {
-                navigate('/admin-dashboard');
-            } else if (storedUser?.role === 'seller') {
-                navigate('/dashboard');
-            } else {
-                navigate('/');
+        try {
+            const res = await axios.post(`${API_URL}/api/auth/reset-password/${token}`, { password });
+            if (res.data.success) {
+                setSuccess('Password has been reset successfully. Redirecting to login...');
+                setTimeout(() => navigate('/login'), 2000);
             }
-        } else {
-            setError(result.message);
+        } catch (err) {
+            setError(err.response?.data?.message || 'Password reset failed. Token may be invalid or expired.');
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     return (
@@ -49,10 +44,10 @@ const Login = () => {
             <div className="container flex justify-center items-center pt-16 sm:pt-8">
                 <div className="glass fade-in w-full max-w-[450px] p-10 sm:p-6 rounded-3xl sm:rounded-2xl shadow-card">
                     <h2 className="text-[2rem] sm:text-2xl font-bold text-center mb-2 text-primary">
-                        Welcome Back
+                        Reset Password
                     </h2>
                     <p className="text-center text-text-muted mb-8">
-                        Please enter your details to sign in
+                        Create a new password for your account
                     </p>
 
                     {error && (
@@ -61,32 +56,31 @@ const Login = () => {
                         </div>
                     )}
 
+                    {success && (
+                        <div className="p-3 bg-green-100 text-green-600 rounded-lg mb-4 text-sm text-center">
+                            {success}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                         <div>
-                            <label className="block mb-2 font-medium">Email Address</label>
+                            <label className="block mb-2 font-medium">New Password</label>
                             <input
-                                type="email"
-                                name="email"
-                                placeholder="name@company.com"
-                                value={formData.email}
-                                onChange={handleChange}
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
                                 required
                                 className="w-full py-3 px-4 rounded-lg border border-border outline-none focus:border-primary transition-colors"
                             />
                         </div>
                         <div>
-                            <div className="flex justify-between items-center mb-2">
-                                <label className="font-medium">Password</label>
-                                <Link to="/forgot-password" className="text-sm text-primary font-medium hover:underline">
-                                    Forgot password?
-                                </Link>
-                            </div>
+                            <label className="block mb-2 font-medium">Confirm New Password</label>
                             <input
                                 type="password"
-                                name="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 placeholder="••••••••"
-                                value={formData.password}
-                                onChange={handleChange}
                                 required
                                 className="w-full py-3 px-4 rounded-lg border border-border outline-none focus:border-primary transition-colors"
                             />
@@ -97,14 +91,14 @@ const Login = () => {
                             type="submit"
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Signing In...' : 'Sign In'}
+                            {isLoading ? 'Resetting...' : 'Reset Password'}
                         </button>
                     </form>
 
                     <p className="text-center mt-8 text-text-muted">
-                        Don't have an account?{' '}
-                        <Link to="/register" className="text-primary font-semibold hover:underline">
-                            Create an account
+                        Back to{' '}
+                        <Link to="/login" className="text-primary font-semibold hover:underline">
+                            login
                         </Link>
                     </p>
                 </div>
@@ -113,4 +107,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default ResetPassword;

@@ -12,6 +12,7 @@ const Profile = () => {
     const [error, setError] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [removeProfilePic, setRemoveProfilePic] = useState(false);
     const [formData, setFormData] = useState({
         name: user?.name || '',
         phone: user?.phone || '',
@@ -34,6 +35,7 @@ const Profile = () => {
         if (file) {
             setImageFile(file);
             setImagePreview(URL.createObjectURL(file));
+            setRemoveProfilePic(false);
         }
     };
 
@@ -49,6 +51,9 @@ const Profile = () => {
             data.append('address', formData.address);
             if (imageFile) {
                 data.append('profilePic', imageFile);
+            }
+            if (removeProfilePic) {
+                data.append('removeProfilePic', 'true');
             }
 
             const res = await axios.put(`${API_URL}/api/user/profile`, data, {
@@ -88,17 +93,35 @@ const Profile = () => {
                             <div className="w-[120px] h-[120px] rounded-[2.5rem] bg-primary-light overflow-hidden flex items-center justify-center text-[3rem] font-bold text-primary border-4 border-white shadow-lg">
                                 {imagePreview ? (
                                     <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                                ) : user?.profilePic ? (
+                                ) : !removeProfilePic && user?.profilePic ? (
                                     <img src={user.profilePic} alt="Profile" className="w-full h-full object-cover" />
                                 ) : (
-                                    user?.name?.[0].toUpperCase()
+                                    <span className="text-primary opacity-60">
+                                        {user?.name?.[0]?.toUpperCase() || 'U'}
+                                    </span>
                                 )}
                             </div>
                             {isEditing && (
-                                <label className="absolute -bottom-2.5 -right-2.5 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.2)] border-4 border-white">
-                                    <input type="file" onChange={handleImageChange} className="hidden" accept="image/*" />
-                                    <HiOutlineUser size={20} />
-                                </label>
+                                <>
+                                    <label className="absolute -bottom-2.5 -right-2.5 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.2)] border-4 border-white z-10 hover:bg-primary-dark transition-colors">
+                                        <input type="file" onChange={handleImageChange} className="hidden" accept="image/*" />
+                                        <HiOutlineUser size={20} />
+                                    </label>
+                                    {(imagePreview || (!removeProfilePic && user?.profilePic)) && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setImagePreview(null);
+                                                setImageFile(null);
+                                                setRemoveProfilePic(true);
+                                            }}
+                                            className="absolute -top-2.5 -right-2.5 bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.2)] border-4 border-white z-10 hover:bg-red-600 transition-colors"
+                                            title="Remove Profile Picture"
+                                        >
+                                            <HiX size={20} />
+                                        </button>
+                                    )}
+                                </>
                             )}
                         </div>
                         <div>
@@ -151,7 +174,12 @@ const Profile = () => {
                                 <button type="submit" disabled={loading} className="btn btn-primary flex-1 flex items-center justify-center gap-2">
                                     <HiCheck size={20} /> {loading ? 'Saving...' : 'Save Changes'}
                                 </button>
-                                <button type="button" onClick={() => setIsEditing(false)} className="btn btn-outline flex-1 flex items-center justify-center gap-2">
+                                <button type="button" onClick={() => {
+                                    setIsEditing(false);
+                                    setImagePreview(null);
+                                    setImageFile(null);
+                                    setRemoveProfilePic(false);
+                                }} className="btn btn-outline flex-1 flex items-center justify-center gap-2">
                                     <HiX size={20} /> Cancel
                                 </button>
                             </div>
